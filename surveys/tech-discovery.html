@@ -376,7 +376,7 @@
     // ── Tool card HTML ─────────────────────────────────────────────
     function toolCardHTML(sid, idx, tool) {
       const who   = tool.who   || '';
-      const whoOptions = ['Just me', 'My team', 'Whole department', 'Multiple departments'];
+      const whoOptions = ['Just me', 'My team', 'Whole department'];
       return `<div class="tool-card" data-sid="${sid}" data-idx="${idx}">
         <div class="tool-card-header">
           <span class="tool-card-num">Tool ${idx + 1}</span>
@@ -502,7 +502,7 @@
         if (!toolData[sec.id] || toolData[sec.id].length === 0) toolData[sec.id] = [{}];
         const tools = toolData[sec.id];
         body.innerHTML = `<div class="survey-page">
-          <div class="section-label-badge">${sec.title}</div>
+          <h2 style="font-size:1.8rem;font-weight:800;color:var(--sb-text);letter-spacing:-0.02em;margin-bottom:0.5rem">${sec.title}</h2>
           <p class="survey-instruction">
             Think about every app or software your team uses for <strong>${sec.title.toLowerCase()}</strong> — whether it's a website you log into, a program installed on your computer, or something you have a license for.<br/><br/>
             <span style="color:var(--sb-muted)">Examples: ${sec.examples}</span><br/><br/>
@@ -660,7 +660,7 @@
     function init() {
       activeSections = [
         { id: 'info',     title: 'About You',          type: 'info'     },
-        { id: 'comments', title: 'Anything Else?',     type: 'comments' },
+        { id: 'comments', title: 'Additional Comments', type: 'comments' },
         { id: 'review',   title: 'Review & Submit',    type: 'review'   },
       ];
       buildStepNav();
