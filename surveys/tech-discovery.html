@@ -6,791 +6,880 @@
   <title>Technology & Application Discovery Survey — RCO IT</title>
   <link rel="stylesheet" href="../styles.css"/>
   <style>
-    /* ── Page layout ── */
-    .survey-single-page { max-width: 780px; margin: 0 auto; }
+    /* ── Step layout ── */
+    .step { display: none; }
+    .step.active { display: block; }
 
-    .survey-header-block {
-      margin-bottom: 2rem;
-      padding-bottom: 1.5rem;
-      border-bottom: 1px solid var(--sb-sep);
-    }
+    .step-header { margin-bottom: 1.75rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--sb-sep); }
+    .step-header h2 { font-size: 1.3rem; font-weight: 800; color: var(--sb-text); margin-bottom: 0.3rem; }
+    .step-header p  { font-size: 0.875rem; color: var(--sb-muted); line-height: 1.6; }
 
-    .survey-header-block h2 {
-      font-size: 1.4rem;
-      font-weight: 800;
-      color: var(--sb-text);
-      margin-bottom: 0.4rem;
+    /* ── How To page ── */
+    .howto-video-placeholder {
+      width: 100%; aspect-ratio: 16/9;
+      background: var(--sidebar-bg);
+      border: 2px dashed var(--sb-border);
+      border-radius: 14px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 0.75rem; color: var(--sb-muted);
+      font-size: 0.875rem; font-weight: 600;
+      margin: 1.5rem 0;
     }
+    .howto-video-placeholder span { font-size: 2.5rem; }
 
-    .survey-header-block p {
-      color: var(--sb-muted);
-      font-size: 0.875rem;
-      line-height: 1.6;
+    .howto-steps { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.25rem; }
+    .howto-step {
+      display: flex; gap: 1rem; align-items: flex-start;
+      background: var(--sidebar-bg); border: 1.5px solid var(--sb-border);
+      border-radius: 12px; padding: 0.9rem 1.1rem;
     }
+    .howto-step-num {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--brand-grad); color: #fff;
+      font-size: 0.78rem; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .howto-step-text strong { display: block; font-size: 0.875rem; color: var(--sb-text); margin-bottom: 0.2rem; }
+    .howto-step-text span   { font-size: 0.8rem; color: var(--sb-muted); line-height: 1.5; }
 
-    /* ── Info grid ── */
-    .info-grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-bottom: 2rem;
+    /* ── Your Info ── */
+    .info-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1rem; max-width: 560px;
     }
-    @media(max-width:600px){ .info-grid-2 { grid-template-columns: 1fr; } }
+    @media(max-width:600px){ .info-grid { grid-template-columns: 1fr; } }
 
     .field-wrap { display: flex; flex-direction: column; gap: 0.35rem; }
-    .field-wrap label {
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: var(--sb-text);
-    }
-    .field-wrap input,
-    .field-wrap select,
-    .field-wrap textarea {
-      background: var(--sidebar-bg);
-      border: 1.5px solid var(--sb-border);
-      border-radius: 9px;
-      padding: 0.6rem 0.85rem;
-      font-size: 0.875rem;
-      font-family: inherit;
-      color: var(--sb-text);
-      outline: none;
+    .field-wrap label { font-size: 0.82rem; font-weight: 700; color: var(--sb-text); }
+    .field-wrap input, .field-wrap select {
+      background: var(--sidebar-bg); border: 1.5px solid var(--sb-border);
+      border-radius: 9px; padding: 0.6rem 0.85rem;
+      font-size: 0.875rem; font-family: inherit; color: var(--sb-text);
+      outline: none; width: 100%;
       transition: border-color 0.15s, box-shadow 0.15s;
-      width: 100%;
     }
-    .field-wrap input:focus,
-    .field-wrap select:focus,
-    .field-wrap textarea:focus {
+    .field-wrap input:focus, .field-wrap select:focus {
       border-color: var(--brand-hover-border);
       box-shadow: 0 0 0 3px rgba(189,153,121,0.15);
     }
 
-    /* ── Tools section ── */
-    .tools-section-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin: 2rem 0 1rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid var(--sb-sep);
+    /* ── Software summary table ── */
+    .sw-table-wrap { overflow-x: auto; margin-bottom: 1.25rem; }
+
+    .sw-table {
+      width: 100%; border-collapse: collapse;
+      font-size: 0.82rem; min-width: 540px;
     }
 
-    .tools-section-header h3 {
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: var(--sb-text);
+    .sw-table th {
+      text-align: left; font-size: 0.7rem; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      color: var(--sb-muted); padding: 0 0.75rem 0.6rem;
+      border-bottom: 1px solid var(--sb-sep);
     }
+
+    .sw-table td {
+      padding: 0.6rem 0.75rem;
+      border-bottom: 1px solid var(--sb-sep);
+      color: var(--sb-text); vertical-align: middle;
+    }
+
+    .sw-row { transition: background 0.15s; position: relative; }
+    .sw-row:hover { background: var(--sidebar-bg); }
+
+    .sw-row td.name-cell { font-weight: 700; }
+
+    .sev-display {
+      display: flex; gap: 3px;
+    }
+    .sev-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--sb-sep);
+    }
+    .sev-dot.filled { background: var(--brand-brown); }
+
+    .pill-sm {
+      font-size: 0.7rem; font-weight: 700; padding: 0.2rem 0.55rem;
+      border-radius: 999px; border: 1px solid var(--sb-border);
+      color: var(--sb-muted); background: var(--panel-bg);
+      white-space: nowrap;
+    }
+    .pill-sm.yes { background: var(--success-soft); color: var(--success); border-color: transparent; }
+    .pill-sm.no  { background: rgba(220,80,60,0.08); color: #c0392b; border-color: transparent; }
+
+    .sw-actions { display: flex; gap: 0.5rem; align-items: center; }
+
+    .details-btn {
+      font-size: 0.72rem; font-weight: 700; font-family: inherit;
+      padding: 0.28rem 0.7rem; border-radius: 7px;
+      background: var(--brand-soft); border: 1.5px solid var(--brand-hover-border);
+      color: var(--brand-brown); cursor: pointer; transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .details-btn:hover { background: var(--brand-grad); color: #fff; border-color: var(--brand-brown); }
+    .details-btn.filled { background: var(--success-soft); border-color: var(--success); color: var(--success); }
+
+    .remove-btn {
+      font-size: 0.72rem; font-weight: 700; font-family: inherit;
+      padding: 0.28rem 0.55rem; border-radius: 7px;
+      background: none; border: 1.5px solid var(--sb-border);
+      color: var(--sb-muted); cursor: pointer; transition: all 0.15s;
+    }
+    .remove-btn:hover { border-color: #c0392b; color: #c0392b; }
+
+    .add-sw-row {
+      width: 100%; padding: 0.75rem; margin-top: 0.5rem;
+      border: 2px dashed var(--sb-border); border-radius: 12px;
+      background: none; color: var(--sb-muted);
+      font-size: 0.875rem; font-weight: 700; font-family: inherit;
+      cursor: pointer; transition: all 0.18s;
+    }
+    .add-sw-row:hover { border-color: var(--brand-hover-border); color: var(--brand-brown); background: var(--brand-soft); }
 
     .examples-btn {
-      background: var(--brand-soft);
-      border: 1.5px solid var(--brand-hover-border);
-      color: var(--brand-brown);
-      font-size: 0.78rem;
-      font-weight: 700;
-      font-family: inherit;
-      padding: 0.38rem 0.85rem;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.15s;
+      background: var(--brand-soft); border: 1.5px solid var(--brand-hover-border);
+      color: var(--brand-brown); font-size: 0.78rem; font-weight: 700;
+      font-family: inherit; padding: 0.38rem 0.85rem; border-radius: 8px;
+      cursor: pointer; transition: all 0.15s;
     }
-    .examples-btn:hover {
-      background: var(--brand-grad);
-      color: #fff;
-      border-color: var(--brand-brown);
-    }
+    .examples-btn:hover { background: var(--brand-grad); color: #fff; border-color: var(--brand-brown); }
 
-    /* ── Tool card ── */
-    .tool-card {
-      background: var(--sidebar-bg);
-      border: 1.5px solid var(--sb-border);
-      border-radius: 14px;
-      padding: 1.25rem 1.5rem;
-      margin-bottom: 1rem;
-      transition: border-color 0.18s;
+    /* ── Inline name input in table ── */
+    .sw-name-input {
+      background: transparent; border: none; outline: none;
+      font-size: 0.82rem; font-weight: 700; font-family: inherit;
+      color: var(--sb-text); width: 100%; min-width: 120px;
+      border-bottom: 1.5px dashed var(--sb-border); padding-bottom: 1px;
+      transition: border-color 0.15s;
     }
-    .tool-card:hover { border-color: var(--brand-hover-border); }
+    .sw-name-input:focus { border-color: var(--brand-hover-border); }
+    .sw-name-input::placeholder { font-weight: 400; color: var(--sb-muted); }
 
-    .tool-card-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1rem;
-    }
+    /* ── Details panel (replaces step temporarily) ── */
+    .details-panel { display: none; }
+    .details-panel.active { display: block; }
 
-    .tool-card-num {
-      font-size: 0.72rem;
-      font-weight: 800;
-      color: var(--sb-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    .tool-card-remove {
-      background: none;
-      border: none;
-      color: var(--sb-muted);
-      font-size: 0.78rem;
-      font-weight: 600;
-      font-family: inherit;
-      cursor: pointer;
+    .details-back {
+      display: flex; align-items: center; gap: 0.5rem;
+      background: none; border: none; color: var(--sb-muted);
+      font-family: inherit; font-size: 0.82rem; font-weight: 700;
+      cursor: pointer; padding: 0; margin-bottom: 1.5rem;
       transition: color 0.15s;
-      padding: 0;
     }
-    .tool-card-remove:hover { color: #c0392b; }
+    .details-back:hover { color: var(--brand-brown); }
 
-    .tool-grid-3 {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
-      gap: 0.85rem;
-      margin-bottom: 0.85rem;
+    .details-context {
+      background: var(--sidebar-bg); border: 1.5px solid var(--sb-border);
+      border-radius: 12px; padding: 1rem 1.25rem;
+      margin-bottom: 1.75rem; display: flex; align-items: center; gap: 1rem;
     }
-    .tool-grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.85rem;
-      margin-bottom: 0.85rem;
+    .details-context-name {
+      font-size: 1.1rem; font-weight: 800; color: var(--sb-text);
     }
-    @media(max-width:600px){
-      .tool-grid-3, .tool-grid-2 { grid-template-columns: 1fr; }
-    }
+    .details-context-sub { font-size: 0.78rem; color: var(--sb-muted); margin-top: 0.1rem; }
 
-    .field-hint {
-      font-size: 0.72rem;
-      color: var(--sb-muted);
-      margin-top: 0.2rem;
+    /* sequential questions */
+    .detail-q { margin-bottom: 1.5rem; }
+    .detail-q label {
+      display: block; font-size: 0.95rem; font-weight: 700;
+      color: var(--sb-text); margin-bottom: 0.2rem;
     }
+    .detail-q .q-sub { font-size: 0.8rem; color: var(--sb-muted); margin-bottom: 0.65rem; display: block; }
 
-    /* ── Severity stars ── */
-    .severity-wrap {
-      display: flex;
-      gap: 0.4rem;
-      margin-top: 0.25rem;
-      align-items: center;
-    }
-
-    .sev-btn {
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
-      border: 1.5px solid var(--sb-border);
-      background: var(--panel-bg);
-      font-size: 0.85rem;
-      font-weight: 800;
-      font-family: inherit;
-      color: var(--sb-muted);
-      cursor: pointer;
-      transition: all 0.15s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .sev-btn:hover { border-color: var(--brand-hover-border); color: var(--brand-brown); }
-    .sev-btn.selected { background: var(--brand-grad); border-color: var(--brand-brown); color: #fff; }
-
-    .sev-labels {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.68rem;
-      color: var(--sb-muted);
-      margin-top: 0.2rem;
-    }
-
-    /* ── Who pills ── */
-    .pill-group {
-      display: flex;
-      gap: 0.4rem;
-      flex-wrap: wrap;
-      margin-top: 0.25rem;
-    }
-
+    .pill-group { display: flex; gap: 0.4rem; flex-wrap: wrap; }
     .pill-btn {
-      padding: 0.35rem 0.8rem;
-      border-radius: 999px;
-      border: 1.5px solid var(--sb-border);
-      background: var(--panel-bg);
-      color: var(--sb-text);
-      font-size: 0.78rem;
-      font-weight: 600;
-      font-family: inherit;
-      cursor: pointer;
-      transition: all 0.15s;
+      padding: 0.42rem 1rem; border-radius: 999px;
+      border: 1.5px solid var(--sb-border); background: var(--panel-bg);
+      color: var(--sb-text); font-size: 0.82rem; font-weight: 600;
+      font-family: inherit; cursor: pointer; transition: all 0.15s;
     }
     .pill-btn:hover { border-color: var(--brand-hover-border); }
     .pill-btn.selected { background: var(--brand-grad); border-color: var(--brand-brown); color: #fff; }
 
-    /* ── Add tool button ── */
-    .add-tool-btn {
-      width: 100%;
-      padding: 0.85rem;
-      border: 2px dashed var(--sb-border);
-      border-radius: 14px;
-      background: none;
-      color: var(--sb-muted);
-      font-size: 0.875rem;
-      font-weight: 700;
-      font-family: inherit;
-      cursor: pointer;
-      transition: all 0.18s;
-      margin-bottom: 2rem;
+    .sev-group { display: flex; gap: 0.5rem; align-items: center; }
+    .sev-btn {
+      width: 42px; height: 42px; border-radius: 10px;
+      border: 1.5px solid var(--sb-border); background: var(--panel-bg);
+      font-size: 0.9rem; font-weight: 800; font-family: inherit;
+      color: var(--sb-muted); cursor: pointer; transition: all 0.15s;
+      display: flex; align-items: center; justify-content: center;
     }
-    .add-tool-btn:hover {
-      border-color: var(--brand-hover-border);
-      color: var(--brand-brown);
-      background: var(--brand-soft);
-    }
+    .sev-btn:hover { border-color: var(--brand-hover-border); color: var(--brand-brown); }
+    .sev-btn.selected { background: var(--brand-grad); border-color: var(--brand-brown); color: #fff; }
+    .sev-labels { display: flex; justify-content: space-between; font-size: 0.68rem; color: var(--sb-muted); margin-top: 0.3rem; max-width: 230px; }
 
-    /* ── Submit section ── */
-    .submit-section {
-      border-top: 1px solid var(--sb-sep);
-      padding-top: 1.5rem;
-      margin-top: 1rem;
+    .detail-input {
+      width: 100%; max-width: 420px;
+      background: var(--sidebar-bg); border: 1.5px solid var(--sb-border);
+      border-radius: 9px; padding: 0.6rem 0.9rem;
+      font-size: 0.875rem; font-family: inherit; color: var(--sb-text);
+      outline: none; transition: border-color 0.15s, box-shadow 0.15s;
     }
+    .detail-input:focus { border-color: var(--brand-hover-border); box-shadow: 0 0 0 3px rgba(189,153,121,0.15); }
 
-    .submit-section textarea {
-      width: 100%;
-      background: var(--sidebar-bg);
-      border: 1.5px solid var(--sb-border);
-      border-radius: 9px;
-      padding: 0.6rem 0.85rem;
-      font-size: 0.875rem;
-      font-family: inherit;
-      color: var(--sb-text);
-      outline: none;
-      resize: vertical;
-      margin-top: 0.35rem;
+    .detail-textarea {
+      width: 100%; background: var(--sidebar-bg);
+      border: 1.5px solid var(--sb-border); border-radius: 9px;
+      padding: 0.6rem 0.9rem; font-size: 0.875rem; font-family: inherit;
+      color: var(--sb-text); outline: none; resize: vertical;
       transition: border-color 0.15s, box-shadow 0.15s;
     }
-    .submit-section textarea:focus {
-      border-color: var(--brand-hover-border);
-      box-shadow: 0 0 0 3px rgba(189,153,121,0.15);
+    .detail-textarea:focus { border-color: var(--brand-hover-border); box-shadow: 0 0 0 3px rgba(189,153,121,0.15); }
+
+    .skip-hint { font-size: 0.72rem; color: var(--sb-muted); font-style: italic; margin-top: 0.3rem; }
+
+    .done-btn {
+      background: var(--brand-grad); color: #fff; border: none;
+      padding: 0.65rem 1.75rem; border-radius: 10px;
+      font-size: 0.875rem; font-weight: 700; font-family: inherit;
+      cursor: pointer; transition: opacity 0.15s; margin-top: 0.5rem;
+    }
+    .done-btn:hover { opacity: 0.88; }
+
+    /* ── Review page ── */
+    .review-summary { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.5rem; }
+    .review-row { display: flex; justify-content: space-between; font-size: 0.875rem; gap: 1rem; }
+    .review-row span { color: var(--sb-muted); }
+    .review-row strong { color: var(--sb-text); }
+
+    .review-sw-list { margin: 1rem 0 1.5rem; }
+    .review-sw-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.6rem 0.9rem; border-radius: 10px;
+      background: var(--sidebar-bg); border: 1px solid var(--sb-border);
+      margin-bottom: 0.5rem; font-size: 0.82rem;
+    }
+    .review-sw-item strong { color: var(--sb-text); }
+    .review-sw-item span   { color: var(--sb-muted); font-size: 0.75rem; }
+
+    /* ── Nav ── */
+    .step-nav {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--sb-sep);
     }
 
     /* ── Modal ── */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.45);
-      backdrop-filter: blur(6px);
-      z-index: 300;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-    }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); backdrop-filter: blur(6px); z-index: 300; display: flex; align-items: center; justify-content: center; padding: 1rem; }
     .modal-overlay.hidden { display: none; }
-
-    .modal-box {
-      background: var(--panel-bg);
-      border: 1.5px solid var(--sb-border);
-      border-radius: 20px;
-      padding: 2rem;
-      max-width: 640px;
-      width: 100%;
-      max-height: 80vh;
-      overflow-y: auto;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-    }
-
-    .modal-box h3 {
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: var(--sb-text);
-      margin-bottom: 1.25rem;
-    }
-
+    .modal-box { background: var(--panel-bg); border: 1.5px solid var(--sb-border); border-radius: 20px; padding: 2rem; max-width: 620px; width: 100%; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+    .modal-box h3 { font-size: 1.1rem; font-weight: 800; color: var(--sb-text); margin-bottom: 1.25rem; }
     .modal-category { margin-bottom: 1.25rem; }
-
-    .modal-category h4 {
-      font-size: 0.8rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--sb-muted);
-      margin-bottom: 0.5rem;
-    }
-
-    .modal-apps {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-    }
-
-    .modal-app-tag {
-      background: var(--sidebar-bg);
-      border: 1px solid var(--sb-border);
-      border-radius: 8px;
-      padding: 0.28rem 0.65rem;
-      font-size: 0.78rem;
-      color: var(--sb-text);
-      font-weight: 600;
-    }
-
-    .modal-close {
-      width: 100%;
-      margin-top: 1.5rem;
-      padding: 0.65rem;
-      background: var(--brand-grad);
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      font-size: 0.875rem;
-      font-weight: 700;
-      font-family: inherit;
-      cursor: pointer;
-    }
-
-    .skip-note {
-      font-size: 0.72rem;
-      color: var(--sb-muted);
-      margin-top: 0.3rem;
-      font-style: italic;
-    }
+    .modal-category h4 { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--sb-muted); margin-bottom: 0.5rem; }
+    .modal-apps { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .modal-app-tag { background: var(--sidebar-bg); border: 1px solid var(--sb-border); border-radius: 8px; padding: 0.28rem 0.65rem; font-size: 0.78rem; color: var(--sb-text); font-weight: 600; }
+    .modal-close { width: 100%; margin-top: 1.5rem; padding: 0.65rem; background: var(--brand-grad); color: #fff; border: none; border-radius: 10px; font-size: 0.875rem; font-weight: 700; font-family: inherit; cursor: pointer; }
   </style>
 </head>
 <body>
+<div class="app-shell">
 
-  <div class="app-shell">
-
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
-      <div class="sidebar-logo-wrap">
-        <img src="../logo.png" alt="Rowe Casa Organics" class="sidebar-logo"/>
-      </div>
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo-wrap">
+      <img src="../logo.png" alt="Rowe Casa Organics" class="sidebar-logo"/>
+    </div>
+    <div class="sidebar-divider"></div>
+    <nav class="sidebar-nav" id="stepNav">
+      <button class="nav-btn step-nav-btn active" onclick="goTo(0)"><span class="step-num">1</span> Overview</button>
+      <button class="nav-btn step-nav-btn"         onclick="goTo(1)"><span class="step-num">2</span> Your Info</button>
+      <button class="nav-btn step-nav-btn"         onclick="goTo(2)"><span class="step-num">3</span> Software Details</button>
+      <button class="nav-btn step-nav-btn"         onclick="goTo(3)"><span class="step-num">4</span> Review & Submit</button>
+    </nav>
+    <div class="sidebar-footer">
       <div class="sidebar-divider"></div>
-      <nav class="sidebar-nav">
-        <button class="nav-btn active" onclick="scrollTo(0,0)">Your Information</button>
-        <button class="nav-btn" onclick="document.getElementById('tools-section').scrollIntoView({behavior:'smooth'})">Tools & Software</button>
-        <button class="nav-btn" onclick="document.getElementById('submit-section').scrollIntoView({behavior:'smooth'})">Submit</button>
-      </nav>
-      <div class="sidebar-footer">
-        <div class="sidebar-divider"></div>
-        <button class="contact-btn" onclick="window.location.href='../index.html'">← Back to Portal</button>
-        <div class="portal-label">RCO IT Help Site</div>
-        <div class="portal-sub">@rowecasaorganics.com</div>
+      <button class="contact-btn" onclick="window.location.href='../index.html'">← Back to Portal</button>
+      <div class="portal-label">RCO IT Help Site</div>
+      <div class="portal-sub">@rowecasaorganics.com</div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main-wrap">
+    <header class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-title">Technology & Application Discovery Survey</div>
+        <div class="topbar-desc">Help us track every app and software your team uses.</div>
       </div>
-    </aside>
-
-    <!-- MAIN -->
-    <div class="main-wrap">
-      <header class="topbar">
-        <div class="topbar-left">
-          <div class="topbar-title">Technology & Application Discovery Survey</div>
-          <div class="topbar-desc">Help us track every app and software your team uses — web, desktop, or licensed.</div>
+      <div class="topbar-right">
+        <div class="survey-progress-wrap">
+          <div class="survey-progress-label">Step <span id="progressCurrent">1</span> of 4</div>
+          <div class="survey-progress-bar"><div class="survey-progress-fill" id="progressFill" style="width:25%"></div></div>
         </div>
-      </header>
+      </div>
+    </header>
 
-      <main class="content-panel">
-        <div class="survey-single-page" id="surveyPage">
+    <main class="content-panel">
 
-          <!-- ── Your Information ── -->
-          <div class="survey-header-block">
-            <h2>Your Information</h2>
-            <p>Tell us a little about yourself so we know who submitted this survey.</p>
-          </div>
-
-          <div class="info-grid-2">
-            <div class="field-wrap">
-              <label>Full Name</label>
-              <input type="text" id="info_name" placeholder="Your full name"/>
-            </div>
-            <div class="field-wrap">
-              <label>Job Title</label>
-              <input type="text" id="info_title" placeholder="Your job title"/>
-            </div>
-            <div class="field-wrap">
-              <label>Department</label>
-              <select id="info_dept">
-                <option value="">— Select your department —</option>
-                <option>Administration</option><option>Brand Experience</option>
-                <option>Curing</option><option>Customer Care</option>
-                <option>Customer Service</option><option>Facilities and Maintenance</option>
-                <option>Finance</option><option>Human Resources</option>
-                <option>Information Technology</option><option>Inventory</option>
-                <option>Kitchen</option><option>Labeling</option>
-                <option>Marketing</option><option>Operations</option>
-                <option>Procurement</option><option>Production</option>
-                <option>Project Management</option><option>Quality Control</option>
-                <option>Research &amp; Development</option><option>Shipping</option>
-                <option>Social Media</option><option>Strategy</option>
-                <option>Wholesale</option>
-              </select>
-            </div>
-            <div class="field-wrap">
-              <label>Work Email</label>
-              <input type="email" id="info_email" placeholder="yourname@rowecasaorganics.com"/>
-            </div>
-            <div class="field-wrap">
-              <label>Today's Date</label>
-              <input type="date" id="info_date"/>
-            </div>
-          </div>
-
-          <!-- ── Tools Section ── -->
-          <div id="tools-section">
-            <div class="tools-section-header">
-              <h3>Tools &amp; Software</h3>
-              <button class="examples-btn" onclick="openModal()">View App Examples</button>
-            </div>
-            <p style="font-size:0.85rem;color:var(--sb-muted);margin-bottom:1.25rem;line-height:1.6">
-              List every app, program, or software your team uses — whether it's a website you log into (like Asana), 
-              a program installed on your computer (like Adobe Acrobat), or anything that's licensed or regularly used for work.<br/>
-              <strong style="color:var(--sb-text)">Skip any field you're unsure about — just fill in what you know.</strong>
-            </p>
-
-            <div id="toolsList"></div>
-
-            <button class="add-tool-btn" onclick="addTool()">+ Add a tool or app</button>
-          </div>
-
-          <!-- ── Submit ── -->
-          <div class="submit-section" id="submit-section">
-            <div class="survey-header-block" style="border:none;padding:0;margin-bottom:1rem">
-              <h2>Additional Comments</h2>
-              <p>Anything else we should know? Tools being trialed, tools you're unsure about, or anything on your mind.</p>
-            </div>
-            <div class="field-wrap">
-              <label>Comments <span style="font-weight:400;color:var(--sb-muted)">(optional)</span></label>
-              <textarea id="comments" rows="4" placeholder="Optional..."></textarea>
-            </div>
-            <div style="margin-top:1.5rem">
-              <button class="card-action" style="padding:0.75rem 2rem;font-size:0.95rem" onclick="submitSurvey()" id="submitBtn">Submit Survey →</button>
-            </div>
-            <div id="submitStatus" class="contact-status" style="margin-top:0.75rem"></div>
-          </div>
-
-        </div>
-      </main>
-    </div>
-  </div>
-
-  <!-- ── Examples Modal ── -->
-  <div class="modal-overlay hidden" id="examplesModal">
-    <div class="modal-box">
-      <h3>App &amp; Software Examples by Category</h3>
-      <div id="modalContent"></div>
-      <button class="modal-close" onclick="closeModal()">Close</button>
-    </div>
-  </div>
-
-  <!-- Google Sheets endpoint -->
-  <script>
-    const SHEET_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxeP-Asvk9kgGx_oz4jMWYOBldaPLM8Tm6S2XfXOfDRat-3KX1UfVXYzEju2Dc7nDwBGg/exec';
-  </script>
-
-  <!-- Firebase -->
-  <script type="module">
-    import { initializeApp, getApps, getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-    import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-
-    const FIREBASE_CONFIG = {
-      apiKey:            "AIzaSyBRKBzxTYzBnBHo-YY8fSxTSSkM3uyujmc",
-      authDomain:        "ithelpsite-4ec53.firebaseapp.com",
-      projectId:         "ithelpsite-4ec53",
-      storageBucket:     "ithelpsite-4ec53.firebasestorage.app",
-      messagingSenderId: "893459212285",
-      appId:             "1:893459212285:web:194adf30886cbb28c21b94",
-      measurementId:     "G-H6WM1LWQ4V"
-    };
-
-    const app  = getApps().length ? getApp() : initializeApp(FIREBASE_CONFIG);
-    const auth = getAuth(app);
-    const db   = getFirestore(app);
-
-    onAuthStateChanged(auth, user => {
-      if (!user || !user.email.endsWith('@rowecasaorganics.com')) {
-        signOut(auth).finally(() => window.location.replace('../login.html'));
-        return;
-      }
-      window._currentUser = user;
-    });
-
-    window.saveSubmission = async function(data) {
-      if (!window._currentUser) {
-        await new Promise(resolve => {
-          const unsub = onAuthStateChanged(auth, user => {
-            if (user) { window._currentUser = user; unsub(); resolve(); }
-          });
-          setTimeout(resolve, 5000);
-        });
-      }
-      if (!window._currentUser) return false;
-      try {
-        await addDoc(collection(db, 'submissions'), {
-          ...data,
-          uid:         window._currentUser.uid,
-          userEmail:   window._currentUser.email,
-          submittedAt: serverTimestamp(),
-        });
-        return true;
-      } catch (err) {
-        console.error('Firestore save failed:', err);
-        return false;
-      }
-    };
-  </script>
-
-  <!-- Main script -->
-  <script>
-    // ── App examples by category ───────────────────────────────────
-    const APP_EXAMPLES = {
-      'Communication':               ['Gmail','Slack','Microsoft Teams','Zoom','Outlook','Google Meet','Loom','RingCentral'],
-      'Productivity & File Storage': ['Google Drive','Dropbox','Microsoft 365','OneDrive','Notion','Box','SharePoint','Evernote'],
-      'Project Management':          ['Asana','Monday.com','Trello','ClickUp','Basecamp','Smartsheet','Jira','Wrike'],
-      'HR & People':                 ['BambooHR','ADP','Gusto','Rippling','Workday','Lattice','Greenhouse','Lever'],
-      'Finance & Accounting':        ['QuickBooks','Expensify','Bill.com','NetSuite','Xero','FreshBooks','Sage','Concur'],
-      'Sales & CRM':                 ['Salesforce','HubSpot','Pipedrive','Zoho CRM','Copper','Close','Zendesk'],
-      'Marketing':                   ['Mailchimp','Klaviyo','Hootsuite','Google Analytics','Meta Ads','Semrush','Buffer','ActiveCampaign'],
-      'IT & Security':               ['1Password','LastPass','CrowdStrike','Okta','Jamf','NordVPN','Malwarebytes','Duo'],
-      'Design & Creative':           ['Adobe Acrobat','Adobe Creative Cloud','Canva','Figma','InDesign','Photoshop','Illustrator','CapCut'],
-      'Operations & Logistics':      ['ShipStation','ShipBob','Cin7','Fishbowl','NetSuite','Brightpearl','Extensiv','ZebraDesigner'],
-      'Other':                       ['Any browser extensions','Specialty tools','Industry-specific software','Custom-built tools'],
-    };
-
-    // ── Tool counter ───────────────────────────────────────────────
-    let toolCount = 0;
-
-    // ── Add tool ───────────────────────────────────────────────────
-    function addTool() {
-      const idx  = toolCount++;
-      const div  = document.createElement('div');
-      div.className = 'tool-card';
-      div.id        = `tool-${idx}`;
-      div.innerHTML = toolCardHTML(idx);
-      document.getElementById('toolsList').appendChild(div);
-      div.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-
-    function toolCardHTML(idx) {
-      return `
-        <div class="tool-card-top">
-          <span class="tool-card-num">Tool ${idx + 1}</span>
-          <button class="tool-card-remove" onclick="removeTool(${idx})">✕ Remove</button>
+      <!-- ── STEP 1: Overview ── -->
+      <div class="step active" id="step-0">
+        <div class="step-header">
+          <h2>Welcome to the Software Discovery Survey</h2>
+          <p>This should only take a few minutes. Here's what to expect.</p>
         </div>
 
-        <!-- Row 1: name, category, severity -->
-        <div class="tool-grid-3">
+        <p style="font-size:0.9rem;color:var(--sb-text);line-height:1.7;margin-bottom:1.25rem">
+          Rowe Casa Organics is building a full inventory of every app, program, and software tool used across the company.
+          This helps our IT team manage licenses, improve security, and make sure everyone has what they need to do their job.
+          <br/><br/>
+          <strong>You don't need to be technical to fill this out.</strong> Just list the tools you use at work —
+          whether it's something you open in a browser like Asana, or a program installed on your computer like Adobe Acrobat.
+          Skip anything you're unsure about.
+        </p>
+
+        <div class="howto-video-placeholder">
+          <span>▶</span>
+          <strong>Walkthrough video coming soon</strong>
+          <span style="font-size:0.78rem">A short demo will be added here showing how to fill out the survey</span>
+        </div>
+
+        <div class="howto-steps">
+          <div class="howto-step">
+            <div class="howto-step-num">1</div>
+            <div class="howto-step-text">
+              <strong>Your Info</strong>
+              <span>Just your name, email, and department — takes 30 seconds.</span>
+            </div>
+          </div>
+          <div class="howto-step">
+            <div class="howto-step-num">2</div>
+            <div class="howto-step-text">
+              <strong>Software Details</strong>
+              <span>Add each app or program your team uses. For each one, you can optionally answer a few quick questions — who owns the account, whether you have admin access, and so on.</span>
+            </div>
+          </div>
+          <div class="howto-step">
+            <div class="howto-step-num">3</div>
+            <div class="howto-step-text">
+              <strong>Review & Submit</strong>
+              <span>Check your entries and submit. That's it.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-nav">
+          <span></span>
+          <button class="card-action" onclick="goTo(1)">Get Started →</button>
+        </div>
+      </div>
+
+      <!-- ── STEP 2: Your Info ── -->
+      <div class="step" id="step-1">
+        <div class="step-header">
+          <h2>Your Info</h2>
+          <p>Just the basics so we know who submitted this.</p>
+        </div>
+
+        <div class="info-grid">
           <div class="field-wrap">
-            <label>App / Software Name</label>
-            <input type="text" id="t${idx}_name" placeholder="e.g. Asana, Adobe Acrobat, Slack"/>
-            <div class="field-hint">Web app, desktop program, or licensed software</div>
+            <label>Full Name</label>
+            <input type="text" id="info_name" placeholder="Your full name"/>
           </div>
           <div class="field-wrap">
-            <label>Category</label>
-            <select id="t${idx}_category">
-              <option value="">— Select —</option>
-              <option>Communication</option>
-              <option>Productivity & File Storage</option>
-              <option>Project Management</option>
-              <option>HR & People</option>
-              <option>Finance & Accounting</option>
-              <option>Sales & CRM</option>
-              <option>Marketing</option>
-              <option>IT & Security</option>
-              <option>Design & Creative</option>
-              <option>Operations & Logistics</option>
-              <option>Other</option>
+            <label>Work Email</label>
+            <input type="email" id="info_email" placeholder="yourname@rowecasaorganics.com"/>
+          </div>
+          <div class="field-wrap" style="grid-column:1/-1">
+            <label>Department</label>
+            <select id="info_dept" style="max-width:260px">
+              <option value="">— Select your department —</option>
+              <option>Administration</option><option>Brand Experience</option>
+              <option>Curing</option><option>Customer Care</option>
+              <option>Customer Service</option><option>Facilities and Maintenance</option>
+              <option>Finance</option><option>Human Resources</option>
+              <option>Information Technology</option><option>Inventory</option>
+              <option>Kitchen</option><option>Labeling</option>
+              <option>Marketing</option><option>Operations</option>
+              <option>Procurement</option><option>Production</option>
+              <option>Project Management</option><option>Quality Control</option>
+              <option>Research &amp; Development</option><option>Shipping</option>
+              <option>Social Media</option><option>Strategy</option>
+              <option>Wholesale</option>
             </select>
-            <div class="field-hint">Skip if unsure</div>
           </div>
-          <div class="field-wrap">
-            <label>How critical is this to your job?</label>
-            <div class="severity-wrap">
-              ${[1,2,3,4,5].map(n => `<button type="button" class="sev-btn" id="t${idx}_sev_${n}" onclick="setSeverity(${idx},${n})">${n}</button>`).join('')}
-              <input type="hidden" id="t${idx}_severity" value=""/>
+        </div>
+
+        <div class="step-nav">
+          <button class="clear-btn" onclick="goTo(0)">← Back</button>
+          <button class="card-action" onclick="goToStep2()">Next →</button>
+        </div>
+      </div>
+
+      <!-- ── STEP 3: Software Details ── -->
+      <div class="step" id="step-2">
+
+        <!-- Summary view -->
+        <div id="sw-summary-view">
+          <div class="step-header">
+            <h2>Software Details</h2>
+            <p>List every app, program, or software your team uses. Click <strong>Enter Details</strong> on any row to add more information.</p>
+          </div>
+
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:0.75rem">
+            <button class="examples-btn" onclick="openModal()">View App Examples</button>
+          </div>
+
+          <div class="sw-table-wrap">
+            <table class="sw-table">
+              <thead>
+                <tr>
+                  <th style="width:30%">App / Software Name</th>
+                  <th>How Critical?</th>
+                  <th>Admin Access?</th>
+                  <th>Owner</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="swTableBody"></tbody>
+            </table>
+          </div>
+
+          <button class="add-sw-row" onclick="addSoftware()">+ Add an app or software</button>
+
+          <div class="step-nav">
+            <button class="clear-btn" onclick="goTo(1)">← Back</button>
+            <button class="card-action" onclick="goTo(3)">Review & Submit →</button>
+          </div>
+        </div>
+
+        <!-- Details panel -->
+        <div id="sw-details-view" class="details-panel">
+          <button class="details-back" onclick="closeDetails()">← Back to Software List</button>
+
+          <div class="details-context">
+            <div>
+              <div class="details-context-name" id="details-app-name">—</div>
+              <div class="details-context-sub" id="details-app-sub">Fill in what you know — skip anything you're unsure about</div>
+            </div>
+          </div>
+
+          <!-- Q1: Who uses it -->
+          <div class="detail-q">
+            <label>Who uses this tool?</label>
+            <span class="q-sub">Select the option that best describes your team's usage.</span>
+            <div class="pill-group" id="d-who-pills">
+              <button type="button" class="pill-btn" onclick="setPill('d_who', this, 'Just me')">Just me</button>
+              <button type="button" class="pill-btn" onclick="setPill('d_who', this, 'My team')">My team</button>
+              <button type="button" class="pill-btn" onclick="setPill('d_who', this, 'Whole department')">Whole department</button>
+            </div>
+            <input type="hidden" id="d_who"/>
+            <p class="skip-hint">Skip if unsure</p>
+          </div>
+
+          <!-- Q2: Severity -->
+          <div class="detail-q">
+            <label>How critical is this tool to your job?</label>
+            <span class="q-sub">1 = Nice to have, 5 = Can't do my job without it</span>
+            <div class="sev-group">
+              <button type="button" class="sev-btn" onclick="setSev(1)">1</button>
+              <button type="button" class="sev-btn" onclick="setSev(2)">2</button>
+              <button type="button" class="sev-btn" onclick="setSev(3)">3</button>
+              <button type="button" class="sev-btn" onclick="setSev(4)">4</button>
+              <button type="button" class="sev-btn" onclick="setSev(5)">5</button>
+              <input type="hidden" id="d_severity"/>
             </div>
             <div class="sev-labels"><span>Not critical</span><span>Essential</span></div>
-            <div class="field-hint">Skip if unsure</div>
+            <p class="skip-hint">Skip if unsure</p>
           </div>
-        </div>
 
-        <!-- Row 2: who uses it, admin access -->
-        <div class="tool-grid-2">
-          <div class="field-wrap">
-            <label>Who uses this tool?</label>
-            <div class="pill-group" id="t${idx}_who_pills">
-              ${['Just me','My team','Whole department'].map(o =>
-                `<button type="button" class="pill-btn" onclick="setPill('t${idx}_who', this, '${o}')">${o}</button>`
-              ).join('')}
-            </div>
-            <input type="hidden" id="t${idx}_who" value=""/>
-            <div class="field-hint">Skip if unsure</div>
-          </div>
-          <div class="field-wrap">
+          <!-- Q3: Admin access -->
+          <div class="detail-q">
             <label>Do you have admin access?</label>
-            <div class="pill-group">
-              ${['Yes','No',"I don't know"].map(o =>
-                `<button type="button" class="pill-btn" onclick="setPill('t${idx}_admin', this, '${o}')">${o}</button>`
-              ).join('')}
+            <span class="q-sub">Admin access means you can add/remove users or change settings.</span>
+            <div class="pill-group" id="d-admin-pills">
+              <button type="button" class="pill-btn" onclick="setPill('d_admin', this, 'Yes')">Yes</button>
+              <button type="button" class="pill-btn" onclick="setPill('d_admin', this, 'No')">No</button>
+              <button type="button" class="pill-btn" onclick="setPill('d_admin', this, 'Not sure')">Not sure</button>
             </div>
-            <input type="hidden" id="t${idx}_admin" value=""/>
+            <input type="hidden" id="d_admin"/>
           </div>
+
+          <!-- Q4: Login email -->
+          <div class="detail-q">
+            <label>What email do you use to log in?</label>
+            <span class="q-sub">The email address associated with this account.</span>
+            <input type="text" class="detail-input" id="d_login" placeholder="e.g. hayden@rowecasaorganics.com"/>
+            <p class="skip-hint">Skip if unsure or not applicable</p>
+          </div>
+
+          <!-- Q5: Owner -->
+          <div class="detail-q">
+            <label>Who owns or manages this account?</label>
+            <span class="q-sub">The person responsible for the subscription or license — e.g. BambooHR is managed by Chris Pauline, Google Workspace by Philip Williams.</span>
+            <input type="text" class="detail-input" id="d_owner" placeholder="e.g. Chris Pauline"/>
+            <p class="skip-hint">Skip if you don't know</p>
+          </div>
+
+          <!-- Q6: Notes -->
+          <div class="detail-q">
+            <label>Any notes? <span style="font-weight:400;color:var(--sb-muted)">(optional)</span></label>
+            <span class="q-sub">e.g. trial version, shared login, only used occasionally</span>
+            <textarea class="detail-textarea" id="d_notes" rows="3" placeholder="Optional..."></textarea>
+          </div>
+
+          <button class="done-btn" onclick="saveDetails()">Save & Return to List</button>
+        </div>
+      </div>
+
+      <!-- ── STEP 4: Review & Submit ── -->
+      <div class="step" id="step-3">
+        <div class="step-header">
+          <h2>Review & Submit</h2>
+          <p>Check your details below then hit submit.</p>
         </div>
 
-        <!-- Row 3: login email, owner -->
-        <div class="tool-grid-2">
-          <div class="field-wrap">
-            <label>What email do you log in with?</label>
-            <input type="text" id="t${idx}_login" placeholder="e.g. hayden@rowecasaorganics.com"/>
-            <div class="field-hint">Skip if you're not sure or it doesn't apply</div>
-          </div>
-          <div class="field-wrap">
-            <label>Who owns or manages this app?
-              <span class="owner-tip" title="This is the person responsible for the subscription or license — e.g. BambooHR → Chris Pauline, Google Workspace → Philip Williams"
-                style="cursor:help;color:var(--brand-brown);font-weight:400;margin-left:4px">(?)</span>
-            </label>
-            <input type="text" id="t${idx}_owner" placeholder="e.g. Chris Pauline, Philip Williams"/>
-            <div class="field-hint">The person who pays for or administers the account. Skip if unknown.</div>
-          </div>
-        </div>
+        <div class="review-summary" id="reviewSummary"></div>
 
-        <!-- Notes -->
-        <div class="field-wrap" style="margin-top:0.25rem">
-          <label>Any other notes? <span style="font-weight:400;color:var(--sb-muted)">(optional)</span></label>
-          <input type="text" id="t${idx}_notes" placeholder="e.g. trial version, rarely used, shared login"/>
+        <h3 style="font-size:0.85rem;font-weight:800;color:var(--sb-text);margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:0.05em">Software Entries</h3>
+        <div class="review-sw-list" id="reviewSwList"></div>
+
+        <div id="submitStatus" class="contact-status" style="margin-bottom:0.75rem"></div>
+
+        <div class="step-nav">
+          <button class="clear-btn" onclick="goTo(2)">← Back</button>
+          <button class="card-action" id="submitBtn" onclick="submitSurvey()">Submit Survey →</button>
         </div>
-      `;
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Examples Modal -->
+<div class="modal-overlay hidden" id="examplesModal">
+  <div class="modal-box">
+    <h3>App &amp; Software Examples by Category</h3>
+    <div id="modalContent"></div>
+    <button class="modal-close" onclick="closeModal()">Got it</button>
+  </div>
+</div>
+
+<!-- Google Sheets -->
+<script>
+  const SHEET_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxeP-Asvk9kgGx_oz4jMWYOBldaPLM8Tm6S2XfXOfDRat-3KX1UfVXYzEju2Dc7nDwBGg/exec';
+</script>
+
+<!-- Firebase -->
+<script type="module">
+  import { initializeApp, getApps, getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+  import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+  import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+  const cfg = {
+    apiKey:"AIzaSyBRKBzxTYzBnBHo-YY8fSxTSSkM3uyujmc",
+    authDomain:"ithelpsite-4ec53.firebaseapp.com",
+    projectId:"ithelpsite-4ec53",
+    storageBucket:"ithelpsite-4ec53.firebasestorage.app",
+    messagingSenderId:"893459212285",
+    appId:"1:893459212285:web:194adf30886cbb28c21b94"
+  };
+  const app  = getApps().length ? getApp() : initializeApp(cfg);
+  const auth = getAuth(app);
+  const db   = getFirestore(app);
+
+  onAuthStateChanged(auth, user => {
+    if (!user || !user.email.endsWith('@rowecasaorganics.com')) {
+      signOut(auth).finally(() => window.location.replace('../login.html'));
+      return;
     }
+    window._currentUser = user;
+  });
 
-    // ── Remove tool ────────────────────────────────────────────────
-    function removeTool(idx) {
-      const el = document.getElementById(`tool-${idx}`);
-      if (el) el.remove();
-    }
-
-    // ── Severity selector ──────────────────────────────────────────
-    function setSeverity(idx, val) {
-      [1,2,3,4,5].forEach(n => {
-        document.getElementById(`t${idx}_sev_${n}`)?.classList.toggle('selected', n <= val);
+  window.saveSubmission = async function(data) {
+    if (!window._currentUser) {
+      await new Promise(resolve => {
+        const u = onAuthStateChanged(auth, usr => { if(usr){window._currentUser=usr;u();resolve();} });
+        setTimeout(resolve, 5000);
       });
-      document.getElementById(`t${idx}_severity`).value = val;
     }
+    if (!window._currentUser) return false;
+    try {
+      await addDoc(collection(db,'submissions'), {
+        ...data, uid: window._currentUser.uid,
+        userEmail: window._currentUser.email, submittedAt: serverTimestamp()
+      });
+      return true;
+    } catch(e) { console.error(e); return false; }
+  };
+</script>
 
-    // ── Pill selector ──────────────────────────────────────────────
-    function setPill(fieldId, btn, val) {
-      btn.closest('.pill-group').querySelectorAll('.pill-btn').forEach(b => b.classList.remove('selected'));
-      btn.classList.add('selected');
-      document.getElementById(fieldId).value = val;
+<!-- Main -->
+<script>
+  const APP_EXAMPLES = {
+    'Communication':               ['Gmail','Slack','Microsoft Teams','Zoom','Outlook','Google Meet','Loom'],
+    'Productivity & File Storage': ['Google Drive','Dropbox','Microsoft 365','OneDrive','Notion','Box'],
+    'Project Management':          ['Asana','Monday.com','Trello','ClickUp','Basecamp','Smartsheet','Jira'],
+    'HR & People':                 ['BambooHR','ADP','Gusto','Rippling','Workday','Greenhouse'],
+    'Finance & Accounting':        ['QuickBooks','Expensify','Bill.com','NetSuite','Xero','FreshBooks'],
+    'Sales & CRM':                 ['Salesforce','HubSpot','Pipedrive','Zoho CRM','Zendesk'],
+    'Marketing':                   ['Mailchimp','Klaviyo','Hootsuite','Google Analytics','Meta Ads','Buffer'],
+    'IT & Security':               ['1Password','LastPass','CrowdStrike','Okta','Jamf','NordVPN','Duo'],
+    'Design & Creative':           ['Adobe Acrobat','Adobe Creative Cloud','Canva','Figma','Photoshop','CapCut'],
+    'Operations & Logistics':      ['ShipStation','ShipBob','Cin7','Fishbowl','NetSuite','Extensiv'],
+    'Other':                       ['Browser extensions','Specialty / industry-specific tools','Custom-built internal tools'],
+  };
+
+  // ── State ──────────────────────────────────────────────────
+  let currentStep  = 0;
+  let softwareList = []; // [{name, severity, admin, owner, who, login, notes, detailsFilled}]
+  let editingIdx   = null;
+
+  // ── Step navigation ────────────────────────────────────────
+  function goTo(n) {
+    if (n === 3) buildReview();
+    document.querySelectorAll('.step').forEach((s,i) => s.classList.toggle('active', i === n));
+    document.querySelectorAll('.step-nav-btn').forEach((b,i) => b.classList.toggle('active', i === n));
+    document.getElementById('progressCurrent').textContent = n + 1;
+    document.getElementById('progressFill').style.width = ((n+1)/4*100) + '%';
+    currentStep = n;
+    window.scrollTo(0,0);
+  }
+
+  function goToStep2() {
+    const name  = document.getElementById('info_name').value.trim();
+    const email = document.getElementById('info_email').value.trim();
+    const dept  = document.getElementById('info_dept').value;
+    if (!name || !email || !dept) {
+      alert('Please fill in your name, email, and department before continuing.');
+      return;
     }
+    goTo(2);
+  }
 
-    // ── Modal ──────────────────────────────────────────────────────
-    function openModal() {
-      const content = document.getElementById('modalContent');
-      content.innerHTML = Object.entries(APP_EXAMPLES).map(([cat, apps]) => `
-        <div class="modal-category">
-          <h4>${cat}</h4>
-          <div class="modal-apps">
-            ${apps.map(a => `<span class="modal-app-tag">${a}</span>`).join('')}
+  // ── Software list ──────────────────────────────────────────
+  function addSoftware() {
+    softwareList.push({ name:'', severity:'', admin:'', owner:'', who:'', login:'', notes:'', detailsFilled:false });
+    renderTable();
+    // focus the new name input
+    setTimeout(() => {
+      const inputs = document.querySelectorAll('.sw-name-input');
+      inputs[inputs.length-1]?.focus();
+    }, 50);
+  }
+
+  function removeSoftware(idx) {
+    softwareList.splice(idx,1);
+    renderTable();
+  }
+
+  function renderTable() {
+    const tbody = document.getElementById('swTableBody');
+    if (!softwareList.length) {
+      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--sb-muted);padding:2rem;font-size:0.85rem">No apps added yet — click the button below to get started.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = softwareList.map((sw, i) => {
+      const sevDots = [1,2,3,4,5].map(n =>
+        `<div class="sev-dot ${sw.severity && n <= sw.severity ? 'filled' : ''}"></div>`
+      ).join('');
+      const adminPill = sw.admin
+        ? `<span class="pill-sm ${sw.admin==='Yes'?'yes':sw.admin==='No'?'no':''}">${sw.admin}</span>`
+        : `<span style="color:var(--sb-muted);font-size:0.75rem">—</span>`;
+      const filled = sw.detailsFilled;
+      return `<tr class="sw-row">
+        <td class="name-cell">
+          <input class="sw-name-input" type="text" placeholder="App or software name"
+            value="${escHtml(sw.name)}"
+            oninput="softwareList[${i}].name = this.value"/>
+        </td>
+        <td><div class="sev-display">${sevDots}</div></td>
+        <td>${adminPill}</td>
+        <td style="color:var(--sb-muted);font-size:0.78rem">${escHtml(sw.owner || '—')}</td>
+        <td>
+          <div class="sw-actions">
+            <button class="details-btn ${filled?'filled':''}" onclick="openDetails(${i})">
+              ${filled ? '✓ Details' : 'Enter Details'}
+            </button>
+            <button class="remove-btn" onclick="removeSoftware(${i})">✕</button>
           </div>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  // ── Details panel ──────────────────────────────────────────
+  function openDetails(idx) {
+    editingIdx = idx;
+    const sw   = softwareList[idx];
+
+    // Update context bar
+    document.getElementById('details-app-name').textContent = sw.name || 'Unnamed App';
+    document.getElementById('details-app-sub').textContent  =
+      `Editing details for this entry — skip anything you're unsure about`;
+
+    // Restore saved values
+    restorePills('d-who-pills',   'd_who',      sw.who);
+    restorePills('d-admin-pills', 'd_admin',    sw.admin);
+    restoreSev(sw.severity);
+    document.getElementById('d_login').value = sw.login || '';
+    document.getElementById('d_owner').value = sw.owner || '';
+    document.getElementById('d_notes').value = sw.notes || '';
+
+    document.getElementById('sw-summary-view').style.display = 'none';
+    document.getElementById('sw-details-view').classList.add('active');
+    window.scrollTo(0,0);
+  }
+
+  function closeDetails() {
+    document.getElementById('sw-summary-view').style.display = '';
+    document.getElementById('sw-details-view').classList.remove('active');
+    editingIdx = null;
+  }
+
+  function saveDetails() {
+    if (editingIdx === null) return;
+    const sw      = softwareList[editingIdx];
+    sw.who        = document.getElementById('d_who').value;
+    sw.severity   = document.getElementById('d_severity').value;
+    sw.admin      = document.getElementById('d_admin').value;
+    sw.login      = document.getElementById('d_login').value;
+    sw.owner      = document.getElementById('d_owner').value;
+    sw.notes      = document.getElementById('d_notes').value;
+    sw.detailsFilled = !!(sw.who || sw.severity || sw.admin || sw.login || sw.owner);
+    renderTable();
+    closeDetails();
+  }
+
+  // ── Pill / severity helpers ────────────────────────────────
+  function setPill(fieldId, btn, val) {
+    btn.closest('.pill-group').querySelectorAll('.pill-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    document.getElementById(fieldId).value = val;
+  }
+
+  function setSev(val) {
+    [1,2,3,4,5].forEach(n => {
+      document.querySelectorAll('.sev-btn')[n-1]?.classList.toggle('selected', n <= val);
+    });
+    document.getElementById('d_severity').value = val;
+  }
+
+  function restorePills(groupId, fieldId, val) {
+    document.getElementById(fieldId).value = val || '';
+    document.getElementById(groupId)?.querySelectorAll('.pill-btn').forEach(b => {
+      b.classList.toggle('selected', b.textContent === val);
+    });
+  }
+
+  function restoreSev(val) {
+    document.getElementById('d_severity').value = val || '';
+    [1,2,3,4,5].forEach(n => {
+      document.querySelectorAll('.sev-btn')[n-1]?.classList.toggle('selected', val && n <= parseInt(val));
+    });
+  }
+
+  // ── Review page ────────────────────────────────────────────
+  function buildReview() {
+    const name  = document.getElementById('info_name').value;
+    const email = document.getElementById('info_email').value;
+    const dept  = document.getElementById('info_dept').value;
+    const count = softwareList.filter(s => s.name.trim()).length;
+
+    document.getElementById('reviewSummary').innerHTML = `
+      <div class="review-row"><span>Name</span>       <strong>${escHtml(name  ||'—')}</strong></div>
+      <div class="review-row"><span>Email</span>      <strong>${escHtml(email ||'—')}</strong></div>
+      <div class="review-row"><span>Department</span> <strong>${escHtml(dept  ||'—')}</strong></div>
+      <div class="review-row"><span>Apps listed</span><strong>${count} entr${count===1?'y':'ies'}</strong></div>
+    `;
+
+    document.getElementById('reviewSwList').innerHTML = softwareList
+      .filter(s => s.name.trim())
+      .map(s => `
+        <div class="review-sw-item">
+          <strong>${escHtml(s.name)}</strong>
+          <span>${[
+            s.severity ? `Severity: ${s.severity}/5` : '',
+            s.admin    ? `Admin: ${s.admin}`          : '',
+            s.owner    ? `Owner: ${s.owner}`          : '',
+          ].filter(Boolean).join(' · ') || 'No details added'}</span>
         </div>
-      `).join('');
-      document.getElementById('examplesModal').classList.remove('hidden');
+      `).join('') || '<p style="color:var(--sb-muted);font-size:0.85rem">No software entries added.</p>';
+  }
+
+  // ── Modal ──────────────────────────────────────────────────
+  function openModal() {
+    document.getElementById('modalContent').innerHTML = Object.entries(APP_EXAMPLES).map(([cat, apps]) => `
+      <div class="modal-category">
+        <h4>${cat}</h4>
+        <div class="modal-apps">${apps.map(a => `<span class="modal-app-tag">${a}</span>`).join('')}</div>
+      </div>
+    `).join('');
+    document.getElementById('examplesModal').classList.remove('hidden');
+  }
+
+  function closeModal() {
+    document.getElementById('examplesModal').classList.add('hidden');
+  }
+
+  document.getElementById('examplesModal').addEventListener('click', e => {
+    if (e.target === document.getElementById('examplesModal')) closeModal();
+  });
+
+  // ── Escape HTML ────────────────────────────────────────────
+  function escHtml(s) {
+    return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  // ── Submit ─────────────────────────────────────────────────
+  async function submitSurvey() {
+    const btn  = document.getElementById('submitBtn');
+    const stat = document.getElementById('submitStatus');
+
+    const name  = document.getElementById('info_name').value.trim();
+    const email = document.getElementById('info_email').value.trim();
+    const dept  = document.getElementById('info_dept').value;
+
+    if (!name || !email || !dept) {
+      stat.textContent = 'Please go back and fill in your name, email, and department.';
+      stat.className   = 'contact-status error';
+      return;
     }
 
-    function closeModal() {
-      document.getElementById('examplesModal').classList.add('hidden');
-    }
+    btn.textContent = 'Submitting...';
+    btn.disabled    = true;
 
-    // Click outside modal to close
-    document.getElementById('examplesModal').addEventListener('click', function(e) {
-      if (e.target === this) closeModal();
+    const payload = {
+      info_name: name, info_email: email, info_dept: dept,
+      info_date: new Date().toLocaleDateString('en-US'),
+      submitted_at: new Date().toISOString(),
+    };
+
+    softwareList.filter(s => s.name.trim()).forEach((sw, r) => {
+      const b = `other_r${r}`;
+      payload[`${b}_name`]     = sw.name;
+      payload[`${b}_severity`] = sw.severity;
+      payload[`${b}_who`]      = sw.who;
+      payload[`${b}_admin`]    = sw.admin;
+      payload[`${b}_login`]    = sw.login;
+      payload[`${b}_owner`]    = sw.owner;
+      payload[`${b}_notes`]    = sw.notes;
     });
 
-    // ── Collect all tool data ──────────────────────────────────────
-    function collectTools() {
-      const tools = [];
-      document.querySelectorAll('.tool-card').forEach((card, r) => {
-        const idx = card.id.replace('tool-','');
-        const name = document.getElementById(`t${idx}_name`)?.value?.trim();
-        if (!name) return; // skip blank cards
-        tools.push({
-          idx: r,
-          name,
-          category: document.getElementById(`t${idx}_category`)?.value  || '',
-          severity: document.getElementById(`t${idx}_severity`)?.value  || '',
-          who:      document.getElementById(`t${idx}_who`)?.value        || '',
-          admin:    document.getElementById(`t${idx}_admin`)?.value      || '',
-          login:    document.getElementById(`t${idx}_login`)?.value      || '',
-          owner:    document.getElementById(`t${idx}_owner`)?.value      || '',
-          notes:    document.getElementById(`t${idx}_notes`)?.value      || '',
-        });
-      });
-      return tools;
+    fetch(SHEET_ENDPOINT, {
+      method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(payload),
+    }).catch(e => console.warn('Sheet write failed:', e));
+
+    const saved = await window.saveSubmission({
+      title: 'Technology & Application Discovery Survey',
+      dept, url: 'surveys/tech-discovery.html',
+    });
+
+    if (saved) {
+      stat.textContent = '✅ Survey submitted! Redirecting you back to the portal...';
+      stat.className   = 'contact-status success';
+      btn.textContent  = 'Submitted ✓';
+      setTimeout(() => window.location.href = '../index.html', 2500);
+    } else {
+      stat.textContent = '❌ Submission failed. Please try again or contact itsupport@rowecasaorganics.com.';
+      stat.className   = 'contact-status error';
+      btn.textContent  = 'Submit Survey →';
+      btn.disabled     = false;
     }
-
-    // ── Build flat payload for Google Sheets ──────────────────────
-    function buildPayload(tools) {
-      const payload = {
-        info_name:    document.getElementById('info_name')?.value  || '',
-        info_title:   document.getElementById('info_title')?.value || '',
-        info_dept:    document.getElementById('info_dept')?.value  || '',
-        info_email:   document.getElementById('info_email')?.value || '',
-        info_date:    document.getElementById('info_date')?.value  || '',
-        comments:     document.getElementById('comments')?.value   || '',
-        submitted_at: new Date().toISOString(),
-      };
-      tools.forEach((tool, r) => {
-        const base = `other_r${r}`; // use 'other' as generic section key
-        payload[`${base}_name`]     = tool.name;
-        payload[`${base}_category`] = tool.category;
-        payload[`${base}_severity`] = tool.severity;
-        payload[`${base}_who`]      = tool.who;
-        payload[`${base}_admin`]    = tool.admin;
-        payload[`${base}_login`]    = tool.login;
-        payload[`${base}_owner`]    = tool.owner;
-        payload[`${base}_notes`]    = tool.notes;
-      });
-      return payload;
-    }
-
-    // ── Submit ─────────────────────────────────────────────────────
-    async function submitSurvey() {
-      const btn  = document.getElementById('submitBtn');
-      const stat = document.getElementById('submitStatus');
-
-      // Basic validation
-      const name  = document.getElementById('info_name')?.value?.trim();
-      const dept  = document.getElementById('info_dept')?.value;
-      const email = document.getElementById('info_email')?.value?.trim();
-      if (!name || !dept || !email) {
-        stat.textContent = 'Please fill in your name, department, and email before submitting.';
-        stat.className   = 'contact-status error';
-        document.getElementById('info_name').scrollIntoView({ behavior: 'smooth', block: 'center' });
-        return;
-      }
-
-      btn.textContent = 'Submitting...';
-      btn.disabled    = true;
-
-      const tools   = collectTools();
-      const payload = buildPayload(tools);
-
-      // Fire to Google Sheets
-      fetch(SHEET_ENDPOINT, {
-        method: 'POST', mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      }).catch(e => console.warn('Sheet write failed:', e));
-
-      // Save to Firestore
-      const saved = await window.saveSubmission({
-        title: 'Technology & Application Discovery Survey',
-        dept:  payload.info_dept || '—',
-        url:   'surveys/tech-discovery.html',
-      });
-
-      if (saved) {
-        stat.textContent = '✅ Survey submitted! Redirecting you back to the portal...';
-        stat.className   = 'contact-status success';
-        btn.textContent  = 'Submitted ✓';
-        setTimeout(() => window.location.href = '../index.html', 2500);
-      } else {
-        stat.textContent = '❌ Submission failed. Please try again or contact itsupport@rowecasaorganics.com.';
-        stat.className   = 'contact-status error';
-        btn.textContent  = 'Submit Survey →';
-        btn.disabled     = false;
-      }
-    }
-  </script>
+  }
+</script>
 
 </body>
 </html>
