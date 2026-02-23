@@ -198,7 +198,7 @@
       <header class="topbar">
         <div class="topbar-left">
           <div class="topbar-title">Technology & Application Discovery Survey</div>
-          <div class="topbar-desc">Tell us about the tools your team uses — takes about 10 minutes.</div>
+          <div class="topbar-desc">Help us track every app and software your team uses — web, desktop, or licensed.</div>
         </div>
         <div class="topbar-right">
           <div class="survey-progress-wrap">
@@ -314,17 +314,17 @@
     };
 
     const ALL_TOOL_SECTIONS = {
-      comm:     { title: 'Communication',               emoji: '💬', examples: 'Gmail, Slack, Microsoft Teams, Zoom, phone systems' },
-      prod:     { title: 'Productivity & File Storage', emoji: '📁', examples: 'Google Drive, Dropbox, Microsoft 365, Notion, OneDrive' },
-      pm:       { title: 'Project Management',          emoji: '📋', examples: 'Asana, Monday.com, Trello, ClickUp, Basecamp' },
-      hr:       { title: 'HR & People',                 emoji: '👥', examples: 'BambooHR, ADP, Gusto, Rippling, any payroll or hiring tools' },
-      finance:  { title: 'Finance & Accounting',        emoji: '💰', examples: 'QuickBooks, Expensify, Bill.com, any invoicing or expense tools' },
-      crm:      { title: 'Sales & Customer Tools',      emoji: '🤝', examples: 'Salesforce, HubSpot, any tools for tracking customers or sales' },
-      marketing:{ title: 'Marketing',                   emoji: '📣', examples: 'Mailchimp, Klaviyo, Hootsuite, Google Analytics, ad platforms' },
-      it:       { title: 'IT & Security',               emoji: '🔒', examples: 'Password managers, VPN, antivirus, any IT or security software' },
-      design:   { title: 'Design & Creative',           emoji: '🎨', examples: 'Canva, Adobe Creative Cloud, Figma, video or photo editing apps' },
-      ops:      { title: 'Operations & Logistics',      emoji: '📦', examples: 'ShipStation, any inventory, shipping, or production software' },
-      other:    { title: 'Anything Else',               emoji: '🗂️', examples: 'Any tool not listed above — even free apps or browser extensions' },
+      comm:     { title: 'Communication',               examples: 'Gmail, Slack, Microsoft Teams, Zoom, Outlook, any phone or messaging apps' },
+      prod:     { title: 'Productivity & File Storage', examples: 'Google Drive, Dropbox, Microsoft 365, Notion, OneDrive, Box' },
+      pm:       { title: 'Project Management',          examples: 'Asana, Monday.com, Trello, ClickUp, Basecamp, Smartsheet' },
+      hr:       { title: 'HR & People',                 examples: 'BambooHR, ADP, Gusto, Rippling, any payroll, onboarding, or hiring software' },
+      finance:  { title: 'Finance & Accounting',        examples: 'QuickBooks, Expensify, Bill.com, NetSuite, any invoicing or expense software' },
+      crm:      { title: 'Sales & Customer Tools',      examples: 'Salesforce, HubSpot, any software for tracking customers, orders, or sales' },
+      marketing:{ title: 'Marketing',                   examples: 'Mailchimp, Klaviyo, Hootsuite, Google Analytics, Meta Ads, any marketing platforms' },
+      it:       { title: 'IT & Security',               examples: 'Password managers (1Password, LastPass), VPN, antivirus, any IT or security software' },
+      design:   { title: 'Design & Creative',           examples: 'Adobe Acrobat, Adobe Creative Cloud, Canva, Figma, any design or video/photo editing apps' },
+      ops:      { title: 'Operations & Logistics',      examples: 'ShipStation, any inventory, warehouse, shipping, or production software' },
+      other:    { title: 'Anything Else',               examples: 'Any software not covered above — including apps installed directly on your computer, browser extensions, or tools you only use occasionally' },
     };
 
     // ── State ──────────────────────────────────────────────────────
@@ -359,7 +359,7 @@
         btn.className = 'nav-btn step-nav-btn'
           + (i === currentStep ? ' active' : '')
           + (i < currentStep  ? ' done'   : '');
-        btn.innerHTML = `<span class="step-num">${i + 1}</span> ${s.emoji || ''} ${s.title}`;
+        btn.innerHTML = `<span class="step-num">${i + 1}</span> ${s.title}`;
         btn.onclick = () => { saveStep(); goToStep(i); };
         nav.appendChild(btn);
       });
@@ -469,7 +469,8 @@
 
       if (sec.type === 'info') {
         body.innerHTML = `<div class="survey-page">
-          <p class="survey-instruction">👋 Let's start with a little info about you. This helps us know who submitted the survey.</p>
+          <p class="survey-instruction">Let's start with a little info about you. This helps us know who submitted the survey.</p>
+          <p class="survey-instruction" style="margin-top:0.75rem"><strong>What we're collecting:</strong> A list of every app and software your team uses — this includes web apps like Asana or Google Drive, desktop apps like Adobe Acrobat or QuickBooks, and anything else that's licensed or regularly used. If you use it for work, we want to know about it.</p>
           <div class="info-grid">
             <div class="contact-field">
               <label>What's your full name?</label>
@@ -501,11 +502,11 @@
         if (!toolData[sec.id] || toolData[sec.id].length === 0) toolData[sec.id] = [{}];
         const tools = toolData[sec.id];
         body.innerHTML = `<div class="survey-page">
-          <div class="section-label-badge">${sec.emoji} ${sec.title}</div>
+          <div class="section-label-badge">${sec.title}</div>
           <p class="survey-instruction">
-            Think about everything your team uses for <strong>${sec.title.toLowerCase()}</strong>.<br/>
+            Think about every app or software your team uses for <strong>${sec.title.toLowerCase()}</strong> — whether it's a website you log into, a program installed on your computer, or something you have a license for.<br/><br/>
             <span style="color:var(--sb-muted)">Examples: ${sec.examples}</span><br/><br/>
-            <strong>Don't worry if you're not sure of every detail</strong> — just fill in what you know. If your team doesn't use anything in this category, click Next to skip.
+            <strong>Don't worry if you're unsure of every detail</strong> — just fill in what you know. Click Next to skip this category if it doesn't apply to your team.
           </p>
           <div id="tools-wrap-${sec.id}">
             ${tools.map((t, i) => toolCardHTML(sec.id, i, t)).join('')}
@@ -515,7 +516,7 @@
 
       } else if (sec.type === 'comments') {
         body.innerHTML = `<div class="survey-page">
-          <p class="survey-instruction">🗒️ Is there anything else you'd like to tell us? Tools you're trialing, something you weren't sure how to categorize, or anything else on your mind.</p>
+          <p class="survey-instruction">Is there anything else you'd like to tell us? Tools you're trialing, something you weren't sure how to categorize, or anything else on your mind.</p>
           <div class="contact-field" style="margin-top:1rem">
             <label>Additional comments <span style="color:var(--sb-muted);font-weight:400">(optional)</span></label>
             <textarea class="ti" rows="6" data-key="comments" placeholder="Anything else...">${escHtml(surveyData.comments||'')}</textarea>
@@ -525,7 +526,7 @@
       } else if (sec.type === 'review') {
         const toolCount = Object.values(toolData).flat().filter(t => t.name?.trim()).length;
         body.innerHTML = `<div class="survey-page">
-          <p class="survey-instruction">✅ You're almost done! Here's a summary of what you've filled in. Click <strong>Submit Survey</strong> when you're ready.</p>
+          <p class="survey-instruction">You're almost done! Here's a summary of what you've filled in. Click <strong>Submit Survey</strong> when you're ready.</p>
           <div class="review-box">
             <div class="review-row"><span>Name</span>          <strong>${escHtml(surveyData.info_name  || '—')}</strong></div>
             <div class="review-row"><span>Job Title</span>     <strong>${escHtml(surveyData.info_title || '—')}</strong></div>
