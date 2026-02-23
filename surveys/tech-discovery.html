@@ -6,23 +6,114 @@
   <title>Technology & Application Discovery Survey — RCO IT</title>
   <link rel="stylesheet" href="../styles.css"/>
   <style>
-    /* ── Conversational tool card ── */
+    /* ── Page layout ── */
+    .survey-single-page { max-width: 780px; margin: 0 auto; }
+
+    .survey-header-block {
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--sb-sep);
+    }
+
+    .survey-header-block h2 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--sb-text);
+      margin-bottom: 0.4rem;
+    }
+
+    .survey-header-block p {
+      color: var(--sb-muted);
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+
+    /* ── Info grid ── */
+    .info-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    @media(max-width:600px){ .info-grid-2 { grid-template-columns: 1fr; } }
+
+    .field-wrap { display: flex; flex-direction: column; gap: 0.35rem; }
+    .field-wrap label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--sb-text);
+    }
+    .field-wrap input,
+    .field-wrap select,
+    .field-wrap textarea {
+      background: var(--sidebar-bg);
+      border: 1.5px solid var(--sb-border);
+      border-radius: 9px;
+      padding: 0.6rem 0.85rem;
+      font-size: 0.875rem;
+      font-family: inherit;
+      color: var(--sb-text);
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      width: 100%;
+    }
+    .field-wrap input:focus,
+    .field-wrap select:focus,
+    .field-wrap textarea:focus {
+      border-color: var(--brand-hover-border);
+      box-shadow: 0 0 0 3px rgba(189,153,121,0.15);
+    }
+
+    /* ── Tools section ── */
+    .tools-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 2rem 0 1rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--sb-sep);
+    }
+
+    .tools-section-header h3 {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--sb-text);
+    }
+
+    .examples-btn {
+      background: var(--brand-soft);
+      border: 1.5px solid var(--brand-hover-border);
+      color: var(--brand-brown);
+      font-size: 0.78rem;
+      font-weight: 700;
+      font-family: inherit;
+      padding: 0.38rem 0.85rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .examples-btn:hover {
+      background: var(--brand-grad);
+      color: #fff;
+      border-color: var(--brand-brown);
+    }
+
+    /* ── Tool card ── */
     .tool-card {
       background: var(--sidebar-bg);
       border: 1.5px solid var(--sb-border);
       border-radius: 14px;
-      padding: 1.5rem;
+      padding: 1.25rem 1.5rem;
       margin-bottom: 1rem;
-      position: relative;
       transition: border-color 0.18s;
     }
     .tool-card:hover { border-color: var(--brand-hover-border); }
 
-    .tool-card-header {
+    .tool-card-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 1.1rem;
+      margin-bottom: 1rem;
     }
 
     .tool-card-num {
@@ -37,95 +128,96 @@
       background: none;
       border: none;
       color: var(--sb-muted);
-      font-size: 0.8rem;
-      cursor: pointer;
-      font-family: inherit;
+      font-size: 0.78rem;
       font-weight: 600;
-      padding: 0;
+      font-family: inherit;
+      cursor: pointer;
       transition: color 0.15s;
+      padding: 0;
     }
     .tool-card-remove:hover { color: #c0392b; }
 
-    .tool-question {
-      margin-bottom: 1rem;
+    .tool-grid-3 {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 0.85rem;
+      margin-bottom: 0.85rem;
+    }
+    .tool-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.85rem;
+      margin-bottom: 0.85rem;
+    }
+    @media(max-width:600px){
+      .tool-grid-3, .tool-grid-2 { grid-template-columns: 1fr; }
     }
 
-    .tool-question label {
-      display: block;
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--sb-text);
-      margin-bottom: 0.35rem;
-    }
-
-    .tool-question .q-hint {
-      font-size: 0.75rem;
+    .field-hint {
+      font-size: 0.72rem;
       color: var(--sb-muted);
-      font-weight: 400;
-      margin-bottom: 0.4rem;
-      display: block;
+      margin-top: 0.2rem;
     }
 
-    .tool-question input,
-    .tool-question textarea,
-    .tool-question select {
-      width: 100%;
-      background: var(--panel-bg);
-      border: 1.5px solid var(--sb-border);
-      border-radius: 9px;
-      padding: 0.6rem 0.85rem;
-      font-size: 0.875rem;
-      font-family: inherit;
-      color: var(--sb-text);
-      outline: none;
-      transition: border-color 0.15s, box-shadow 0.15s;
-      resize: vertical;
-    }
-
-    .tool-question input:focus,
-    .tool-question textarea:focus,
-    .tool-question select:focus {
-      border-color: var(--brand-hover-border);
-      box-shadow: 0 0 0 3px rgba(189,153,121,0.15);
-    }
-
-    /* who-uses pill buttons */
-    .who-pills {
+    /* ── Severity stars ── */
+    .severity-wrap {
       display: flex;
-      gap: 0.5rem;
+      gap: 0.4rem;
+      margin-top: 0.25rem;
+      align-items: center;
+    }
+
+    .sev-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      border: 1.5px solid var(--sb-border);
+      background: var(--panel-bg);
+      font-size: 0.85rem;
+      font-weight: 800;
+      font-family: inherit;
+      color: var(--sb-muted);
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .sev-btn:hover { border-color: var(--brand-hover-border); color: var(--brand-brown); }
+    .sev-btn.selected { background: var(--brand-grad); border-color: var(--brand-brown); color: #fff; }
+
+    .sev-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.68rem;
+      color: var(--sb-muted);
+      margin-top: 0.2rem;
+    }
+
+    /* ── Who pills ── */
+    .pill-group {
+      display: flex;
+      gap: 0.4rem;
       flex-wrap: wrap;
       margin-top: 0.25rem;
     }
 
-    .who-pill {
-      padding: 0.38rem 0.9rem;
+    .pill-btn {
+      padding: 0.35rem 0.8rem;
       border-radius: 999px;
       border: 1.5px solid var(--sb-border);
       background: var(--panel-bg);
       color: var(--sb-text);
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 600;
       font-family: inherit;
       cursor: pointer;
       transition: all 0.15s;
     }
+    .pill-btn:hover { border-color: var(--brand-hover-border); }
+    .pill-btn.selected { background: var(--brand-grad); border-color: var(--brand-brown); color: #fff; }
 
-    .who-pill:hover { border-color: var(--brand-hover-border); }
-
-    .who-pill.selected {
-      background: var(--brand-grad);
-      border-color: var(--brand-brown);
-      color: #fff;
-    }
-
-    .tool-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.85rem;
-    }
-
-    @media (max-width: 600px) { .tool-grid { grid-template-columns: 1fr; } }
-
+    /* ── Add tool button ── */
     .add-tool-btn {
       width: 100%;
       padding: 0.85rem;
@@ -138,7 +230,7 @@
       font-family: inherit;
       cursor: pointer;
       transition: all 0.18s;
-      margin-top: 0.5rem;
+      margin-bottom: 2rem;
     }
     .add-tool-btn:hover {
       border-color: var(--brand-hover-border);
@@ -146,30 +238,112 @@
       background: var(--brand-soft);
     }
 
-    .section-label-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      background: var(--brand-soft);
-      border: 1px solid var(--brand-hover-border);
-      color: var(--brand-brown);
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 0.25rem 0.7rem;
-      border-radius: 999px;
-      margin-bottom: 1rem;
+    /* ── Submit section ── */
+    .submit-section {
+      border-top: 1px solid var(--sb-sep);
+      padding-top: 1.5rem;
+      margin-top: 1rem;
     }
 
-    .empty-section-msg {
-      text-align: center;
-      padding: 2rem 1rem;
-      color: var(--sb-muted);
+    .submit-section textarea {
+      width: 100%;
+      background: var(--sidebar-bg);
+      border: 1.5px solid var(--sb-border);
+      border-radius: 9px;
+      padding: 0.6rem 0.85rem;
       font-size: 0.875rem;
-      border: 1.5px dashed var(--sb-border);
-      border-radius: 14px;
-      margin-bottom: 1rem;
+      font-family: inherit;
+      color: var(--sb-text);
+      outline: none;
+      resize: vertical;
+      margin-top: 0.35rem;
+      transition: border-color 0.15s, box-shadow 0.15s;
     }
-    .empty-section-msg strong { display: block; margin-bottom: 0.3rem; color: var(--sb-text); }
+    .submit-section textarea:focus {
+      border-color: var(--brand-hover-border);
+      box-shadow: 0 0 0 3px rgba(189,153,121,0.15);
+    }
+
+    /* ── Modal ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(6px);
+      z-index: 300;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .modal-overlay.hidden { display: none; }
+
+    .modal-box {
+      background: var(--panel-bg);
+      border: 1.5px solid var(--sb-border);
+      border-radius: 20px;
+      padding: 2rem;
+      max-width: 640px;
+      width: 100%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    }
+
+    .modal-box h3 {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--sb-text);
+      margin-bottom: 1.25rem;
+    }
+
+    .modal-category { margin-bottom: 1.25rem; }
+
+    .modal-category h4 {
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--sb-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .modal-apps {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .modal-app-tag {
+      background: var(--sidebar-bg);
+      border: 1px solid var(--sb-border);
+      border-radius: 8px;
+      padding: 0.28rem 0.65rem;
+      font-size: 0.78rem;
+      color: var(--sb-text);
+      font-weight: 600;
+    }
+
+    .modal-close {
+      width: 100%;
+      margin-top: 1.5rem;
+      padding: 0.65rem;
+      background: var(--brand-grad);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.875rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .skip-note {
+      font-size: 0.72rem;
+      color: var(--sb-muted);
+      margin-top: 0.3rem;
+      font-style: italic;
+    }
   </style>
 </head>
 <body>
@@ -182,39 +356,118 @@
         <img src="../logo.png" alt="Rowe Casa Organics" class="sidebar-logo"/>
       </div>
       <div class="sidebar-divider"></div>
-      <nav class="sidebar-nav" id="stepNav"></nav>
+      <nav class="sidebar-nav">
+        <button class="nav-btn active" onclick="scrollTo(0,0)">Your Information</button>
+        <button class="nav-btn" onclick="document.getElementById('tools-section').scrollIntoView({behavior:'smooth'})">Tools & Software</button>
+        <button class="nav-btn" onclick="document.getElementById('submit-section').scrollIntoView({behavior:'smooth'})">Submit</button>
+      </nav>
       <div class="sidebar-footer">
         <div class="sidebar-divider"></div>
-        <button class="contact-btn" onclick="window.location.href='../index.html'">
-          ← Back to Portal
-        </button>
+        <button class="contact-btn" onclick="window.location.href='../index.html'">← Back to Portal</button>
         <div class="portal-label">RCO IT Help Site</div>
         <div class="portal-sub">@rowecasaorganics.com</div>
       </div>
     </aside>
 
-    <!-- MAIN WRAP -->
+    <!-- MAIN -->
     <div class="main-wrap">
       <header class="topbar">
         <div class="topbar-left">
           <div class="topbar-title">Technology & Application Discovery Survey</div>
           <div class="topbar-desc">Help us track every app and software your team uses — web, desktop, or licensed.</div>
         </div>
-        <div class="topbar-right">
-          <div class="survey-progress-wrap">
-            <div class="survey-progress-label">Step <span id="progressCurrent">1</span> of <span id="progressTotal">—</span></div>
-            <div class="survey-progress-bar"><div class="survey-progress-fill" id="progressFill"></div></div>
-          </div>
-        </div>
       </header>
 
       <main class="content-panel">
-        <div id="surveyBody"></div>
-        <div class="survey-nav">
-          <button class="clear-btn" id="prevBtn" onclick="surveyNav(-1)">← Previous</button>
-          <button class="card-action" id="nextBtn" onclick="surveyNav(1)">Next →</button>
+        <div class="survey-single-page" id="surveyPage">
+
+          <!-- ── Your Information ── -->
+          <div class="survey-header-block">
+            <h2>Your Information</h2>
+            <p>Tell us a little about yourself so we know who submitted this survey.</p>
+          </div>
+
+          <div class="info-grid-2">
+            <div class="field-wrap">
+              <label>Full Name</label>
+              <input type="text" id="info_name" placeholder="Your full name"/>
+            </div>
+            <div class="field-wrap">
+              <label>Job Title</label>
+              <input type="text" id="info_title" placeholder="Your job title"/>
+            </div>
+            <div class="field-wrap">
+              <label>Department</label>
+              <select id="info_dept">
+                <option value="">— Select your department —</option>
+                <option>Administration</option><option>Brand Experience</option>
+                <option>Curing</option><option>Customer Care</option>
+                <option>Customer Service</option><option>Facilities and Maintenance</option>
+                <option>Finance</option><option>Human Resources</option>
+                <option>Information Technology</option><option>Inventory</option>
+                <option>Kitchen</option><option>Labeling</option>
+                <option>Marketing</option><option>Operations</option>
+                <option>Procurement</option><option>Production</option>
+                <option>Project Management</option><option>Quality Control</option>
+                <option>Research &amp; Development</option><option>Shipping</option>
+                <option>Social Media</option><option>Strategy</option>
+                <option>Wholesale</option>
+              </select>
+            </div>
+            <div class="field-wrap">
+              <label>Work Email</label>
+              <input type="email" id="info_email" placeholder="yourname@rowecasaorganics.com"/>
+            </div>
+            <div class="field-wrap">
+              <label>Today's Date</label>
+              <input type="date" id="info_date"/>
+            </div>
+          </div>
+
+          <!-- ── Tools Section ── -->
+          <div id="tools-section">
+            <div class="tools-section-header">
+              <h3>Tools &amp; Software</h3>
+              <button class="examples-btn" onclick="openModal()">View App Examples</button>
+            </div>
+            <p style="font-size:0.85rem;color:var(--sb-muted);margin-bottom:1.25rem;line-height:1.6">
+              List every app, program, or software your team uses — whether it's a website you log into (like Asana), 
+              a program installed on your computer (like Adobe Acrobat), or anything that's licensed or regularly used for work.<br/>
+              <strong style="color:var(--sb-text)">Skip any field you're unsure about — just fill in what you know.</strong>
+            </p>
+
+            <div id="toolsList"></div>
+
+            <button class="add-tool-btn" onclick="addTool()">+ Add a tool or app</button>
+          </div>
+
+          <!-- ── Submit ── -->
+          <div class="submit-section" id="submit-section">
+            <div class="survey-header-block" style="border:none;padding:0;margin-bottom:1rem">
+              <h2>Additional Comments</h2>
+              <p>Anything else we should know? Tools being trialed, tools you're unsure about, or anything on your mind.</p>
+            </div>
+            <div class="field-wrap">
+              <label>Comments <span style="font-weight:400;color:var(--sb-muted)">(optional)</span></label>
+              <textarea id="comments" rows="4" placeholder="Optional..."></textarea>
+            </div>
+            <div style="margin-top:1.5rem">
+              <button class="card-action" style="padding:0.75rem 2rem;font-size:0.95rem" onclick="submitSurvey()" id="submitBtn">Submit Survey →</button>
+            </div>
+            <div id="submitStatus" class="contact-status" style="margin-top:0.75rem"></div>
+          </div>
+
         </div>
       </main>
+    </div>
+  </div>
+
+  <!-- ── Examples Modal ── -->
+  <div class="modal-overlay hidden" id="examplesModal">
+    <div class="modal-box">
+      <h3>App &amp; Software Examples by Category</h3>
+      <div id="modalContent"></div>
+      <button class="modal-close" onclick="closeModal()">Close</button>
     </div>
   </div>
 
@@ -223,7 +476,7 @@
     const SHEET_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxeP-Asvk9kgGx_oz4jMWYOBldaPLM8Tm6S2XfXOfDRat-3KX1UfVXYzEju2Dc7nDwBGg/exec';
   </script>
 
-  <!-- Firebase module -->
+  <!-- Firebase -->
   <script type="module">
     import { initializeApp, getApps, getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
     import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
@@ -276,400 +529,267 @@
     };
   </script>
 
-  <!-- Main survey script -->
+  <!-- Main script -->
   <script>
-    const DEPARTMENTS = [
-      'Administration','Brand Experience','Curing','Customer Care',
-      'Customer Service','Facilities and Maintenance','Finance',
-      'Human Resources','Information Technology','Inventory','Kitchen',
-      'Labeling','Marketing','Operations','Procurement','Production',
-      'Project Management','Quality Control','Research & Development',
-      'Shipping','Social Media','Strategy','Wholesale',
-    ];
-
-    const DEPT_SECTIONS = {
-      'Administration':             ['comm','prod','pm','finance','hr','other'],
-      'Brand Experience':           ['comm','prod','pm','marketing','design','other'],
-      'Curing':                     ['comm','prod','ops','other'],
-      'Customer Care':              ['comm','prod','pm','crm','other'],
-      'Customer Service':           ['comm','prod','pm','crm','other'],
-      'Facilities and Maintenance': ['comm','prod','ops','other'],
-      'Finance':                    ['comm','prod','pm','finance','other'],
-      'Human Resources':            ['comm','prod','pm','hr','other'],
-      'Information Technology':     ['comm','prod','pm','it','ops','other'],
-      'Inventory':                  ['comm','prod','ops','other'],
-      'Kitchen':                    ['comm','prod','ops','other'],
-      'Labeling':                   ['comm','prod','ops','other'],
-      'Marketing':                  ['comm','prod','pm','marketing','design','other'],
-      'Operations':                 ['comm','prod','pm','ops','finance','other'],
-      'Procurement':                ['comm','prod','pm','finance','ops','other'],
-      'Production':                 ['comm','prod','pm','ops','other'],
-      'Project Management':         ['comm','prod','pm','other'],
-      'Quality Control':            ['comm','prod','ops','other'],
-      'Research & Development':     ['comm','prod','pm','design','other'],
-      'Shipping':                   ['comm','prod','ops','other'],
-      'Social Media':               ['comm','prod','marketing','design','other'],
-      'Strategy':                   ['comm','prod','pm','finance','other'],
-      'Wholesale':                  ['comm','prod','pm','crm','finance','other'],
+    // ── App examples by category ───────────────────────────────────
+    const APP_EXAMPLES = {
+      'Communication':               ['Gmail','Slack','Microsoft Teams','Zoom','Outlook','Google Meet','Loom','RingCentral'],
+      'Productivity & File Storage': ['Google Drive','Dropbox','Microsoft 365','OneDrive','Notion','Box','SharePoint','Evernote'],
+      'Project Management':          ['Asana','Monday.com','Trello','ClickUp','Basecamp','Smartsheet','Jira','Wrike'],
+      'HR & People':                 ['BambooHR','ADP','Gusto','Rippling','Workday','Lattice','Greenhouse','Lever'],
+      'Finance & Accounting':        ['QuickBooks','Expensify','Bill.com','NetSuite','Xero','FreshBooks','Sage','Concur'],
+      'Sales & CRM':                 ['Salesforce','HubSpot','Pipedrive','Zoho CRM','Copper','Close','Zendesk'],
+      'Marketing':                   ['Mailchimp','Klaviyo','Hootsuite','Google Analytics','Meta Ads','Semrush','Buffer','ActiveCampaign'],
+      'IT & Security':               ['1Password','LastPass','CrowdStrike','Okta','Jamf','NordVPN','Malwarebytes','Duo'],
+      'Design & Creative':           ['Adobe Acrobat','Adobe Creative Cloud','Canva','Figma','InDesign','Photoshop','Illustrator','CapCut'],
+      'Operations & Logistics':      ['ShipStation','ShipBob','Cin7','Fishbowl','NetSuite','Brightpearl','Extensiv','ZebraDesigner'],
+      'Other':                       ['Any browser extensions','Specialty tools','Industry-specific software','Custom-built tools'],
     };
 
-    const ALL_TOOL_SECTIONS = {
-      comm:     { title: 'Communication',               examples: 'Gmail, Slack, Microsoft Teams, Zoom, Outlook, any phone or messaging apps' },
-      prod:     { title: 'Productivity & File Storage', examples: 'Google Drive, Dropbox, Microsoft 365, Notion, OneDrive, Box' },
-      pm:       { title: 'Project Management',          examples: 'Asana, Monday.com, Trello, ClickUp, Basecamp, Smartsheet' },
-      hr:       { title: 'HR & People',                 examples: 'BambooHR, ADP, Gusto, Rippling, any payroll, onboarding, or hiring software' },
-      finance:  { title: 'Finance & Accounting',        examples: 'QuickBooks, Expensify, Bill.com, NetSuite, any invoicing or expense software' },
-      crm:      { title: 'Sales & Customer Tools',      examples: 'Salesforce, HubSpot, any software for tracking customers, orders, or sales' },
-      marketing:{ title: 'Marketing',                   examples: 'Mailchimp, Klaviyo, Hootsuite, Google Analytics, Meta Ads, any marketing platforms' },
-      it:       { title: 'IT & Security',               examples: 'Password managers (1Password, LastPass), VPN, antivirus, any IT or security software' },
-      design:   { title: 'Design & Creative',           examples: 'Adobe Acrobat, Adobe Creative Cloud, Canva, Figma, any design or video/photo editing apps' },
-      ops:      { title: 'Operations & Logistics',      examples: 'ShipStation, any inventory, warehouse, shipping, or production software' },
-      other:    { title: 'Anything Else',               examples: 'Any software not covered above — including apps installed directly on your computer, browser extensions, or tools you only use occasionally' },
-    };
+    // ── Tool counter ───────────────────────────────────────────────
+    let toolCount = 0;
 
-    // ── State ──────────────────────────────────────────────────────
-    let currentStep    = 0;
-    let surveyData     = {};  // info fields
-    let toolData       = {};  // { sectionId: [ {name, who, login, notes}, ... ] }
-    let activeSections = [];
-
-    // ── Section builder ────────────────────────────────────────────
-    function buildSections(dept) {
-      const ids = DEPT_SECTIONS[dept] || ['comm','prod','pm','other'];
-      const sections = [{ id: 'info', title: 'About You', type: 'info' }];
-      ids.forEach(id => sections.push({
-        id, type: 'tools',
-        title:   ALL_TOOL_SECTIONS[id].title,
-        emoji:   ALL_TOOL_SECTIONS[id].emoji,
-        examples:ALL_TOOL_SECTIONS[id].examples,
-      }));
-      sections.push(
-        { id: 'comments', title: 'Anything Else?',  type: 'comments' },
-        { id: 'review',   title: 'Review & Submit', type: 'review'   }
-      );
-      return sections;
+    // ── Add tool ───────────────────────────────────────────────────
+    function addTool() {
+      const idx  = toolCount++;
+      const div  = document.createElement('div');
+      div.className = 'tool-card';
+      div.id        = `tool-${idx}`;
+      div.innerHTML = toolCardHTML(idx);
+      document.getElementById('toolsList').appendChild(div);
+      div.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
-    // ── Sidebar step nav ───────────────────────────────────────────
-    function buildStepNav() {
-      const nav = document.getElementById('stepNav');
-      nav.innerHTML = '';
-      activeSections.forEach((s, i) => {
-        const btn = document.createElement('button');
-        btn.className = 'nav-btn step-nav-btn'
-          + (i === currentStep ? ' active' : '')
-          + (i < currentStep  ? ' done'   : '');
-        btn.innerHTML = `<span class="step-num">${i + 1}</span> ${s.title}`;
-        btn.onclick = () => { saveStep(); goToStep(i); };
-        nav.appendChild(btn);
-      });
-      document.getElementById('progressTotal').textContent = activeSections.length;
-    }
-
-    function updateStepNav() {
-      document.querySelectorAll('.step-nav-btn').forEach((b, i) => {
-        b.classList.toggle('active', i === currentStep);
-        b.classList.toggle('done',   i < currentStep);
-      });
-    }
-
-    // ── Tool card HTML ─────────────────────────────────────────────
-    function toolCardHTML(sid, idx, tool) {
-      const who   = tool.who   || '';
-      const whoOptions = ['Just me', 'My team', 'Whole department'];
-      return `<div class="tool-card" data-sid="${sid}" data-idx="${idx}">
-        <div class="tool-card-header">
+    function toolCardHTML(idx) {
+      return `
+        <div class="tool-card-top">
           <span class="tool-card-num">Tool ${idx + 1}</span>
-          ${idx > 0 ? `<button class="tool-card-remove" onclick="removeTool('${sid}', ${idx})">✕ Remove</button>` : ''}
+          <button class="tool-card-remove" onclick="removeTool(${idx})">✕ Remove</button>
         </div>
 
-        <div class="tool-question">
-          <label>What's the name of the tool or app?</label>
-          <span class="q-hint">Just the name is fine — e.g. "Gmail" or "Slack"</span>
-          <input type="text" placeholder="Tool or app name" data-field="name"
-            value="${escHtml(tool.name || '')}"/>
+        <!-- Row 1: name, category, severity -->
+        <div class="tool-grid-3">
+          <div class="field-wrap">
+            <label>App / Software Name</label>
+            <input type="text" id="t${idx}_name" placeholder="e.g. Asana, Adobe Acrobat, Slack"/>
+            <div class="field-hint">Web app, desktop program, or licensed software</div>
+          </div>
+          <div class="field-wrap">
+            <label>Category</label>
+            <select id="t${idx}_category">
+              <option value="">— Select —</option>
+              <option>Communication</option>
+              <option>Productivity & File Storage</option>
+              <option>Project Management</option>
+              <option>HR & People</option>
+              <option>Finance & Accounting</option>
+              <option>Sales & CRM</option>
+              <option>Marketing</option>
+              <option>IT & Security</option>
+              <option>Design & Creative</option>
+              <option>Operations & Logistics</option>
+              <option>Other</option>
+            </select>
+            <div class="field-hint">Skip if unsure</div>
+          </div>
+          <div class="field-wrap">
+            <label>How critical is this to your job?</label>
+            <div class="severity-wrap">
+              ${[1,2,3,4,5].map(n => `<button type="button" class="sev-btn" id="t${idx}_sev_${n}" onclick="setSeverity(${idx},${n})">${n}</button>`).join('')}
+              <input type="hidden" id="t${idx}_severity" value=""/>
+            </div>
+            <div class="sev-labels"><span>Not critical</span><span>Essential</span></div>
+            <div class="field-hint">Skip if unsure</div>
+          </div>
         </div>
 
-        <div class="tool-question">
-          <label>Who uses this tool?</label>
-          <span class="q-hint">Select all that apply</span>
-          <div class="who-pills">
-            ${whoOptions.map(opt => `
-              <button type="button" class="who-pill ${who === opt ? 'selected' : ''}"
-                onclick="selectWho(this, '${sid}', ${idx}, '${opt}')">${opt}</button>
-            `).join('')}
+        <!-- Row 2: who uses it, admin access -->
+        <div class="tool-grid-2">
+          <div class="field-wrap">
+            <label>Who uses this tool?</label>
+            <div class="pill-group" id="t${idx}_who_pills">
+              ${['Just me','My team','Whole department'].map(o =>
+                `<button type="button" class="pill-btn" onclick="setPill('t${idx}_who', this, '${o}')">${o}</button>`
+              ).join('')}
+            </div>
+            <input type="hidden" id="t${idx}_who" value=""/>
+            <div class="field-hint">Skip if unsure</div>
           </div>
-          <input type="hidden" data-field="who" value="${escHtml(who)}"/>
+          <div class="field-wrap">
+            <label>Do you have admin access?</label>
+            <div class="pill-group">
+              ${['Yes','No',"I don't know"].map(o =>
+                `<button type="button" class="pill-btn" onclick="setPill('t${idx}_admin', this, '${o}')">${o}</button>`
+              ).join('')}
+            </div>
+            <input type="hidden" id="t${idx}_admin" value=""/>
+          </div>
         </div>
 
-        <div class="tool-grid">
-          <div class="tool-question">
-            <label>Login or account email <span style="color:var(--sb-muted);font-weight:400">(optional)</span></label>
-            <span class="q-hint">The email address used to log in, if known</span>
-            <input type="text" placeholder="e.g. team@rowecasaorganics.com" data-field="login"
-              value="${escHtml(tool.login || '')}"/>
+        <!-- Row 3: login email, owner -->
+        <div class="tool-grid-2">
+          <div class="field-wrap">
+            <label>What email do you log in with?</label>
+            <input type="text" id="t${idx}_login" placeholder="e.g. hayden@rowecasaorganics.com"/>
+            <div class="field-hint">Skip if you're not sure or it doesn't apply</div>
           </div>
-          <div class="tool-question">
-            <label>Anything else we should know? <span style="color:var(--sb-muted);font-weight:400">(optional)</span></label>
-            <span class="q-hint">e.g. paid subscription, trial, rarely used</span>
-            <input type="text" placeholder="Optional notes" data-field="notes"
-              value="${escHtml(tool.notes || '')}"/>
+          <div class="field-wrap">
+            <label>Who owns or manages this account?
+              <span class="owner-tip" title="This is the person responsible for the subscription or license — e.g. BambooHR → Chris Pauline, Google Workspace → Philip Williams"
+                style="cursor:help;color:var(--brand-brown);font-weight:400;margin-left:4px">(?)</span>
+            </label>
+            <input type="text" id="t${idx}_owner" placeholder="e.g. Chris Pauline, Philip Williams"/>
+            <div class="field-hint">The person who pays for or administers the account. Skip if unknown.</div>
           </div>
         </div>
-      </div>`;
+
+        <!-- Notes -->
+        <div class="field-wrap" style="margin-top:0.25rem">
+          <label>Any other notes? <span style="font-weight:400;color:var(--sb-muted)">(optional)</span></label>
+          <input type="text" id="t${idx}_notes" placeholder="e.g. trial version, rarely used, shared login"/>
+        </div>
+      `;
     }
 
-    function escHtml(str) {
-      return String(str).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    // ── Remove tool ────────────────────────────────────────────────
+    function removeTool(idx) {
+      const el = document.getElementById(`tool-${idx}`);
+      if (el) el.remove();
     }
 
-    // ── Who pill selection ─────────────────────────────────────────
-    function selectWho(btn, sid, idx, val) {
-      const card = btn.closest('.tool-card');
-      card.querySelectorAll('.who-pill').forEach(p => p.classList.remove('selected'));
-      btn.classList.add('selected');
-      card.querySelector('[data-field="who"]').value = val;
-      if (!toolData[sid]) toolData[sid] = [];
-      if (!toolData[sid][idx]) toolData[sid][idx] = {};
-      toolData[sid][idx].who = val;
-    }
-
-    // ── Add / remove tool ──────────────────────────────────────────
-    function addTool(sid) {
-      if (!toolData[sid]) toolData[sid] = [{}];
-      else toolData[sid].push({});
-      rerenderTools(sid);
-    }
-
-    function removeTool(sid, idx) {
-      toolData[sid].splice(idx, 1);
-      rerenderTools(sid);
-    }
-
-    function rerenderTools(sid) {
-      const wrap = document.getElementById('tools-wrap-' + sid);
-      if (!wrap) return;
-      const tools = toolData[sid] || [{}];
-      wrap.innerHTML = tools.map((t, i) => toolCardHTML(sid, i, t)).join('');
-    }
-
-    // ── Render step ────────────────────────────────────────────────
-    function renderStep(idx) {
-      const sec   = activeSections[idx];
-      const total = activeSections.length;
-      const body  = document.getElementById('surveyBody');
-
-      document.getElementById('progressCurrent').textContent = idx + 1;
-      document.getElementById('progressTotal').textContent   = total;
-      document.getElementById('progressFill').style.width    = ((idx + 1) / total * 100) + '%';
-      document.getElementById('prevBtn').style.visibility    = idx === 0 ? 'hidden' : 'visible';
-      document.getElementById('nextBtn').textContent         = idx === total - 1 ? 'Submit Survey ✓' : 'Next →';
-
-      updateStepNav();
-
-      if (sec.type === 'info') {
-        body.innerHTML = `<div class="survey-page">
-          <p class="survey-instruction">Let's start with a little info about you. This helps us know who submitted the survey.</p>
-          <p class="survey-instruction" style="margin-top:0.75rem"><strong>What we're collecting:</strong> A list of every app and software your team uses — this includes web apps like Asana or Google Drive, desktop apps like Adobe Acrobat or QuickBooks, and anything else that's licensed or regularly used. If you use it for work, we want to know about it.</p>
-          <div class="info-grid">
-            <div class="contact-field">
-              <label>What's your full name?</label>
-              <input class="ti" type="text" data-key="info_name" placeholder="Your full name" value="${escHtml(surveyData.info_name||'')}"/>
-            </div>
-            <div class="contact-field">
-              <label>What's your job title?</label>
-              <input class="ti" type="text" data-key="info_title" placeholder="Your job title" value="${escHtml(surveyData.info_title||'')}"/>
-            </div>
-            <div class="contact-field">
-              <label>Which department are you in?</label>
-              <select class="ti" data-key="info_dept">
-                <option value="">— Select your department —</option>
-                ${DEPARTMENTS.map(d => `<option value="${d}" ${surveyData.info_dept === d ? 'selected' : ''}>${d}</option>`).join('')}
-              </select>
-            </div>
-            <div class="contact-field">
-              <label>What's your work email?</label>
-              <input class="ti" type="email" data-key="info_email" placeholder="yourname@rowecasaorganics.com" value="${escHtml(surveyData.info_email||'')}"/>
-            </div>
-            <div class="contact-field">
-              <label>Today's date</label>
-              <input class="ti" type="date" data-key="info_date" value="${escHtml(surveyData.info_date||'')}"/>
-            </div>
-          </div>
-        </div>`;
-
-      } else if (sec.type === 'tools') {
-        if (!toolData[sec.id]) toolData[sec.id] = [];
-        const tools = toolData[sec.id];
-        body.innerHTML = `<div class="survey-page">
-          <h2 style="font-size:1.8rem;font-weight:800;color:var(--sb-text);letter-spacing:-0.02em;margin-bottom:0.5rem">${sec.title}</h2>
-          <p class="survey-instruction">
-            Think about every app or software your team uses for <strong>${sec.title.toLowerCase()}</strong> — whether it's a website you log into, a program installed on your computer, or something you have a license for.<br/><br/>
-            <span style="color:var(--sb-muted)">Examples: ${sec.examples}</span><br/><br/>
-            <strong>Don't worry if you're unsure of every detail</strong> — just fill in what you know. Click Next to skip this category if it doesn't apply to your team.
-          </p>
-          <div id="tools-wrap-${sec.id}">
-            ${tools.length === 0
-              ? `<div class="empty-section-msg"><strong>No tools added yet</strong>Click the button below if your team uses any ${sec.title.toLowerCase()} software.</div>`
-              : tools.map((t, i) => toolCardHTML(sec.id, i, t)).join('')}
-          </div>
-          <button class="add-tool-btn" onclick="addTool('${sec.id}')">+ Add another ${sec.title.toLowerCase()} tool</button>
-        </div>`;
-
-      } else if (sec.type === 'comments') {
-        body.innerHTML = `<div class="survey-page">
-          <p class="survey-instruction">Is there anything else you'd like to tell us? Tools you're trialing, something you weren't sure how to categorize, or anything else on your mind.</p>
-          <div class="contact-field" style="margin-top:1rem">
-            <label>Additional comments <span style="color:var(--sb-muted);font-weight:400">(optional)</span></label>
-            <textarea class="ti" rows="6" data-key="comments" placeholder="Anything else...">${escHtml(surveyData.comments||'')}</textarea>
-          </div>
-        </div>`;
-
-      } else if (sec.type === 'review') {
-        const toolCount = Object.values(toolData).flat().filter(t => t.name?.trim()).length;
-        body.innerHTML = `<div class="survey-page">
-          <p class="survey-instruction">You're almost done! Here's a summary of what you've filled in. Click <strong>Submit Survey</strong> when you're ready.</p>
-          <div class="review-box">
-            <div class="review-row"><span>Name</span>          <strong>${escHtml(surveyData.info_name  || '—')}</strong></div>
-            <div class="review-row"><span>Job Title</span>     <strong>${escHtml(surveyData.info_title || '—')}</strong></div>
-            <div class="review-row"><span>Department</span>    <strong>${escHtml(surveyData.info_dept  || '—')}</strong></div>
-            <div class="review-row"><span>Email</span>         <strong>${escHtml(surveyData.info_email || '—')}</strong></div>
-            <div class="review-row"><span>Date</span>          <strong>${escHtml(surveyData.info_date  || '—')}</strong></div>
-            <div class="review-row"><span>Tools recorded</span><strong>${toolCount} tool${toolCount !== 1 ? 's' : ''}</strong></div>
-          </div>
-          <p class="survey-instruction" style="margin-top:1.25rem">By submitting you confirm this information is accurate to the best of your knowledge.</p>
-          <div id="submitStatus" class="contact-status" style="margin-top:0.75rem"></div>
-        </div>`;
-      }
-
-      window.scrollTo(0, 0);
-    }
-
-    // ── Save step ──────────────────────────────────────────────────
-    function saveStep() {
-      // Save info fields
-      document.querySelectorAll('#surveyBody [data-key]').forEach(el => {
-        surveyData[el.dataset.key] = el.value;
+    // ── Severity selector ──────────────────────────────────────────
+    function setSeverity(idx, val) {
+      [1,2,3,4,5].forEach(n => {
+        document.getElementById(`t${idx}_sev_${n}`)?.classList.toggle('selected', n <= val);
       });
+      document.getElementById(`t${idx}_severity`).value = val;
+    }
 
-      // Save tool cards for current tool section
-      const sec = activeSections[currentStep];
-      if (sec?.type === 'tools') {
-        const cards = document.querySelectorAll(`#tools-wrap-${sec.id} .tool-card`);
-        toolData[sec.id] = [];
-        cards.forEach(card => {
-          const tool = {};
-          card.querySelectorAll('[data-field]').forEach(el => {
-            tool[el.dataset.field] = el.value;
-          });
-          toolData[sec.id].push(tool);
+    // ── Pill selector ──────────────────────────────────────────────
+    function setPill(fieldId, btn, val) {
+      btn.closest('.pill-group').querySelectorAll('.pill-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      document.getElementById(fieldId).value = val;
+    }
+
+    // ── Modal ──────────────────────────────────────────────────────
+    function openModal() {
+      const content = document.getElementById('modalContent');
+      content.innerHTML = Object.entries(APP_EXAMPLES).map(([cat, apps]) => `
+        <div class="modal-category">
+          <h4>${cat}</h4>
+          <div class="modal-apps">
+            ${apps.map(a => `<span class="modal-app-tag">${a}</span>`).join('')}
+          </div>
+        </div>
+      `).join('');
+      document.getElementById('examplesModal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('examplesModal').classList.add('hidden');
+    }
+
+    // Click outside modal to close
+    document.getElementById('examplesModal').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+
+    // ── Collect all tool data ──────────────────────────────────────
+    function collectTools() {
+      const tools = [];
+      document.querySelectorAll('.tool-card').forEach((card, r) => {
+        const idx = card.id.replace('tool-','');
+        const name = document.getElementById(`t${idx}_name`)?.value?.trim();
+        if (!name) return; // skip blank cards
+        tools.push({
+          idx: r,
+          name,
+          category: document.getElementById(`t${idx}_category`)?.value  || '',
+          severity: document.getElementById(`t${idx}_severity`)?.value  || '',
+          who:      document.getElementById(`t${idx}_who`)?.value        || '',
+          admin:    document.getElementById(`t${idx}_admin`)?.value      || '',
+          login:    document.getElementById(`t${idx}_login`)?.value      || '',
+          owner:    document.getElementById(`t${idx}_owner`)?.value      || '',
+          notes:    document.getElementById(`t${idx}_notes`)?.value      || '',
         });
-      }
+      });
+      return tools;
     }
 
-    // ── Validation ─────────────────────────────────────────────────
-    function validateStep(idx) {
-      if (activeSections[idx]?.type !== 'info') return true;
-      const required = ['info_name','info_title','info_dept','info_email','info_date'];
-      for (const key of required) {
-        if (!surveyData[key] || surveyData[key].trim() === '') {
-          alert('Please fill in all the fields before continuing.');
-          return false;
-        }
-      }
-      return true;
-    }
-
-    // ── Navigation ─────────────────────────────────────────────────
-    function goToStep(idx) {
-      currentStep = idx;
-      renderStep(idx);
-    }
-
-    function surveyNav(dir) {
-      saveStep();
-      if (activeSections[currentStep]?.type === 'info' && dir === 1) {
-        if (!validateStep(currentStep)) return;
-        activeSections = buildSections(surveyData.info_dept);
-        buildStepNav();
-      }
-      if (dir === 1 && currentStep === activeSections.length - 1) {
-        submitSurvey(); return;
-      }
-      goToStep(currentStep + dir);
-    }
-
-    // ── Build flat payload for Google Sheets ───────────────────────
-    function buildPayload() {
-      const payload = { ...surveyData, submitted_at: new Date().toISOString() };
-      Object.entries(toolData).forEach(([sid, tools]) => {
-        tools.forEach((tool, r) => {
-          const base = `${sid}_r${r}`;
-          payload[`${base}_name`]  = tool.name  || '';
-          payload[`${base}_who`]   = tool.who   || '';
-          payload[`${base}_login`] = tool.login || '';
-          payload[`${base}_notes`] = tool.notes || '';
-          // Map to existing Apps Script fields so the sheet still works
-          payload[`${base}_active`]   = '';
-          payload[`${base}_acct`]     = '';
-          payload[`${base}_alldept`]  = tool.who === 'Whole department' || tool.who === 'Multiple departments';
-          payload[`${base}_myself`]   = tool.who === 'Just me';
-          payload[`${base}_perm`]     = '';
-        });
+    // ── Build flat payload for Google Sheets ──────────────────────
+    function buildPayload(tools) {
+      const payload = {
+        info_name:    document.getElementById('info_name')?.value  || '',
+        info_title:   document.getElementById('info_title')?.value || '',
+        info_dept:    document.getElementById('info_dept')?.value  || '',
+        info_email:   document.getElementById('info_email')?.value || '',
+        info_date:    document.getElementById('info_date')?.value  || '',
+        comments:     document.getElementById('comments')?.value   || '',
+        submitted_at: new Date().toISOString(),
+      };
+      tools.forEach((tool, r) => {
+        const base = `other_r${r}`; // use 'other' as generic section key
+        payload[`${base}_name`]     = tool.name;
+        payload[`${base}_category`] = tool.category;
+        payload[`${base}_severity`] = tool.severity;
+        payload[`${base}_who`]      = tool.who;
+        payload[`${base}_admin`]    = tool.admin;
+        payload[`${base}_login`]    = tool.login;
+        payload[`${base}_owner`]    = tool.owner;
+        payload[`${base}_notes`]    = tool.notes;
       });
       return payload;
     }
 
     // ── Submit ─────────────────────────────────────────────────────
     async function submitSurvey() {
-      const btn  = document.getElementById('nextBtn');
+      const btn  = document.getElementById('submitBtn');
       const stat = document.getElementById('submitStatus');
+
+      // Basic validation
+      const name  = document.getElementById('info_name')?.value?.trim();
+      const dept  = document.getElementById('info_dept')?.value;
+      const email = document.getElementById('info_email')?.value?.trim();
+      if (!name || !dept || !email) {
+        stat.textContent = 'Please fill in your name, department, and email before submitting.';
+        stat.className   = 'contact-status error';
+        document.getElementById('info_name').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+
       btn.textContent = 'Submitting...';
       btn.disabled    = true;
 
-      const payload = buildPayload();
+      const tools   = collectTools();
+      const payload = buildPayload(tools);
 
+      // Fire to Google Sheets
       fetch(SHEET_ENDPOINT, {
         method: 'POST', mode: 'no-cors',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       }).catch(e => console.warn('Sheet write failed:', e));
 
+      // Save to Firestore
       const saved = await window.saveSubmission({
         title: 'Technology & Application Discovery Survey',
-        dept:  surveyData.info_dept || '—',
+        dept:  payload.info_dept || '—',
         url:   'surveys/tech-discovery.html',
       });
 
       if (saved) {
-        if (stat) {
-          stat.textContent = '✅ Survey submitted! Redirecting you back to the portal...';
-          stat.className   = 'contact-status success';
-        }
-        btn.textContent = 'Submitted ✓';
+        stat.textContent = '✅ Survey submitted! Redirecting you back to the portal...';
+        stat.className   = 'contact-status success';
+        btn.textContent  = 'Submitted ✓';
         setTimeout(() => window.location.href = '../index.html', 2500);
       } else {
-        if (stat) {
-          stat.textContent = '❌ Submission failed. Please try again or contact itsupport@rowecasaorganics.com.';
-          stat.className   = 'contact-status error';
-        }
-        btn.textContent = 'Submit Survey ✓';
-        btn.disabled    = false;
+        stat.textContent = '❌ Submission failed. Please try again or contact itsupport@rowecasaorganics.com.';
+        stat.className   = 'contact-status error';
+        btn.textContent  = 'Submit Survey →';
+        btn.disabled     = false;
       }
     }
-
-    // ── Init ───────────────────────────────────────────────────────
-    function init() {
-      activeSections = [
-        { id: 'info',     title: 'About You',          type: 'info'     },
-        { id: 'comments', title: 'Additional Comments', type: 'comments' },
-        { id: 'review',   title: 'Review & Submit',    type: 'review'   },
-      ];
-      buildStepNav();
-      renderStep(0);
-    }
-
-    init();
   </script>
 
 </body>
