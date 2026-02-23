@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IT Help Site — Rowe Casa Organics</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+
+  <div class="app-shell">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-logo-wrap">
+        <img src="logo.png" alt="Rowe Casa Organics" class="sidebar-logo"/>
+      </div>
+      <div class="sidebar-divider"></div>
+      <nav class="sidebar-nav">
+        <button class="nav-btn active" data-section="surveys">
+          <span class="nav-icon">📋</span> Surveys
+        </button>
+        <button class="nav-btn" data-section="forms">
+          <span class="nav-icon">📝</span> Request Forms
+        </button>
+        <button class="nav-btn" data-section="completed">
+          <span class="nav-icon">✅</span> Completed
+        </button>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="nav-btn" data-section="knowledge">
+          <span class="nav-icon"></span> IT Knowledge Base
+        </button>
+        <div class="sidebar-divider"></div>
+        <div class="sidebar-divider"></div>
+        <button class="contact-btn" data-section="contact">
+          ✉️ Contact Us
+        </button>
+        <div class="portal-label">RCO IT Help Site</div>
+        <div class="portal-sub">@rowecasaorganics.com</div>
+      </div>
+    </aside>
+
+    <!-- MAIN WRAP -->
+    <div class="main-wrap">
+
+      <!-- TOP BAR -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <div class="topbar-title">Welcome to the RCO IT Help Site</div>
+          <div class="topbar-desc">Submit surveys, request IT support, or reach out to our team directly.</div>
+        </div>
+        <div class="topbar-right">
+          <span class="topbar-user" id="topbarUser">Not signed in</span>
+          <button class="sign-btn" id="authBtn">Sign Out</button>
+        </div>
+      </header>
+
+      <!-- CONTENT PANEL -->
+      <main class="content-panel">
+
+        <!-- SURVEYS -->
+        <section class="section active" id="section-surveys">
+          <div class="section-intro">
+            <h2>IT Surveys</h2>
+            <p>Complete your assigned surveys to help our team manage technology across the organization.</p>
+          </div>
+          <div class="cards">
+            <div class="card brown">
+              <div class="card-top">
+                <span class="card-status status-active">Active</span>
+              </div>
+              <h3>Technology & Application Discovery Survey</h3>
+              <p>Help us build a complete inventory of every tool, app, SaaS platform, and account used across your department. For team leads and managers.</p>
+              <div class="card-meta">
+                <div class="card-meta-left">
+                  <span class="meta-label">Est. completion time</span>
+                  <span class="meta-value">10 – 15 mins</span>
+                </div>
+                <button class="card-action" id="startSurveyBtn">Start →</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- FORMS -->
+        <section class="section" id="section-forms">
+          <div class="section-intro">
+            <h2>Request Forms</h2>
+            <p>Submit IT requests for new employees, departing staff, or equipment and software needs.</p>
+          </div>
+          <div class="cards">
+            <div class="card brown">
+              <div class="card-top"><span class="card-status status-draft">In Progress</span></div>
+              <h3>User Onboarding Request</h3>
+              <p>Submit everything IT needs to provision a new employee — role, system access, devices, and software requirements.</p>
+              <div class="card-meta"><button class="card-action disabled">Coming Soon</button></div>
+            </div>
+            <div class="card brown">
+              <div class="card-top"><span class="card-status status-draft">In Progress</span></div>
+              <h3>User Offboarding Request</h3>
+              <p>Capture separation details for a departing employee — access revocation, email handling, file transfer, and device return.</p>
+              <div class="card-meta"><button class="card-action disabled">Coming Soon</button></div>
+            </div>
+            <div class="card brown">
+              <div class="card-top"><span class="card-status status-draft">In Progress</span></div>
+              <h3>IT Equipment & Software Request</h3>
+              <p>Request any technology need — hardware, software, or licenses — with business justification and manager approval workflow.</p>
+              <div class="card-meta"><button class="card-action disabled">Coming Soon</button></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- COMPLETED -->
+        <section class="section" id="section-completed">
+          <div class="section-intro">
+            <h2>My Completed Submissions</h2>
+            <p>A record of all surveys and forms you have submitted.</p>
+            <button class="clear-btn" style="margin-top:0.75rem" id="refreshBtn">↻ Refresh</button>
+          </div>
+          <div id="completedList"></div>
+        </section>
+
+        <!-- KNOWLEDGE BASE -->
+        <section class="section" id="section-knowledge">
+          <div class="section-intro">
+            <h2>IT Knowledge Base</h2>
+            <p>Guides, how-tos, and IT documentation for the RCO team.</p>
+          </div>
+          <div class="construction-wrap">
+            <div class="construction-badge">
+              <div class="construction-emoji">🚧</div>
+              <span class="construction-tag">Coming Soon</span>
+              <h2>Under Construction</h2>
+              <p>The IT Knowledge Base is being built out. Check back soon for guides, FAQs, and documentation.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section class="section" id="section-contact">
+          <div class="section-intro">
+            <h2>Contact IT Support</h2>
+            <p>Send a message directly to the RCO IT team. We'll get back to you as soon as possible.</p>
+          </div>
+          <div class="contact-form-wrap">
+            <div class="contact-field">
+              <label for="contactFrom">Your Email Address</label>
+              <input type="email" id="contactFrom" placeholder="yourname@rowecasaorganics.com"/>
+            </div>
+            <div class="contact-field">
+              <label for="contactTo">To</label>
+              <input type="text" id="contactTo" value="itsupport@rowecasaorganics.com" readonly/>
+            </div>
+            <div class="contact-field">
+              <label for="contactSubject">Subject</label>
+              <input type="text" id="contactSubject" placeholder="Brief description of your issue or request"/>
+            </div>
+            <div class="contact-field">
+              <label for="contactBody">Message</label>
+              <textarea id="contactBody" rows="6" placeholder="Describe your issue, request, or question in detail..."></textarea>
+            </div>
+            <div class="contact-actions">
+              <button class="card-action" id="sendBtn">Send Message →</button>
+              <button class="clear-btn" id="clearBtn">Clear</button>
+            </div>
+            <div id="contactStatus" class="contact-status"></div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <script type="module" src="app.js"></script>
+
+</body>
+</html>
