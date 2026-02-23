@@ -5,6 +5,172 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Technology & Application Discovery Survey — RCO IT</title>
   <link rel="stylesheet" href="../styles.css"/>
+  <style>
+    /* ── Conversational tool card ── */
+    .tool-card {
+      background: var(--sidebar-bg);
+      border: 1.5px solid var(--sb-border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      position: relative;
+      transition: border-color 0.18s;
+    }
+    .tool-card:hover { border-color: var(--brand-hover-border); }
+
+    .tool-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.1rem;
+    }
+
+    .tool-card-num {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: var(--sb-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .tool-card-remove {
+      background: none;
+      border: none;
+      color: var(--sb-muted);
+      font-size: 0.8rem;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 600;
+      padding: 0;
+      transition: color 0.15s;
+    }
+    .tool-card-remove:hover { color: #c0392b; }
+
+    .tool-question {
+      margin-bottom: 1rem;
+    }
+
+    .tool-question label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--sb-text);
+      margin-bottom: 0.35rem;
+    }
+
+    .tool-question .q-hint {
+      font-size: 0.75rem;
+      color: var(--sb-muted);
+      font-weight: 400;
+      margin-bottom: 0.4rem;
+      display: block;
+    }
+
+    .tool-question input,
+    .tool-question textarea,
+    .tool-question select {
+      width: 100%;
+      background: var(--panel-bg);
+      border: 1.5px solid var(--sb-border);
+      border-radius: 9px;
+      padding: 0.6rem 0.85rem;
+      font-size: 0.875rem;
+      font-family: inherit;
+      color: var(--sb-text);
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      resize: vertical;
+    }
+
+    .tool-question input:focus,
+    .tool-question textarea:focus,
+    .tool-question select:focus {
+      border-color: var(--brand-hover-border);
+      box-shadow: 0 0 0 3px rgba(189,153,121,0.15);
+    }
+
+    /* who-uses pill buttons */
+    .who-pills {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 0.25rem;
+    }
+
+    .who-pill {
+      padding: 0.38rem 0.9rem;
+      border-radius: 999px;
+      border: 1.5px solid var(--sb-border);
+      background: var(--panel-bg);
+      color: var(--sb-text);
+      font-size: 0.8rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .who-pill:hover { border-color: var(--brand-hover-border); }
+
+    .who-pill.selected {
+      background: var(--brand-grad);
+      border-color: var(--brand-brown);
+      color: #fff;
+    }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.85rem;
+    }
+
+    @media (max-width: 600px) { .tool-grid { grid-template-columns: 1fr; } }
+
+    .add-tool-btn {
+      width: 100%;
+      padding: 0.85rem;
+      border: 2px dashed var(--sb-border);
+      border-radius: 14px;
+      background: none;
+      color: var(--sb-muted);
+      font-size: 0.875rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.18s;
+      margin-top: 0.5rem;
+    }
+    .add-tool-btn:hover {
+      border-color: var(--brand-hover-border);
+      color: var(--brand-brown);
+      background: var(--brand-soft);
+    }
+
+    .section-label-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--brand-soft);
+      border: 1px solid var(--brand-hover-border);
+      color: var(--brand-brown);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.25rem 0.7rem;
+      border-radius: 999px;
+      margin-bottom: 1rem;
+    }
+
+    .empty-section-msg {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: var(--sb-muted);
+      font-size: 0.875rem;
+      border: 1.5px dashed var(--sb-border);
+      border-radius: 14px;
+      margin-bottom: 1rem;
+    }
+    .empty-section-msg strong { display: block; margin-bottom: 0.3rem; color: var(--sb-text); }
+  </style>
 </head>
 <body>
 
@@ -32,7 +198,7 @@
       <header class="topbar">
         <div class="topbar-left">
           <div class="topbar-title">Technology & Application Discovery Survey</div>
-          <div class="topbar-desc">List all tools and accounts your team uses — one submission covers everything.</div>
+          <div class="topbar-desc">Tell us about the tools your team uses — takes about 10 minutes.</div>
         </div>
         <div class="topbar-right">
           <div class="survey-progress-wrap">
@@ -52,17 +218,16 @@
     </div>
   </div>
 
-  <!-- ── Google Sheets endpoint ── -->
+  <!-- Google Sheets endpoint -->
   <script>
     const SHEET_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxeP-Asvk9kgGx_oz4jMWYOBldaPLM8Tm6S2XfXOfDRat-3KX1UfVXYzEju2Dc7nDwBGg/exec';
   </script>
 
-  <!-- ── Firebase module — auth guard + Firestore save ── -->
+  <!-- Firebase module -->
   <script type="module">
     import { initializeApp, getApps, getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-    import { getAuth, onAuthStateChanged, signOut }   from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-    import { getFirestore, collection, addDoc, serverTimestamp }
-                                                      from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+    import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
     const FIREBASE_CONFIG = {
       apiKey:            "AIzaSyBRKBzxTYzBnBHo-YY8fSxTSSkM3uyujmc",
@@ -74,27 +239,19 @@
       measurementId:     "G-H6WM1LWQ4V"
     };
 
-    const ALLOWED_DOMAIN = '@rowecasaorganics.com';
-
-    // Guard against duplicate initializeApp calls
     const app  = getApps().length ? getApp() : initializeApp(FIREBASE_CONFIG);
     const auth = getAuth(app);
     const db   = getFirestore(app);
-    console.log('Firestore db instance:', db);
-    console.log('Firestore app name:', app.name);
 
-    // Auth guard — redirect to login if not signed in or wrong domain
     onAuthStateChanged(auth, user => {
-      if (!user || !user.email.endsWith(ALLOWED_DOMAIN)) {
+      if (!user || !user.email.endsWith('@rowecasaorganics.com')) {
         signOut(auth).finally(() => window.location.replace('../login.html'));
         return;
       }
       window._currentUser = user;
     });
 
-    // Exposed globally so the non-module survey script can call it
     window.saveSubmission = async function(data) {
-      // Wait up to 5s for auth to resolve if _currentUser isn't set yet
       if (!window._currentUser) {
         await new Promise(resolve => {
           const unsub = onAuthStateChanged(auth, user => {
@@ -103,21 +260,7 @@
           setTimeout(resolve, 5000);
         });
       }
-
-      // ── DEBUG — remove once working ──
-      console.log('=== saveSubmission debug ===');
-      console.log('_currentUser:', window._currentUser);
-      console.log('uid:', window._currentUser?.uid);
-      console.log('email:', window._currentUser?.email);
-      console.log('data being written:', data);
-      console.log('db instance:', db);
-      // ── END DEBUG ──
-
-      if (!window._currentUser) {
-        console.error('saveSubmission: no authenticated user');
-        return false;
-      }
-
+      if (!window._currentUser) return false;
       try {
         await addDoc(collection(db, 'submissions'), {
           ...data,
@@ -125,22 +268,16 @@
           userEmail:   window._currentUser.email,
           submittedAt: serverTimestamp(),
         });
-        console.log('Firestore submission saved for', window._currentUser.email);
         return true;
       } catch (err) {
         console.error('Firestore save failed:', err);
-        console.error('Error code:', err.code);
-        console.error('Error message:', err.message);
-        console.error('Full error object:', JSON.stringify(err, null, 2));
         return false;
       }
     };
   </script>
 
-  <!-- ── Main survey script (non-module so it can use globals freely) ── -->
+  <!-- Main survey script -->
   <script>
-
-    // ── Departments ────────────────────────────────────────────────
     const DEPARTMENTS = [
       'Administration','Brand Experience','Curing','Customer Care',
       'Customer Service','Facilities and Maintenance','Finance',
@@ -177,37 +314,38 @@
     };
 
     const ALL_TOOL_SECTIONS = {
-      comm:    { title: 'Communication Tools',               examples: 'Email clients, messaging platforms, video conferencing, VoIP — e.g. Gmail, Slack, Microsoft Teams' },
-      prod:    { title: 'Productivity & Collaboration Tools', examples: 'Document creation, file storage, cloud drives, office suites, note-taking — e.g. Google Workspace, Microsoft 365, Notion, Dropbox' },
-      pm:      { title: 'Project Management Tools',          examples: 'Task tracking, project planning, ticketing systems, workflow management — e.g. Asana, Monday.com' },
-      hr:      { title: 'HR & People Management Tools',      examples: 'HRIS, payroll, recruiting/ATS, performance management, onboarding — e.g. BambooHR, ADP' },
-      finance: { title: 'Finance & Accounting Tools',        examples: 'Accounting software, invoicing, expense management, budgeting — e.g. QuickBooks, Expensify' },
-      crm:     { title: 'Sales & CRM Tools',                 examples: 'CRM platforms, sales enablement, lead generation, e-signature — e.g. Salesforce, HubSpot' },
-      marketing:{ title: 'Marketing Tools',                  examples: 'Email marketing, social media management, analytics, SEO, ad platforms — e.g. Mailchimp, Hootsuite' },
-      it:      { title: 'IT & Security Tools',               examples: 'Password managers, VPN, antivirus, MDM, identity/access management — e.g. Okta, CrowdStrike' },
-      design:  { title: 'Design & Creative Tools',           examples: 'Graphic design, video editing, photo editing, prototyping — e.g. Adobe Creative Cloud, Canva' },
-      ops:     { title: 'Operations & Industry-Specific Tools', examples: 'ERP, inventory, logistics, shipping, scheduling — e.g. ShipStation, ZebraDesigner' },
-      other:   { title: 'Any Other Tools',                   examples: 'Anything not covered above — free tools, browser extensions, or anything downloaded directly to your computer' },
+      comm:     { title: 'Communication',               emoji: '💬', examples: 'Gmail, Slack, Microsoft Teams, Zoom, phone systems' },
+      prod:     { title: 'Productivity & File Storage', emoji: '📁', examples: 'Google Drive, Dropbox, Microsoft 365, Notion, OneDrive' },
+      pm:       { title: 'Project Management',          emoji: '📋', examples: 'Asana, Monday.com, Trello, ClickUp, Basecamp' },
+      hr:       { title: 'HR & People',                 emoji: '👥', examples: 'BambooHR, ADP, Gusto, Rippling, any payroll or hiring tools' },
+      finance:  { title: 'Finance & Accounting',        emoji: '💰', examples: 'QuickBooks, Expensify, Bill.com, any invoicing or expense tools' },
+      crm:      { title: 'Sales & Customer Tools',      emoji: '🤝', examples: 'Salesforce, HubSpot, any tools for tracking customers or sales' },
+      marketing:{ title: 'Marketing',                   emoji: '📣', examples: 'Mailchimp, Klaviyo, Hootsuite, Google Analytics, ad platforms' },
+      it:       { title: 'IT & Security',               emoji: '🔒', examples: 'Password managers, VPN, antivirus, any IT or security software' },
+      design:   { title: 'Design & Creative',           emoji: '🎨', examples: 'Canva, Adobe Creative Cloud, Figma, video or photo editing apps' },
+      ops:      { title: 'Operations & Logistics',      emoji: '📦', examples: 'ShipStation, any inventory, shipping, or production software' },
+      other:    { title: 'Anything Else',               emoji: '🗂️', examples: 'Any tool not listed above — even free apps or browser extensions' },
     };
 
     // ── State ──────────────────────────────────────────────────────
     let currentStep    = 0;
-    let surveyData     = {};
+    let surveyData     = {};  // info fields
+    let toolData       = {};  // { sectionId: [ {name, who, login, notes}, ... ] }
     let activeSections = [];
 
     // ── Section builder ────────────────────────────────────────────
     function buildSections(dept) {
-      const toolIds  = DEPT_SECTIONS[dept] || ['comm','prod','pm','other'];
-      const sections = [{ id: 'info', title: 'Your Information', type: 'info' }];
-      toolIds.forEach(id => sections.push({
-        id,
-        title:    ALL_TOOL_SECTIONS[id].title,
-        type:     'tools',
-        examples: ALL_TOOL_SECTIONS[id].examples
+      const ids = DEPT_SECTIONS[dept] || ['comm','prod','pm','other'];
+      const sections = [{ id: 'info', title: 'About You', type: 'info' }];
+      ids.forEach(id => sections.push({
+        id, type: 'tools',
+        title:   ALL_TOOL_SECTIONS[id].title,
+        emoji:   ALL_TOOL_SECTIONS[id].emoji,
+        examples:ALL_TOOL_SECTIONS[id].examples,
       }));
       sections.push(
-        { id: 'comments', title: 'Additional Comments', type: 'comments' },
-        { id: 'review',   title: 'Review & Submit',     type: 'review'   }
+        { id: 'comments', title: 'Anything Else?',  type: 'comments' },
+        { id: 'review',   title: 'Review & Submit', type: 'review'   }
       );
       return sections;
     }
@@ -221,8 +359,7 @@
         btn.className = 'nav-btn step-nav-btn'
           + (i === currentStep ? ' active' : '')
           + (i < currentStep  ? ' done'   : '');
-        btn.dataset.step = i;
-        btn.innerHTML = `<span class="step-num">${i + 1}</span> ${s.title}`;
+        btn.innerHTML = `<span class="step-num">${i + 1}</span> ${s.emoji || ''} ${s.title}`;
         btn.onclick = () => { saveStep(); goToStep(i); };
         nav.appendChild(btn);
       });
@@ -236,61 +373,84 @@
       });
     }
 
-    // ── Tool row / table HTML ──────────────────────────────────────
-    function toolRowHTML(sid, r) {
-      const base = `${sid}_r${r}`;
-      return `<div class="tool-row" data-row="${r}">
-        <input class="ti" type="text"  placeholder="Tool / app name"          data-key="${base}_name"/>
-        <select class="ti"                                                      data-key="${base}_active">
-          <option value="">–</option><option>Yes</option><option>No</option>
-        </select>
-        <select class="ti"                                                      data-key="${base}_acct">
-          <option value="">–</option><option>Personal</option><option>Shared / Team</option>
-        </select>
-        <div class="who-cell">
-          <div class="who-checks">
-            <label class="check-label"><input type="checkbox" data-key="${base}_alldept"/> Entire Dept.</label>
-            <label class="check-label"><input type="checkbox" data-key="${base}_myself"/>  Myself</label>
+    // ── Tool card HTML ─────────────────────────────────────────────
+    function toolCardHTML(sid, idx, tool) {
+      const who   = tool.who   || '';
+      const whoOptions = ['Just me', 'My team', 'Whole department', 'Multiple departments'];
+      return `<div class="tool-card" data-sid="${sid}" data-idx="${idx}">
+        <div class="tool-card-header">
+          <span class="tool-card-num">Tool ${idx + 1}</span>
+          ${idx > 0 ? `<button class="tool-card-remove" onclick="removeTool('${sid}', ${idx})">✕ Remove</button>` : ''}
+        </div>
+
+        <div class="tool-question">
+          <label>What's the name of the tool or app?</label>
+          <span class="q-hint">Just the name is fine — e.g. "Gmail" or "Slack"</span>
+          <input type="text" placeholder="Tool or app name" data-field="name"
+            value="${escHtml(tool.name || '')}"/>
+        </div>
+
+        <div class="tool-question">
+          <label>Who uses this tool?</label>
+          <span class="q-hint">Select all that apply</span>
+          <div class="who-pills">
+            ${whoOptions.map(opt => `
+              <button type="button" class="who-pill ${who === opt ? 'selected' : ''}"
+                onclick="selectWho(this, '${sid}', ${idx}, '${opt}')">${opt}</button>
+            `).join('')}
           </div>
-          <input class="ti ti-sm" type="text" placeholder="Other names / emails" data-key="${base}_who"/>
+          <input type="hidden" data-field="who" value="${escHtml(who)}"/>
         </div>
-        <input class="ti" type="text" placeholder="e.g. Admin, Viewer" data-key="${base}_perm"/>
-        <input class="ti" type="text" placeholder="Optional"            data-key="${base}_notes"/>
+
+        <div class="tool-grid">
+          <div class="tool-question">
+            <label>Login or account email <span style="color:var(--sb-muted);font-weight:400">(optional)</span></label>
+            <span class="q-hint">The email address used to log in, if known</span>
+            <input type="text" placeholder="e.g. team@rowecasaorganics.com" data-field="login"
+              value="${escHtml(tool.login || '')}"/>
+          </div>
+          <div class="tool-question">
+            <label>Anything else we should know? <span style="color:var(--sb-muted);font-weight:400">(optional)</span></label>
+            <span class="q-hint">e.g. paid subscription, trial, rarely used</span>
+            <input type="text" placeholder="Optional notes" data-field="notes"
+              value="${escHtml(tool.notes || '')}"/>
+          </div>
+        </div>
       </div>`;
     }
 
-    function toolTableHTML(sid) {
-      // Count how many rows were previously saved for this section
-      let rowCount = 0;
-      for (let r = 0; r < 20; r++) {
-        if (surveyData[`${sid}_r${r}_name`] !== undefined) rowCount = r + 1;
-      }
-      if (rowCount === 0) rowCount = 1; // always show at least one row
-
-      let rows = '';
-      for (let r = 0; r < rowCount; r++) rows += toolRowHTML(sid, r);
-
-      return `<div class="tool-table-wrap" id="table-${sid}">
-        <div class="tool-table-header">
-          <span>Tool / App Name</span>
-          <span>Active?</span>
-          <span>Account Type</span>
-          <span>Who Uses It?</span>
-          <span>Permission Level</span>
-          <span>Notes</span>
-        </div>
-        ${rows}
-        <button class="add-row-btn" onclick="addRow('${sid}')">+ Add another tool</button>
-      </div>`;
+    function escHtml(str) {
+      return String(str).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     }
 
-    function addRow(sid) {
-      const wrap   = document.getElementById('table-' + sid);
-      const addBtn = wrap.querySelector('.add-row-btn');
-      const count  = wrap.querySelectorAll('.tool-row').length;
-      const div    = document.createElement('div');
-      div.innerHTML = toolRowHTML(sid, count);
-      wrap.insertBefore(div.firstElementChild, addBtn);
+    // ── Who pill selection ─────────────────────────────────────────
+    function selectWho(btn, sid, idx, val) {
+      const card = btn.closest('.tool-card');
+      card.querySelectorAll('.who-pill').forEach(p => p.classList.remove('selected'));
+      btn.classList.add('selected');
+      card.querySelector('[data-field="who"]').value = val;
+      if (!toolData[sid]) toolData[sid] = [];
+      if (!toolData[sid][idx]) toolData[sid][idx] = {};
+      toolData[sid][idx].who = val;
+    }
+
+    // ── Add / remove tool ──────────────────────────────────────────
+    function addTool(sid) {
+      if (!toolData[sid]) toolData[sid] = [{}];
+      else toolData[sid].push({});
+      rerenderTools(sid);
+    }
+
+    function removeTool(sid, idx) {
+      toolData[sid].splice(idx, 1);
+      rerenderTools(sid);
+    }
+
+    function rerenderTools(sid) {
+      const wrap = document.getElementById('tools-wrap-' + sid);
+      if (!wrap) return;
+      const tools = toolData[sid] || [{}];
+      wrap.innerHTML = tools.map((t, i) => toolCardHTML(sid, i, t)).join('');
     }
 
     // ── Render step ────────────────────────────────────────────────
@@ -309,74 +469,99 @@
 
       if (sec.type === 'info') {
         body.innerHTML = `<div class="survey-page">
-          <p class="survey-instruction">Please fill in your details. All fields are required. Your department selection will tailor the survey to show only the tool categories relevant to your team.</p>
+          <p class="survey-instruction">👋 Let's start with a little info about you. This helps us know who submitted the survey.</p>
           <div class="info-grid">
-            <div class="contact-field"><label>Full Name <span class="req">*</span></label>
-              <input class="ti" type="text"  data-key="info_name"  placeholder="Your full name"/></div>
-            <div class="contact-field"><label>Job Title <span class="req">*</span></label>
-              <input class="ti" type="text"  data-key="info_title" placeholder="Your job title"/></div>
-            <div class="contact-field"><label>Department <span class="req">*</span></label>
-              <select class="ti" data-key="info_dept" id="deptSelect">
+            <div class="contact-field">
+              <label>What's your full name?</label>
+              <input class="ti" type="text" data-key="info_name" placeholder="Your full name" value="${escHtml(surveyData.info_name||'')}"/>
+            </div>
+            <div class="contact-field">
+              <label>What's your job title?</label>
+              <input class="ti" type="text" data-key="info_title" placeholder="Your job title" value="${escHtml(surveyData.info_title||'')}"/>
+            </div>
+            <div class="contact-field">
+              <label>Which department are you in?</label>
+              <select class="ti" data-key="info_dept">
                 <option value="">— Select your department —</option>
-                ${DEPARTMENTS.map(d => `<option value="${d}" ${surveyData['info_dept'] === d ? 'selected' : ''}>${d}</option>`).join('')}
+                ${DEPARTMENTS.map(d => `<option value="${d}" ${surveyData.info_dept === d ? 'selected' : ''}>${d}</option>`).join('')}
               </select>
             </div>
-            <div class="contact-field"><label>Email Address <span class="req">*</span></label>
-              <input class="ti" type="email" data-key="info_email" placeholder="yourname@rowecasaorganics.com"/></div>
-            <div class="contact-field"><label>Date <span class="req">*</span></label>
-              <input class="ti" type="date"  data-key="info_date"/></div>
+            <div class="contact-field">
+              <label>What's your work email?</label>
+              <input class="ti" type="email" data-key="info_email" placeholder="yourname@rowecasaorganics.com" value="${escHtml(surveyData.info_email||'')}"/>
+            </div>
+            <div class="contact-field">
+              <label>Today's date</label>
+              <input class="ti" type="date" data-key="info_date" value="${escHtml(surveyData.info_date||'')}"/>
+            </div>
           </div>
         </div>`;
 
       } else if (sec.type === 'tools') {
+        if (!toolData[sec.id] || toolData[sec.id].length === 0) toolData[sec.id] = [{}];
+        const tools = toolData[sec.id];
         body.innerHTML = `<div class="survey-page">
-          <p class="survey-instruction"><strong>Examples:</strong> ${sec.examples}</p>
-          ${toolTableHTML(sec.id)}
+          <div class="section-label-badge">${sec.emoji} ${sec.title}</div>
+          <p class="survey-instruction">
+            Think about everything your team uses for <strong>${sec.title.toLowerCase()}</strong>.<br/>
+            <span style="color:var(--sb-muted)">Examples: ${sec.examples}</span><br/><br/>
+            <strong>Don't worry if you're not sure of every detail</strong> — just fill in what you know. If your team doesn't use anything in this category, click Next to skip.
+          </p>
+          <div id="tools-wrap-${sec.id}">
+            ${tools.map((t, i) => toolCardHTML(sec.id, i, t)).join('')}
+          </div>
+          <button class="add-tool-btn" onclick="addTool('${sec.id}')">+ Add another ${sec.title.toLowerCase()} tool</button>
         </div>`;
 
       } else if (sec.type === 'comments') {
         body.innerHTML = `<div class="survey-page">
-          <p class="survey-instruction">Anything else we should know? Tools being trialed, tools used by only one person, or anything you're unsure how to categorize.</p>
+          <p class="survey-instruction">🗒️ Is there anything else you'd like to tell us? Tools you're trialing, something you weren't sure how to categorize, or anything else on your mind.</p>
           <div class="contact-field" style="margin-top:1rem">
-            <label>Additional Comments <span style="color:var(--sb-muted);font-weight:400">(optional)</span></label>
-            <textarea class="ti" rows="7" data-key="comments" placeholder="Share any extra context here..."></textarea>
+            <label>Additional comments <span style="color:var(--sb-muted);font-weight:400">(optional)</span></label>
+            <textarea class="ti" rows="6" data-key="comments" placeholder="Anything else...">${escHtml(surveyData.comments||'')}</textarea>
           </div>
         </div>`;
 
       } else if (sec.type === 'review') {
+        const toolCount = Object.values(toolData).flat().filter(t => t.name?.trim()).length;
         body.innerHTML = `<div class="survey-page">
-          <p class="survey-instruction">Please review your details below then click <strong>Submit Survey</strong> to send your responses to the RCO IT team.</p>
+          <p class="survey-instruction">✅ You're almost done! Here's a summary of what you've filled in. Click <strong>Submit Survey</strong> when you're ready.</p>
           <div class="review-box">
-            <div class="review-row"><span>Name</span>               <strong>${surveyData['info_name']  || '—'}</strong></div>
-            <div class="review-row"><span>Job Title</span>          <strong>${surveyData['info_title'] || '—'}</strong></div>
-            <div class="review-row"><span>Department</span>         <strong>${surveyData['info_dept']  || '—'}</strong></div>
-            <div class="review-row"><span>Email</span>              <strong>${surveyData['info_email'] || '—'}</strong></div>
-            <div class="review-row"><span>Date</span>               <strong>${surveyData['info_date']  || '—'}</strong></div>
-            <div class="review-row"><span>Sections completed</span> <strong>${activeSections.length - 3} tool categories</strong></div>
+            <div class="review-row"><span>Name</span>          <strong>${escHtml(surveyData.info_name  || '—')}</strong></div>
+            <div class="review-row"><span>Job Title</span>     <strong>${escHtml(surveyData.info_title || '—')}</strong></div>
+            <div class="review-row"><span>Department</span>    <strong>${escHtml(surveyData.info_dept  || '—')}</strong></div>
+            <div class="review-row"><span>Email</span>         <strong>${escHtml(surveyData.info_email || '—')}</strong></div>
+            <div class="review-row"><span>Date</span>          <strong>${escHtml(surveyData.info_date  || '—')}</strong></div>
+            <div class="review-row"><span>Tools recorded</span><strong>${toolCount} tool${toolCount !== 1 ? 's' : ''}</strong></div>
           </div>
-          <p class="survey-instruction" style="margin-top:1.25rem">By submitting you confirm all information is accurate to the best of your knowledge.</p>
+          <p class="survey-instruction" style="margin-top:1.25rem">By submitting you confirm this information is accurate to the best of your knowledge.</p>
           <div id="submitStatus" class="contact-status" style="margin-top:0.75rem"></div>
         </div>`;
       }
 
-      restoreValues(body);
       window.scrollTo(0, 0);
     }
 
-    // ── Save / restore field values ────────────────────────────────
+    // ── Save step ──────────────────────────────────────────────────
     function saveStep() {
+      // Save info fields
       document.querySelectorAll('#surveyBody [data-key]').forEach(el => {
-        surveyData[el.dataset.key] = el.type === 'checkbox' ? el.checked : el.value;
+        surveyData[el.dataset.key] = el.value;
       });
-    }
 
-    function restoreValues(container) {
-      container.querySelectorAll('[data-key]').forEach(el => {
-        const v = surveyData[el.dataset.key];
-        if (v === undefined) return;
-        if (el.type === 'checkbox') el.checked = v;
-        else el.value = v;
-      });
+      // Save tool cards for current tool section
+      const sec = activeSections[currentStep];
+      if (sec?.type === 'tools') {
+        const cards = document.querySelectorAll(`#tools-wrap-${sec.id} .tool-card`);
+        toolData[sec.id] = [];
+        cards.forEach(card => {
+          const tool = {};
+          card.querySelectorAll('[data-field]').forEach(el => {
+            tool[el.dataset.field] = el.value;
+          });
+          toolData[sec.id].push(tool);
+        });
+      }
     }
 
     // ── Validation ─────────────────────────────────────────────────
@@ -385,7 +570,7 @@
       const required = ['info_name','info_title','info_dept','info_email','info_date'];
       for (const key of required) {
         if (!surveyData[key] || surveyData[key].trim() === '') {
-          alert('Please complete all required fields before continuing.');
+          alert('Please fill in all the fields before continuing.');
           return false;
         }
       }
@@ -400,45 +585,56 @@
 
     function surveyNav(dir) {
       saveStep();
-
-      // Leaving info step forward → rebuild sections for chosen dept
       if (activeSections[currentStep]?.type === 'info' && dir === 1) {
         if (!validateStep(currentStep)) return;
-        activeSections = buildSections(surveyData['info_dept']);
+        activeSections = buildSections(surveyData.info_dept);
         buildStepNav();
       }
-
       if (dir === 1 && currentStep === activeSections.length - 1) {
-        submitSurvey();
-        return;
+        submitSurvey(); return;
       }
-
       goToStep(currentStep + dir);
+    }
+
+    // ── Build flat payload for Google Sheets ───────────────────────
+    function buildPayload() {
+      const payload = { ...surveyData, submitted_at: new Date().toISOString() };
+      Object.entries(toolData).forEach(([sid, tools]) => {
+        tools.forEach((tool, r) => {
+          const base = `${sid}_r${r}`;
+          payload[`${base}_name`]  = tool.name  || '';
+          payload[`${base}_who`]   = tool.who   || '';
+          payload[`${base}_login`] = tool.login || '';
+          payload[`${base}_notes`] = tool.notes || '';
+          // Map to existing Apps Script fields so the sheet still works
+          payload[`${base}_active`]   = '';
+          payload[`${base}_acct`]     = '';
+          payload[`${base}_alldept`]  = tool.who === 'Whole department' || tool.who === 'Multiple departments';
+          payload[`${base}_myself`]   = tool.who === 'Just me';
+          payload[`${base}_perm`]     = '';
+        });
+      });
+      return payload;
     }
 
     // ── Submit ─────────────────────────────────────────────────────
     async function submitSurvey() {
       const btn  = document.getElementById('nextBtn');
       const stat = document.getElementById('submitStatus');
-
       btn.textContent = 'Submitting...';
       btn.disabled    = true;
 
-      const payload = { ...surveyData, submitted_at: new Date().toISOString() };
+      const payload = buildPayload();
 
-      // 1. Fire Google Sheet write — don't await it, we can't read the response anyway
       fetch(SHEET_ENDPOINT, {
-        method:  'POST',
-        mode:    'no-cors',
+        method: 'POST', mode: 'no-cors',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify(payload),
-      }).catch(e => console.warn('Google Sheet write failed (non-fatal):', e));
+        body: JSON.stringify(payload),
+      }).catch(e => console.warn('Sheet write failed:', e));
 
-      // 2. Save to Firestore so the My Completed tab can read it
-      //    window.saveSubmission is defined in the module block above
       const saved = await window.saveSubmission({
         title: 'Technology & Application Discovery Survey',
-        dept:  surveyData['info_dept'] || '—',
+        dept:  surveyData.info_dept || '—',
         url:   'surveys/tech-discovery.html',
       });
 
@@ -462,9 +658,9 @@
     // ── Init ───────────────────────────────────────────────────────
     function init() {
       activeSections = [
-        { id: 'info',     title: 'Your Information',    type: 'info'     },
-        { id: 'comments', title: 'Additional Comments', type: 'comments' },
-        { id: 'review',   title: 'Review & Submit',     type: 'review'   },
+        { id: 'info',     title: 'About You',          type: 'info'     },
+        { id: 'comments', title: 'Anything Else?',     type: 'comments' },
+        { id: 'review',   title: 'Review & Submit',    type: 'review'   },
       ];
       buildStepNav();
       renderStep(0);
