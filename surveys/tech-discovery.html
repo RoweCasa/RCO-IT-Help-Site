@@ -499,7 +499,7 @@
         </div>`;
 
       } else if (sec.type === 'tools') {
-        if (!toolData[sec.id] || toolData[sec.id].length === 0) toolData[sec.id] = [{}];
+        if (!toolData[sec.id]) toolData[sec.id] = [];
         const tools = toolData[sec.id];
         body.innerHTML = `<div class="survey-page">
           <h2 style="font-size:1.8rem;font-weight:800;color:var(--sb-text);letter-spacing:-0.02em;margin-bottom:0.5rem">${sec.title}</h2>
@@ -509,7 +509,9 @@
             <strong>Don't worry if you're unsure of every detail</strong> — just fill in what you know. Click Next to skip this category if it doesn't apply to your team.
           </p>
           <div id="tools-wrap-${sec.id}">
-            ${tools.map((t, i) => toolCardHTML(sec.id, i, t)).join('')}
+            ${tools.length === 0
+              ? `<div class="empty-section-msg"><strong>No tools added yet</strong>Click the button below if your team uses any ${sec.title.toLowerCase()} software.</div>`
+              : tools.map((t, i) => toolCardHTML(sec.id, i, t)).join('')}
           </div>
           <button class="add-tool-btn" onclick="addTool('${sec.id}')">+ Add another ${sec.title.toLowerCase()} tool</button>
         </div>`;
