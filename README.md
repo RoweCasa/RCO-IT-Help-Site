@@ -1,7 +1,5 @@
 # RCO-IT-Help-Site
 
-# RCO IT Help Site
-
 An internal IT portal for Rowe Casa Organics staff. Hosted on GitHub Pages.
 
 🔗 **Live Site:** [https://hhowell116.github.io/IT-Survey-Site/](https://hhowell116.github.io/IT-Survey-Site/)
