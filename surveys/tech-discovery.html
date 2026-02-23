@@ -260,6 +260,16 @@
     }
 
     function toolTableHTML(sid) {
+      // Count how many rows were previously saved for this section
+      let rowCount = 0;
+      for (let r = 0; r < 20; r++) {
+        if (surveyData[`${sid}_r${r}_name`] !== undefined) rowCount = r + 1;
+      }
+      if (rowCount === 0) rowCount = 1; // always show at least one row
+
+      let rows = '';
+      for (let r = 0; r < rowCount; r++) rows += toolRowHTML(sid, r);
+
       return `<div class="tool-table-wrap" id="table-${sid}">
         <div class="tool-table-header">
           <span>Tool / App Name</span>
@@ -269,7 +279,7 @@
           <span>Permission Level</span>
           <span>Notes</span>
         </div>
-        ${toolRowHTML(sid, 0)}
+        ${rows}
         <button class="add-row-btn" onclick="addRow('${sid}')">+ Add another tool</button>
       </div>`;
     }
