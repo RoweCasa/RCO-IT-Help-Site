@@ -34,7 +34,7 @@
 
     /* ── Software table ── */
     .sw-table-wrap { overflow-x: auto; margin-bottom: 1rem; }
-    .sw-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; min-width: 560px; table-layout: fixed; }
+    .sw-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; table-layout: fixed; }
     .sw-table thead th {
       text-align: left; font-size: 0.68rem; font-weight: 800; text-transform: uppercase;
       letter-spacing: 0.05em; color: var(--sb-muted); padding: 0 0.75rem 0.65rem;
@@ -318,7 +318,7 @@
                   <th style="width:13%">Criticality</th>
                   <th style="width:11%">Admin?</th>
                   <th style="width:13%">Owner</th>
-                  <th style="width:23%"></th>
+                  <th style="width:23%">Actions</th>
                 </tr>
               </thead>
               <tbody id="swTableBody">
@@ -588,7 +588,7 @@ function renderTable() {
       + '<td style="color:var(--sb-muted);font-size:0.78rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(sw.owner || '—') + '</td>'
       + '<td style="text-align:center;white-space:nowrap">'
       +   '<button class="' + btnClass + '" data-edit="' + i + '">' + btnLabel + '</button>'
-      +   ' <button class="remove-btn" data-remove="' + i + '">✕</button>'
+      +   '&nbsp;&nbsp;<button class="remove-btn" data-remove="' + i + '">✕</button>'
       + '</td>'
       + '</tr>';
   }
@@ -763,6 +763,9 @@ function switchTab(tab) {
 document.getElementById('examplesModal').addEventListener('click', function(e) {
   if (e.target === document.getElementById('examplesModal')) closeModal();
 });
+
+// ── Init ─────────────────────────────────────────────────────
+renderTable();
 
 // ── Submit ──────────────────────────────────────────────────
 async function submitSurvey() {
