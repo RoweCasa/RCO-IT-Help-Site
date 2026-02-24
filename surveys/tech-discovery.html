@@ -313,11 +313,8 @@
             <table class="sw-table">
               <thead>
                 <tr>
-                  <th style="width:30%">App / Software Name</th>
-                  <th style="width:17%">Criticality</th>
-                  <th style="width:15%">Admin?</th>
-                  <th style="width:18%">Owner</th>
-                  <th style="width:20%"></th>
+                  <th>App / Software Name</th>
+                  <th style="width:22%"></th>
                 </tr>
               </thead>
               <tbody id="swTableBody">
@@ -350,7 +347,6 @@
               <button type="button" class="pill-btn" onclick="setPill('d_who',this,'Whole department')">Whole department</button>
             </div>
             <input type="hidden" id="d_who"/>
-            <p class="skip-hint">Skip if unsure</p>
           </div>
 
           <div class="detail-q">
@@ -365,7 +361,6 @@
               <input type="hidden" id="d_severity"/>
             </div>
             <div class="sev-labels"><span>Not critical</span><span>Essential</span></div>
-            <p class="skip-hint">Skip if unsure</p>
           </div>
 
           <div class="detail-q">
@@ -558,7 +553,7 @@ function editRow(idx) {
 function renderTable() {
   var tbody = document.getElementById('swTableBody');
   if (!softwareList.length) {
-    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--sb-muted);padding:2rem;font-size:0.85rem">No apps added yet — click the button below to get started.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="2" style="text-align:center;color:var(--sb-muted);padding:2rem;font-size:0.85rem">No apps added yet — click the button below to get started.</td></tr>';
     return;
   }
 
@@ -578,9 +573,6 @@ function renderTable() {
 
     html += '<tr>'
       + '<td><input class="sw-name-input" type="text" placeholder="App or software name" data-idx="' + i + '" value="' + esc(sw.name) + '"/></td>'
-      + '<td><div class="sev-dots">' + dots + '</div></td>'
-      + '<td>' + adm + '</td>'
-      + '<td style="color:var(--sb-muted);font-size:0.78rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(sw.owner || '—') + '</td>'
       + '<td style="text-align:right;white-space:nowrap">'
       +   '<button class="' + btnClass + '" data-edit="' + i + '">' + btnLabel + '</button>'
       +   ' <button class="remove-btn" data-remove="' + i + '">✕</button>'
