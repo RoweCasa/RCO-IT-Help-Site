@@ -34,14 +34,13 @@
 
     /* ── Software table ── */
     .sw-table-wrap { overflow-x: auto; margin-bottom: 1rem; }
-    .sw-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; min-width: 560px; table-layout: fixed; }
+    .sw-table { border-collapse: collapse; font-size: 0.82rem; table-layout: auto; }
     .sw-table thead th {
       text-align: left; font-size: 0.68rem; font-weight: 800; text-transform: uppercase;
       letter-spacing: 0.05em; color: var(--sb-muted); padding: 0 0.75rem 0.65rem;
-      border-bottom: 1.5px solid var(--sb-sep);
     }
-    .sw-table tbody td { padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--sb-sep); vertical-align: middle; }
-    .sw-table tbody tr:hover td { background: var(--sidebar-bg); }
+    .sw-table tbody td { padding: 0.45rem 0.6rem; vertical-align: middle; }
+    .sw-table tbody tr:hover td { background: var(--sidebar-bg); border-radius: 8px; }
     .sw-name-input {
       background: transparent; border: none; outline: none;
       font-size: 0.82rem; font-weight: 700; font-family: inherit;
@@ -552,10 +551,7 @@ function editRow(idx) {
 
 function renderTable() {
   var tbody = document.getElementById('swTableBody');
-  if (!softwareList.length) {
-    tbody.innerHTML = '<tr><td colspan="2" style="text-align:center;color:var(--sb-muted);padding:2rem;font-size:0.85rem">No apps added yet — click the button below to get started.</td></tr>';
-    return;
-  }
+  if (!softwareList.length) { tbody.innerHTML = ''; return; }
 
   var html = '';
   for (var i = 0; i < softwareList.length; i++) {
@@ -572,8 +568,8 @@ function renderTable() {
     var btnLabel = sw.detailsFilled ? '✓ Edited'      : 'Edit Details';
 
     html += '<tr>'
-      + '<td><input class="sw-name-input" type="text" placeholder="App or software name" data-idx="' + i + '" value="' + esc(sw.name) + '"/></td>'
-      + '<td style="text-align:right;white-space:nowrap">'
+      + '<td style="width:1px;white-space:nowrap"><input class="sw-name-input" type="text" placeholder="App or software name" data-idx="' + i + '" value="' + esc(sw.name) + '" style="width:260px"/></td>'
+      + '<td style="width:1px;white-space:nowrap;padding-left:1.25rem">'
       +   '<button class="' + btnClass + '" data-edit="' + i + '">' + btnLabel + '</button>'
       +   ' <button class="remove-btn" data-remove="' + i + '">✕</button>'
       + '</td>'
