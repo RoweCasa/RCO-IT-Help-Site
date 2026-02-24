@@ -264,7 +264,7 @@
             <div class="howto-step-num">2</div>
             <div class="howto-step-text">
               <strong>Software Details</strong>
-              <span>Add each app or program your team uses. Click <strong>+ Details</strong> on any row to answer a few quick questions about that tool — who owns it, how critical it is, admin access, and more.</span>
+              <span>Add each app or program your team uses. Click <strong>Edit Details</strong> on any row to answer a few quick questions about that tool — who owns it, how critical it is, admin access, and more.</span>
             </div>
           </div>
           <div class="howto-step">
@@ -327,7 +327,7 @@
         <div id="sw-summary-view">
           <div class="step-header">
             <h2>Software Details</h2>
-            <p>List every app, program, or tool your team uses. Click <strong style="color:var(--brand-brown)">+ Details</strong> on any row to fill in additional info about that app.</p>
+            <p>List every app, program, or tool your team uses. Click <strong style="color:var(--brand-brown)">Edit Details</strong> on any row to fill in additional info about that app.</p>
           </div>
 
           <div style="margin-bottom:1.25rem">
@@ -342,7 +342,7 @@
                   <th style="width:12%">Criticality</th>
                   <th style="width:11%">Admin?</th>
                   <th style="width:15%">Owner</th>
-                  <th style="width:5%"></th>
+                  <th style="width:12%"></th>
                 </tr>
               </thead>
               <tbody id="swTableBody"></tbody>
@@ -578,17 +578,13 @@ function renderTable() {
               : sw.admin         ? `<span class="pill-sm pill-na">${sw.admin}</span>`
               : `<span style="color:var(--sb-muted);font-size:0.75rem">—</span>`;
     return `<tr class="sw-row">
-      <td>
-        <div style="display:flex;align-items:center;gap:0.6rem">
-          <input class="sw-name-input" type="text" placeholder="App or software name" value="${esc(sw.name)}" oninput="softwareList[${i}].name=this.value"/>
-          <button class="details-btn ${sw.detailsFilled?'filled':''}" type="button" onclick="openDetails(${i})">${sw.detailsFilled?'✓ Details':'+ Details'}</button>
-        </div>
-      </td>
+      <td><input class="sw-name-input" type="text" placeholder="App or software name" value="${esc(sw.name)}" oninput="softwareList[${i}].name=this.value"/></td>
       <td><div class="sev-dots">${dots}</div></td>
       <td>${adm}</td>
       <td style="color:var(--sb-muted);font-size:0.78rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:120px">${esc(sw.owner||'—')}</td>
-      <td style="text-align:right">
-        <button class="remove-btn" type="button" onclick="removeSoftware(${i})">✕</button>
+      <td style="text-align:right;white-space:nowrap">
+        <button class="details-btn ${sw.detailsFilled?'filled':''}" type="button" onclick="openDetails(${i})">${sw.detailsFilled?'✓ Edited':'Edit Details'}</button>
+        <button class="remove-btn" type="button" onclick="removeSoftware(${i})" style="margin-left:0.3rem">✕</button>
       </td>
     </tr>`;
   }).join('');
