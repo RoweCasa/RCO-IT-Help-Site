@@ -338,7 +338,6 @@
             <table class="sw-table">
               <thead>
                 <tr>
-                  <th style="width:10%"></th>
                   <th>App / Software Name</th>
                   <th style="width:12%">Criticality</th>
                   <th style="width:11%">Admin?</th>
@@ -579,15 +578,17 @@ function renderTable() {
               : sw.admin         ? `<span class="pill-sm pill-na">${sw.admin}</span>`
               : `<span style="color:var(--sb-muted);font-size:0.75rem">—</span>`;
     return `<tr class="sw-row">
-      <td style="white-space:nowrap">
-        <button class="details-btn ${sw.detailsFilled?'filled':''}" onclick="openDetails(${i})">${sw.detailsFilled?'✓ Filled':'+ Details'}</button>
+      <td>
+        <div style="display:flex;align-items:center;gap:0.6rem">
+          <input class="sw-name-input" type="text" placeholder="App or software name" value="${esc(sw.name)}" oninput="softwareList[${i}].name=this.value"/>
+          <button class="details-btn ${sw.detailsFilled?'filled':''}" type="button" onclick="openDetails(${i})">${sw.detailsFilled?'✓ Details':'+ Details'}</button>
+        </div>
       </td>
-      <td style="max-width:0"><input class="sw-name-input" type="text" placeholder="App or software name" value="${esc(sw.name)}" oninput="softwareList[${i}].name=this.value" style="width:95%"/></td>
       <td><div class="sev-dots">${dots}</div></td>
       <td>${adm}</td>
-      <td style="color:var(--sb-muted);font-size:0.78rem;max-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(sw.owner||'—')}</td>
+      <td style="color:var(--sb-muted);font-size:0.78rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:120px">${esc(sw.owner||'—')}</td>
       <td style="text-align:right">
-        <button class="remove-btn" onclick="removeSoftware(${i})">✕</button>
+        <button class="remove-btn" type="button" onclick="removeSoftware(${i})">✕</button>
       </td>
     </tr>`;
   }).join('');
