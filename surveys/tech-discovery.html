@@ -318,7 +318,7 @@
                   <th style="width:13%">Criticality</th>
                   <th style="width:11%">Admin?</th>
                   <th style="width:13%">Owner</th>
-                  <th style="width:23%">Actions</th>
+                  <th style="width:23%"></th>
                 </tr>
               </thead>
               <tbody id="swTableBody">
@@ -588,7 +588,7 @@ function renderTable() {
       + '<td style="color:var(--sb-muted);font-size:0.78rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(sw.owner || '—') + '</td>'
       + '<td style="text-align:center;white-space:nowrap">'
       +   '<button class="' + btnClass + '" data-edit="' + i + '">' + btnLabel + '</button>'
-      +   '&nbsp;&nbsp;<button class="remove-btn" data-remove="' + i + '">✕</button>'
+      +   '<button class="remove-btn" style="margin-left:0.6rem" data-remove="' + i + '">✕</button>'
       + '</td>'
       + '</tr>';
   }
