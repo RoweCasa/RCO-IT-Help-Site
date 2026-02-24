@@ -34,13 +34,14 @@
 
     /* ── Software table ── */
     .sw-table-wrap { overflow-x: auto; margin-bottom: 1rem; }
-    .sw-table { border-collapse: collapse; font-size: 0.82rem; table-layout: auto; }
+    .sw-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; min-width: 560px; table-layout: fixed; }
     .sw-table thead th {
       text-align: left; font-size: 0.68rem; font-weight: 800; text-transform: uppercase;
       letter-spacing: 0.05em; color: var(--sb-muted); padding: 0 0.75rem 0.65rem;
+      border-bottom: 1.5px solid var(--sb-sep);
     }
-    .sw-table tbody td { padding: 0.45rem 0.6rem; vertical-align: middle; }
-    .sw-table tbody tr:hover td { background: var(--sidebar-bg); border-radius: 8px; }
+    .sw-table tbody td { padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--sb-sep); vertical-align: middle; }
+    .sw-table tbody tr:hover td { background: var(--sidebar-bg); }
     .sw-name-input {
       background: transparent; border: none; outline: none;
       font-size: 0.82rem; font-weight: 700; font-family: inherit;
@@ -312,8 +313,12 @@
             <table class="sw-table">
               <thead>
                 <tr>
-                  <th>App / Software Name</th>
-                  <th style="width:22%"></th>
+                  <th style="width:28%">App / Software Name</th>
+                  <th style="width:15%">Who Uses It</th>
+                  <th style="width:14%">Criticality</th>
+                  <th style="width:11%">Admin?</th>
+                  <th style="width:14%">Owner</th>
+                  <th style="width:18%"></th>
                 </tr>
               </thead>
               <tbody id="swTableBody">
@@ -551,7 +556,10 @@ function editRow(idx) {
 
 function renderTable() {
   var tbody = document.getElementById('swTableBody');
-  if (!softwareList.length) { tbody.innerHTML = ''; return; }
+  if (!softwareList.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--sb-muted);padding:2rem;font-size:0.85rem">No apps added yet — click the button below to get started.</td></tr>';
+    return;
+  }
 
   var html = '';
   for (var i = 0; i < softwareList.length; i++) {
@@ -564,12 +572,18 @@ function renderTable() {
             : sw.admin === 'No'  ? '<span class="pill-sm pill-no">No</span>'
             : sw.admin           ? '<span class="pill-sm pill-na">' + esc(sw.admin) + '</span>'
             : '<span style="color:var(--sb-muted);font-size:0.75rem">—</span>';
+    var whoDisplay = sw.who ? '<span style="font-size:0.75rem;color:var(--sb-text)">' + esc(sw.who) + '</span>'
+                            : '<span style="color:var(--sb-muted);font-size:0.75rem">—</span>';
     var btnClass = sw.detailsFilled ? 'edit-btn done' : 'edit-btn';
     var btnLabel = sw.detailsFilled ? '✓ Edited'      : 'Edit Details';
 
     html += '<tr>'
-      + '<td style="width:1px;white-space:nowrap"><input class="sw-name-input" type="text" placeholder="App or software name" data-idx="' + i + '" value="' + esc(sw.name) + '" style="width:260px"/></td>'
-      + '<td style="width:1px;white-space:nowrap;padding-left:1.25rem">'
+      + '<td><input class="sw-name-input" type="text" placeholder="App or software name" data-idx="' + i + '" value="' + esc(sw.name) + '"/></td>'
+      + '<td>' + whoDisplay + '</td>'
+      + '<td><div class="sev-dots">' + dots + '</div></td>'
+      + '<td>' + adm + '</td>'
+      + '<td style="color:var(--sb-muted);font-size:0.78rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(sw.owner || '—') + '</td>'
+      + '<td style="text-align:right;white-space:nowrap">'
       +   '<button class="' + btnClass + '" data-edit="' + i + '">' + btnLabel + '</button>'
       +   ' <button class="remove-btn" data-remove="' + i + '">✕</button>'
       + '</td>'
