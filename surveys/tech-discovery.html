@@ -1,5 +1,4 @@
-.sw-table tbody tr:hover td { background: var(--sidebar-bg); }
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
@@ -18,7 +17,7 @@
     .howto-step { display: flex; gap: 1rem; align-items: flex-start; background: var(--sidebar-bg); border: 1.5px solid var(--sb-border); border-radius: 12px; padding: 0.9rem 1.1rem; }
     .howto-step-num { width: 28px; height: 28px; border-radius: 50%; background: var(--brand-grad); color: #fff; font-size: 0.78rem; font-weight: 800; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
     .howto-step-text strong { display: block; font-size: 0.875rem; color: var(--sb-text); margin-bottom: 0.2rem; }
-    .howto-step-text span   { font-size: 0.8rem; color: var(--sb-muted); line-height: 1.5; }
+    .howto-step-text span { font-size: 0.8rem; color: var(--sb-muted); line-height: 1.5; }
 
     .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; max-width: 540px; }
     @media(max-width:600px){ .info-grid { grid-template-columns: 1fr; } }
@@ -33,7 +32,6 @@
       border-color: var(--brand-hover-border); box-shadow: 0 0 0 3px rgba(189,153,121,0.15);
     }
 
-    /* ── Software table ── */
     .sw-table-wrap { overflow-x: auto; margin-bottom: 1rem; }
     .sw-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; table-layout: fixed; }
     .sw-table thead th {
@@ -41,10 +39,9 @@
       letter-spacing: 0.05em; color: var(--sb-muted); padding: 0 0.75rem 0.65rem;
       border-bottom: 1.5px solid var(--sb-sep);
     }
+    .sw-table tbody td { padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--sb-sep); vertical-align: middle; }
+    .sw-table tbody tr:hover td { background: var(--sidebar-bg); }
 
-    .sw-table tbody td { padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--sb-sep); vertical-align: middle; text-align: center; }
-    .sw-table tbody td:first-child { text-align: left; }
-    .sw-table tbody td:last-child { text-align: center; }
     .sw-name-input {
       background: transparent; border: none; outline: none;
       font-size: 0.82rem; font-weight: 700; font-family: inherit;
@@ -71,12 +68,12 @@
       color: var(--brand-brown); transition: all 0.15s; line-height: 1.4;
     }
     .edit-btn:hover { background: var(--brand-grad); color: #fff; border-color: var(--brand-brown); }
-    .edit-btn.done  { background: var(--brand-soft); border-color: var(--brand-hover-border); color: var(--brand-brown); }
+    .edit-btn.done { background: var(--brand-soft); border-color: var(--brand-hover-border); color: var(--brand-brown); }
     .edit-btn.done:hover { background: var(--brand-grad); color: #fff; border-color: var(--brand-brown); }
 
     .remove-btn {
       font-size: 0.7rem; font-weight: 700; font-family: inherit; cursor: pointer;
-      padding: 0.25rem 0.5rem; border-radius: 6px;
+      padding: 0.25rem 0.5rem; border-radius: 6px; margin-left: 0.6rem;
       background: none; border: 1.5px solid var(--sb-border); color: var(--sb-muted);
       transition: all 0.15s; line-height: 1.4;
     }
@@ -91,7 +88,6 @@
     }
     .add-sw-btn:hover { border-color: var(--brand-hover-border); color: var(--brand-brown); background: var(--brand-soft); }
 
-    /* ── Details panel ── */
     .details-panel { display: none; }
     .details-panel.active { display: block; }
     .details-back {
@@ -147,7 +143,6 @@
     .detail-textarea:focus { border-color: var(--brand-hover-border); box-shadow: 0 0 0 3px rgba(189,153,121,0.15); }
     .skip-hint { font-size: 0.72rem; color: var(--sb-muted); font-style: italic; margin-top: 0.3rem; }
 
-    /* ── Review ── */
     .review-card { background: var(--sidebar-bg); border: 1.5px solid var(--sb-border); border-radius: 14px; padding: 1.25rem 1.5rem; margin-bottom: 1.25rem; }
     .review-card h3 { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--sb-muted); margin-bottom: 0.75rem; }
     .review-sw-item {
@@ -157,9 +152,8 @@
       margin-bottom: 0.45rem; font-size: 0.82rem;
     }
     .review-sw-item strong { color: var(--sb-text); font-weight: 700; }
-    .review-sw-item span   { color: var(--sb-muted); font-size: 0.75rem; text-align: right; max-width: 55%; }
+    .review-sw-item span { color: var(--sb-muted); font-size: 0.75rem; text-align: right; max-width: 55%; }
 
-    /* ── Modal ── */
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); backdrop-filter: blur(6px); z-index: 300; display: flex; align-items: center; justify-content: center; padding: 1rem; }
     .modal-overlay.hidden { display: none; }
     .modal-box { background: var(--panel-bg); border: 1.5px solid var(--sb-border); border-radius: 20px; padding: 1.75rem; max-width: 640px; width: 100%; max-height: 82vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
@@ -183,7 +177,6 @@
 <body>
 <div class="app-shell">
 
-  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-logo-wrap">
       <img src="../logo.png" alt="Rowe Casa Organics" class="sidebar-logo"/>
@@ -203,7 +196,6 @@
     </div>
   </aside>
 
-  <!-- MAIN -->
   <div class="main-wrap">
     <header class="topbar">
       <div class="topbar-left">
@@ -301,20 +293,17 @@
 
       <!-- STEP 3 -->
       <div class="step" id="step-2">
-
         <div id="sw-summary-view">
           <div class="step-header">
             <h2>Software Details</h2>
             <p>List every app, program, or tool your team uses. Click <strong style="color:var(--brand-brown)">Edit Details</strong> on any row to fill in additional info about that app.</p>
           </div>
-
           <div style="margin-bottom:1.25rem">
             <button class="clear-btn" style="font-size:0.78rem" onclick="openModal('apps')">App Examples</button>
           </div>
-
           <div class="sw-table-wrap">
             <table class="sw-table">
-              <thead>
+              <thead id="swThead">
                 <tr>
                   <th style="width:26%">App / Software Name</th>
                   <th style="width:14%">Who Uses It</th>
@@ -324,14 +313,10 @@
                   <th style="width:23%"></th>
                 </tr>
               </thead>
-              <tbody id="swTableBody">
-                <tr><td colspan="5" style="text-align:center;color:var(--sb-muted);padding:2rem;font-size:0.85rem">No apps added yet — click the button below to get started.</td></tr>
-              </tbody>
+              <tbody id="swTableBody"></tbody>
             </table>
           </div>
-
           <button class="add-sw-btn" onclick="addSoftware()">+ Add an app or software</button>
-
           <div style="margin-top:1.75rem;padding-top:1.25rem;border-top:1px solid var(--sb-sep)">
             <button class="card-action" onclick="goTo(3)">Review & Submit →</button>
           </div>
@@ -441,11 +426,11 @@
 
 <!-- Firebase -->
 <script type="module">
-  import { initializeApp, getApps, getApp }         from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-  import { getAuth, onAuthStateChanged, signOut }    from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+  import { initializeApp, getApps, getApp }                    from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+  import { getAuth, onAuthStateChanged, signOut }              from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
   import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
-  const cfg = {
+  var cfg = {
     apiKey:"AIzaSyBRKBzxTYzBnBHo-YY8fSxTSSkM3uyujmc",
     authDomain:"ithelpsite-4ec53.firebaseapp.com",
     projectId:"ithelpsite-4ec53",
@@ -453,13 +438,13 @@
     messagingSenderId:"893459212285",
     appId:"1:893459212285:web:194adf30886cbb28c21b94"
   };
-  const fbApp = getApps().length ? getApp() : initializeApp(cfg);
-  const auth  = getAuth(fbApp);
-  const db    = getFirestore(fbApp);
+  var fbApp = getApps().length ? getApp() : initializeApp(cfg);
+  var auth  = getAuth(fbApp);
+  var db    = getFirestore(fbApp);
 
-  onAuthStateChanged(auth, user => {
+  onAuthStateChanged(auth, function(user) {
     if (!user || !user.email.endsWith('@rowecasaorganics.com')) {
-      signOut(auth).finally(() => window.location.replace('../login.html'));
+      signOut(auth).finally(function() { window.location.replace('../login.html'); });
       return;
     }
     window._currentUser = user;
@@ -467,27 +452,27 @@
 
   window.saveSubmission = async function(data) {
     if (!window._currentUser) {
-      await new Promise(resolve => {
-        const u = onAuthStateChanged(auth, usr => { if(usr){window._currentUser=usr;u();resolve();} });
+      await new Promise(function(resolve) {
+        var u = onAuthStateChanged(auth, function(usr) { if(usr){window._currentUser=usr;u();resolve();} });
         setTimeout(resolve, 5000);
       });
     }
     if (!window._currentUser) return false;
     try {
-      await addDoc(collection(db,'submissions'), {
-        ...data, uid: window._currentUser.uid,
-        userEmail: window._currentUser.email, submittedAt: serverTimestamp()
-      });
+      await addDoc(collection(db,'submissions'), Object.assign({}, data, {
+        uid: window._currentUser.uid,
+        userEmail: window._currentUser.email,
+        submittedAt: serverTimestamp()
+      }));
       return true;
     } catch(e) { console.error(e); return false; }
   };
 </script>
 
 <script>
-// ── Constants ───────────────────────────────────────────────
-const SHEET_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxeP-Asvk9kgGx_oz4jMWYOBldaPLM8Tm6S2XfXOfDRat-3KX1UfVXYzEju2Dc7nDwBGg/exec';
+var SHEET_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxeP-Asvk9kgGx_oz4jMWYOBldaPLM8Tm6S2XfXOfDRat-3KX1UfVXYzEju2Dc7nDwBGg/exec';
 
-const APP_EXAMPLES = {
+var APP_EXAMPLES = {
   'Communication & Calling':   ['Gmail','Slack','Zoom','RingCentral','Dialpad','Google Meet','Loom','Microsoft Teams','Outlook'],
   'Project Management':        ['Asana','Trello','Notion','TickTick','Smartsheet','ClickUp'],
   'Design & Creative':         ['Adobe','Canva','CapCut','Superside','Pantone Connect','BeFunky Photo Editor','SmartDraw','SlidesAI.io'],
@@ -501,21 +486,19 @@ const APP_EXAMPLES = {
   'IT, Dev & Security':        ['GitHub','Cloudflare Dashboard','Fly.io','GoDaddy','Postman','manage.auth0.com','Synology Account','Pixel Labs / Helium 10'],
   'Documents, Forms & Labels': ['DocHub','Jotform','Grammarly','Lumin PDF','Scribe','Avery Design & Print Online','Foxy Labels','Labelmaker','Simplebooklet','WiseStamp'],
   'Meetings & Events':         ['Calendly','Livestorm','Pixieset','Otter.ai','Read AI'],
-  'Other':                     ['Alignable','Amazon','MemberSpace','Dropbox','Accessibility Tracker','AI KPI Tracker','Chatbot App','Schedule Email Reports'],
+  'Other':                     ['Alignable','Amazon','MemberSpace','Dropbox','Accessibility Tracker','AI KPI Tracker','Chatbot App','Schedule Email Reports']
 };
 
-const KNOWN_OWNERS = [
+var KNOWN_OWNERS = [
   { name:'Philip Williams', apps:'Shopify, Shopify Partners, Gorgias, ShipStation, Katana, Cloudflare Dashboard, Google Workspace' },
   { name:'Chris Paulene',   apps:'BambooHR' },
   { name:'Grant / Heidi',   apps:'Asana' },
-  { name:'Kaylee Pope',     apps:'Canva' },
+  { name:'Kaylee Pope',     apps:'Canva' }
 ];
 
-// ── State ───────────────────────────────────────────────────
 var softwareList = [];
 var editingIdx   = null;
 
-// ── Navigation ──────────────────────────────────────────────
 function goTo(n) {
   if (n === 3) buildReview();
   var steps = document.querySelectorAll('.step');
@@ -531,14 +514,10 @@ function goToStep2() {
   var name  = document.getElementById('info_name').value.trim();
   var email = document.getElementById('info_email').value.trim();
   var dept  = document.getElementById('info_dept').value;
-  if (!name || !email || !dept) {
-    alert('Please fill in your name, email, and department before continuing.');
-    return;
-  }
+  if (!name || !email || !dept) { alert('Please fill in your name, email, and department before continuing.'); return; }
   goTo(2);
 }
 
-// ── Software table ──────────────────────────────────────────
 function addSoftware() {
   softwareList.push({ name:'', severity:'', admin:'', owner:'', who:'', notes:'', detailsFilled:false });
   renderTable();
@@ -553,20 +532,17 @@ function removeSoftware(idx) {
   renderTable();
 }
 
-function editRow(idx) {
-  openDetails(idx);
-}
-
 function renderTable() {
+  var thead = document.getElementById('swThead');
   var tbody = document.getElementById('swTableBody');
-  var thead = document.querySelector('.sw-table thead');
+
   if (!softwareList.length) {
     thead.style.display = 'none';
     tbody.innerHTML = '<tr><td style="text-align:center;color:var(--sb-muted);padding:2rem;font-size:0.85rem">No apps added yet — click the button below to get started.</td></tr>';
     return;
   }
-  thead.style.display = '';
 
+  thead.style.display = '';
   var html = '';
   for (var i = 0; i < softwareList.length; i++) {
     var sw   = softwareList[i];
@@ -578,10 +554,11 @@ function renderTable() {
             : sw.admin === 'No'  ? '<span class="pill-sm pill-no">No</span>'
             : sw.admin           ? '<span class="pill-sm pill-na">' + esc(sw.admin) + '</span>'
             : '<span style="color:var(--sb-muted);font-size:0.75rem">—</span>';
-    var whoDisplay = sw.who ? '<span style="font-size:0.75rem;color:var(--sb-text)">' + esc(sw.who) + '</span>'
-                            : '<span style="color:var(--sb-muted);font-size:0.75rem">—</span>';
+    var whoDisplay = sw.who
+      ? '<span style="font-size:0.75rem;color:var(--sb-text)">' + esc(sw.who) + '</span>'
+      : '<span style="color:var(--sb-muted);font-size:0.75rem">—</span>';
     var btnClass = sw.detailsFilled ? 'edit-btn done' : 'edit-btn';
-    var btnLabel = sw.detailsFilled ? '✓ Edited'      : 'Edit Details';
+    var btnLabel = sw.detailsFilled ? '✓ Edited' : 'Edit Details';
 
     html += '<tr>'
       + '<td><input class="sw-name-input" type="text" placeholder="App or software name" data-idx="' + i + '" value="' + esc(sw.name) + '"/></td>'
@@ -591,13 +568,12 @@ function renderTable() {
       + '<td style="color:var(--sb-muted);font-size:0.78rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(sw.owner || '—') + '</td>'
       + '<td style="text-align:center;white-space:nowrap">'
       +   '<button class="' + btnClass + '" data-edit="' + i + '">' + btnLabel + '</button>'
-      +   '<button class="remove-btn" style="margin-left:0.6rem" data-remove="' + i + '">✕</button>'
+      +   '<button class="remove-btn" data-remove="' + i + '">✕</button>'
       + '</td>'
       + '</tr>';
   }
   tbody.innerHTML = html;
 
-  // Attach events via delegation-safe direct binding after render
   var nameInputs = tbody.querySelectorAll('.sw-name-input');
   for (var j = 0; j < nameInputs.length; j++) {
     (function(el) {
@@ -606,27 +582,20 @@ function renderTable() {
       });
     })(nameInputs[j]);
   }
-
   var editBtns = tbody.querySelectorAll('[data-edit]');
   for (var j = 0; j < editBtns.length; j++) {
     (function(el) {
-      el.addEventListener('click', function() {
-        openDetails(parseInt(el.dataset.edit));
-      });
+      el.addEventListener('click', function() { openDetails(parseInt(el.dataset.edit)); });
     })(editBtns[j]);
   }
-
   var removeBtns = tbody.querySelectorAll('[data-remove]');
   for (var j = 0; j < removeBtns.length; j++) {
     (function(el) {
-      el.addEventListener('click', function() {
-        removeSoftware(parseInt(el.dataset.remove));
-      });
+      el.addEventListener('click', function() { removeSoftware(parseInt(el.dataset.remove)); });
     })(removeBtns[j]);
   }
 }
 
-// ── Details panel ───────────────────────────────────────────
 function openDetails(idx) {
   editingIdx = idx;
   var sw = softwareList[idx];
@@ -660,7 +629,6 @@ function saveDetails() {
   closeDetails();
 }
 
-// ── Pill / sev helpers ──────────────────────────────────────
 function setPill(fid, btn, val) {
   var group = btn.closest('.pill-group').querySelectorAll('.pill-btn');
   for (var i = 0; i < group.length; i++) group[i].classList.remove('selected');
@@ -677,20 +645,15 @@ function setSev(val) {
 function restorePills(gid, fid, val) {
   document.getElementById(fid).value = val || '';
   var btns = document.getElementById(gid).querySelectorAll('.pill-btn');
-  for (var i = 0; i < btns.length; i++) {
-    btns[i].classList.toggle('selected', btns[i].textContent.trim() === val);
-  }
+  for (var i = 0; i < btns.length; i++) btns[i].classList.toggle('selected', btns[i].textContent.trim() === val);
 }
 
 function restoreSev(val) {
   document.getElementById('d_severity').value = val || '';
   var btns = document.querySelectorAll('.sev-btn');
-  for (var i = 0; i < btns.length; i++) {
-    btns[i].classList.toggle('selected', !!val && i < parseInt(val));
-  }
+  for (var i = 0; i < btns.length; i++) btns[i].classList.toggle('selected', !!val && i < parseInt(val));
 }
 
-// ── Review ──────────────────────────────────────────────────
 function buildReview() {
   var name  = document.getElementById('info_name').value;
   var email = document.getElementById('info_email').value;
@@ -701,29 +664,26 @@ function buildReview() {
     '<div class="review-row"><span>Email</span><strong>'      + esc(email || '—') + '</strong></div>' +
     '<div class="review-row"><span>Department</span><strong>' + esc(dept  || '—') + '</strong></div>' +
     '<div class="review-row"><span>Date</span><strong>'       + date              + '</strong></div>';
-
   var valid = softwareList.filter(function(s) { return s.name.trim(); });
   document.getElementById('reviewCount').textContent = '(' + valid.length + ' entr' + (valid.length === 1 ? 'y' : 'ies') + ')';
-
   if (!valid.length) {
     document.getElementById('reviewSwList').innerHTML = '<p style="color:var(--sb-muted);font-size:0.85rem">No software entries added.</p>';
     return;
   }
   var html = '';
   for (var i = 0; i < valid.length; i++) {
-    var s    = valid[i];
+    var s = valid[i];
     var meta = [
       s.severity ? 'Criticality: ' + s.severity + '/5' : '',
       s.admin    ? 'Admin: '       + s.admin            : '',
       s.owner    ? 'Owner: '       + s.owner            : '',
-      s.who      ? 'Used by: '     + s.who              : '',
+      s.who      ? 'Used by: '     + s.who              : ''
     ].filter(Boolean).join(' · ') || 'No details added';
     html += '<div class="review-sw-item"><strong>' + esc(s.name) + '</strong><span>' + esc(meta) + '</span></div>';
   }
   document.getElementById('reviewSwList').innerHTML = html;
 }
 
-// ── Modal ───────────────────────────────────────────────────
 function buildModal() {
   var appsHtml = '';
   var cats = Object.keys(APP_EXAMPLES);
@@ -734,43 +694,29 @@ function buildModal() {
     appsHtml += '<div class="modal-category"><h4>' + cats[i] + '</h4><div class="modal-apps">' + tags + '</div></div>';
   }
   document.getElementById('tab-apps').innerHTML = appsHtml;
-
   var ownerRows = '';
   for (var i = 0; i < KNOWN_OWNERS.length; i++) {
     ownerRows += '<tr><td style="font-weight:700">' + esc(KNOWN_OWNERS[i].name) + '</td>'
                + '<td style="color:var(--sb-muted);font-size:0.78rem">' + esc(KNOWN_OWNERS[i].apps) + '</td></tr>';
   }
   document.getElementById('tab-owners').innerHTML =
-    '<p style="font-size:0.8rem;color:var(--sb-muted);margin-bottom:1rem;line-height:1.5">Known owners/admins for common RCO apps. Use this as a reference when filling in the owner field.</p>' +
+    '<p style="font-size:0.8rem;color:var(--sb-muted);margin-bottom:1rem;line-height:1.5">Known owners/admins for common RCO apps.</p>' +
     '<table class="owners-table"><thead><tr><th>Person</th><th>Apps They Own / Manage</th></tr></thead><tbody>' + ownerRows + '</tbody></table>';
 }
 
-function openModal(tab) {
-  buildModal();
-  switchTab(tab || 'apps');
-  document.getElementById('examplesModal').classList.remove('hidden');
-}
-
-function closeModal() {
-  document.getElementById('examplesModal').classList.add('hidden');
-}
-
+function openModal(tab) { buildModal(); switchTab(tab || 'apps'); document.getElementById('examplesModal').classList.remove('hidden'); }
+function closeModal() { document.getElementById('examplesModal').classList.add('hidden'); }
 function switchTab(tab) {
-  document.getElementById('tab-apps').classList.toggle('active',    tab === 'apps');
-  document.getElementById('tab-owners').classList.toggle('active',  tab === 'owners');
+  document.getElementById('tab-apps').classList.toggle('active',   tab === 'apps');
+  document.getElementById('tab-owners').classList.toggle('active', tab === 'owners');
   var tabs = document.querySelectorAll('.modal-tab');
   tabs[0].classList.toggle('active', tab === 'apps');
   tabs[1].classList.toggle('active', tab === 'owners');
 }
-
 document.getElementById('examplesModal').addEventListener('click', function(e) {
   if (e.target === document.getElementById('examplesModal')) closeModal();
 });
 
-// ── Init ─────────────────────────────────────────────────────
-renderTable();
-
-// ── Submit ──────────────────────────────────────────────────
 async function submitSurvey() {
   var btn   = document.getElementById('submitBtn');
   var stat  = document.getElementById('submitStatus');
@@ -779,56 +725,31 @@ async function submitSurvey() {
   var dept  = document.getElementById('info_dept').value;
   if (!name || !email || !dept) {
     stat.textContent = 'Please go back and fill in your name, email, and department.';
-    stat.className   = 'contact-status error';
-    return;
+    stat.className = 'contact-status error'; return;
   }
-  btn.textContent = 'Submitting…';
-  btn.disabled    = true;
-
-  var payload = {
-    info_name: name, info_email: email, info_dept: dept,
-    info_date: new Date().toLocaleDateString('en-US'),
-    submitted_at: new Date().toISOString()
-  };
+  btn.textContent = 'Submitting…'; btn.disabled = true;
+  var payload = { info_name:name, info_email:email, info_dept:dept, info_date:new Date().toLocaleDateString('en-US'), submitted_at:new Date().toISOString() };
   var valid = softwareList.filter(function(s) { return s.name.trim(); });
   for (var i = 0; i < valid.length; i++) {
-    var sw = valid[i];
-    var b  = 'app_r' + i;
-    payload[b + '_name']     = sw.name;
-    payload[b + '_severity'] = sw.severity;
-    payload[b + '_who']      = sw.who;
-    payload[b + '_admin']    = sw.admin;
-    payload[b + '_owner']    = sw.owner;
-    payload[b + '_notes']    = sw.notes;
+    var sw = valid[i]; var b = 'app_r' + i;
+    payload[b+'_name']=sw.name; payload[b+'_severity']=sw.severity; payload[b+'_who']=sw.who;
+    payload[b+'_admin']=sw.admin; payload[b+'_owner']=sw.owner; payload[b+'_notes']=sw.notes;
   }
-
-  fetch(SHEET_ENDPOINT, {
-    method: 'POST', mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  }).catch(function() {});
-
-  var saved = window.saveSubmission
-    ? await window.saveSubmission({ title: 'Technology & Application Discovery Survey', dept: dept, url: 'surveys/tech-discovery.html' })
-    : true;
-
+  fetch(SHEET_ENDPOINT, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) }).catch(function(){});
+  var saved = window.saveSubmission ? await window.saveSubmission({ title:'Technology & Application Discovery Survey', dept:dept, url:'surveys/tech-discovery.html' }) : true;
   if (saved) {
     stat.textContent = '✅ Survey submitted! Redirecting you back to the portal…';
-    stat.className   = 'contact-status success';
-    btn.textContent  = 'Submitted ✓';
+    stat.className = 'contact-status success'; btn.textContent = 'Submitted ✓';
     setTimeout(function() { window.location.href = '../index.html'; }, 2500);
   } else {
     stat.textContent = '❌ Submission failed. Please try again or contact itsupport@rowecasaorganics.com.';
-    stat.className   = 'contact-status error';
-    btn.textContent  = 'Submit Survey →';
-    btn.disabled     = false;
+    stat.className = 'contact-status error'; btn.textContent = 'Submit Survey →'; btn.disabled = false;
   }
 }
 
-// ── Helpers ─────────────────────────────────────────────────
-function esc(s) {
-  return String(s || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+renderTable();
 </script>
 </body>
 </html>
