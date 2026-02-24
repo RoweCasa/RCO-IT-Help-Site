@@ -334,15 +334,15 @@
           </div>
 
           <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1.25rem">
-            <button class="clear-btn" style="font-size:0.78rem" onclick="openModal('apps')">📋 App Examples</button>
-            <button class="clear-btn" style="font-size:0.78rem" onclick="openModal('owners')">👤 Known App Owners</button>
+            <button class="clear-btn" style="font-size:0.78rem" onclick="openModal('apps')">App Examples</button>
+            <button class="clear-btn" style="font-size:0.78rem" onclick="openModal('owners')">App Owner Examples</button>
           </div>
 
           <div class="sw-table-wrap">
             <table class="sw-table">
               <thead>
                 <tr>
-                  <th style="width:32%">App / Software Name</th>
+                  <th style="width:38%">App / Software Name</th>
                   <th style="width:13%">Criticality</th>
                   <th style="width:12%">Admin?</th>
                   <th style="width:16%">Owner</th>
@@ -414,10 +414,11 @@
           </div>
 
           <div class="detail-q">
-            <label>Who owns or manages this account?</label>
-            <span class="q-sub">The person responsible for the subscription or license. Use "Known App Owners" above for reference.</span>
+            <label>Who owns or manages this application?</label>
+            <span class="q-sub">The person responsible for the subscription or license.</span>
             <input type="text" class="detail-input" id="d_owner" placeholder="e.g. Philip Williams"/>
-            <p class="skip-hint">Skip if you don't know</p>
+            <button type="button" class="clear-btn" style="font-size:0.75rem;margin-top:0.5rem" onclick="openModal('owners')">App Owner Examples</button>
+            <p class="skip-hint" style="margin-top:0.4rem">Skip if you don't know</p>
           </div>
 
           <div class="detail-q">
@@ -462,8 +463,8 @@
   <div class="modal-box">
     <h3 id="modalTitle">Reference</h3>
     <div class="modal-tabs">
-      <button class="modal-tab active" onclick="switchTab('apps')">📋 App Examples</button>
-      <button class="modal-tab"        onclick="switchTab('owners')">👤 Known Owners</button>
+      <button class="modal-tab active" onclick="switchTab('apps')">App Examples</button>
+      <button class="modal-tab"        onclick="switchTab('owners')">App Owner Examples</button>
     </div>
     <div class="modal-tab-content active" id="tab-apps"></div>
     <div class="modal-tab-content"        id="tab-owners"></div>
@@ -588,21 +589,25 @@ function renderTable() {
     tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--sb-muted);padding:2rem;font-size:0.85rem">No apps added yet — click the button below to get started.</td></tr>`;
     return;
   }
-  tbody.innerHTML = softwareList.map((sw,i)=>{
+      tbody.innerHTML = softwareList.map((sw,i)=>{
     const dots = [1,2,3,4,5].map(n=>`<div class="sev-dot ${sw.severity&&n<=sw.severity?'on':''}"></div>`).join('');
     const adm = sw.admin==='Yes' ? `<span class="pill-sm pill-yes">Yes</span>`
               : sw.admin==='No'  ? `<span class="pill-sm pill-no">No</span>`
               : sw.admin         ? `<span class="pill-sm pill-na">${sw.admin}</span>`
               : `<span style="color:var(--sb-muted);font-size:0.75rem">—</span>`;
     return `<tr class="sw-row">
-      <td><input class="sw-name-input" type="text" placeholder="App or software name" value="${esc(sw.name)}" oninput="softwareList[${i}].name=this.value"/></td>
+      <td>
+        <div style="display:flex;align-items:center;gap:0.6rem">
+          <input class="sw-name-input" type="text" placeholder="App or software name" value="${esc(sw.name)}" oninput="softwareList[${i}].name=this.value"/>
+          <button class="details-btn ${sw.detailsFilled?'filled':''}" onclick="openDetails(${i})">
+            ${sw.detailsFilled?'✓ Filled':'+ Details'}
+          </button>
+        </div>
+      </td>
       <td><div class="sev-dots">${dots}</div></td>
       <td>${adm}</td>
       <td style="color:var(--sb-muted);font-size:0.78rem;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(sw.owner||'—')}</td>
       <td style="white-space:nowrap">
-        <button class="details-btn ${sw.detailsFilled?'filled':''}" onclick="openDetails(${i})">
-          ${sw.detailsFilled?'✓ Details':'Enter Details →'}
-        </button>
         <button class="remove-btn" onclick="removeSoftware(${i})">✕</button>
       </td>
     </tr>`;
