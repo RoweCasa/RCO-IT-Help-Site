@@ -166,7 +166,13 @@
     .modal-category { margin-bottom: 1.25rem; }
     .modal-category h4 { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--sb-muted); margin-bottom: 0.5rem; }
     .modal-apps { display: flex; flex-wrap: wrap; gap: 0.4rem; }
-    .modal-app-tag { background: var(--sidebar-bg); border: 1px solid var(--sb-border); border-radius: 8px; padding: 0.28rem 0.65rem; font-size: 0.78rem; color: var(--sb-text); font-weight: 600; }
+    .modal-app-tag {
+      background: var(--sidebar-bg); border: 1px solid var(--sb-border); border-radius: 8px;
+      padding: 0.28rem 0.65rem; font-size: 0.78rem; color: var(--sb-text); font-weight: 600;
+      cursor: pointer; transition: all 0.15s;
+    }
+    .modal-app-tag:hover { background: var(--brand-soft); border-color: var(--brand-hover-border); color: var(--brand-brown); }
+    .modal-app-tag.added { background: var(--success-soft); border-color: var(--success); color: var(--success); }
     .owners-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
     .owners-table th { text-align: left; font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--sb-muted); padding: 0 0.75rem 0.6rem; border-bottom: 1.5px solid var(--sb-sep); }
     .owners-table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--sb-sep); color: var(--sb-text); }
@@ -690,10 +696,38 @@ function buildModal() {
   for (var i = 0; i < cats.length; i++) {
     var apps = APP_EXAMPLES[cats[i]];
     var tags = '';
-    for (var j = 0; j < apps.length; j++) tags += '<span class="modal-app-tag">' + apps[j] + '</span>';
+    for (var j = 0; j < apps.length; j++) {
+      tags += '<span class="modal-app-tag" data-appname="' + esc(apps[j]) + '">' + apps[j] + '</span>';
+    }
     appsHtml += '<div class="modal-category"><h4>' + cats[i] + '</h4><div class="modal-apps">' + tags + '</div></div>';
   }
   document.getElementById('tab-apps').innerHTML = appsHtml;
+
+  // Wire up click-to-add on each tag
+  var tags = document.querySelectorAll('.modal-app-tag[data-appname]');
+  for (var k = 0; k < tags.length; k++) {
+    (function(el) {
+      el.addEventListener('click', function() {
+        var appName = el.dataset.appname;
+        // Check if already in list
+        var exists = false;
+        for (var x = 0; x < softwareList.length; x++) {
+          if (softwareList[x].name.trim().toLowerCase() === appName.toLowerCase()) { exists = true; break; }
+        }
+        if (!exists) {
+          softwareList.push({ name: appName, severity:'', admin:'', owner:'', who:'', notes:'', detailsFilled:false });
+          renderTable();
+        }
+        // Toggle visual state
+        el.classList.add('added');
+        el.textContent = '✓ ' + appName;
+      });
+    })(tags[k]);
+  }
+
+  // Refresh added state based on current softwareList
+  refreshModalTags();
+
   var ownerRows = '';
   for (var i = 0; i < KNOWN_OWNERS.length; i++) {
     ownerRows += '<tr><td style="font-weight:700">' + esc(KNOWN_OWNERS[i].name) + '</td>'
@@ -702,6 +736,24 @@ function buildModal() {
   document.getElementById('tab-owners').innerHTML =
     '<p style="font-size:0.8rem;color:var(--sb-muted);margin-bottom:1rem;line-height:1.5">Known owners/admins for common RCO apps.</p>' +
     '<table class="owners-table"><thead><tr><th>Person</th><th>Apps They Own / Manage</th></tr></thead><tbody>' + ownerRows + '</tbody></table>';
+}
+
+function refreshModalTags() {
+  var tags = document.querySelectorAll('.modal-app-tag[data-appname]');
+  for (var i = 0; i < tags.length; i++) {
+    var appName = tags[i].dataset.appname;
+    var exists = false;
+    for (var x = 0; x < softwareList.length; x++) {
+      if (softwareList[x].name.trim().toLowerCase() === appName.toLowerCase()) { exists = true; break; }
+    }
+    if (exists) {
+      tags[i].classList.add('added');
+      tags[i].textContent = '✓ ' + appName;
+    } else {
+      tags[i].classList.remove('added');
+      tags[i].textContent = appName;
+    }
+  }
 }
 
 function openModal(tab) { buildModal(); switchTab(tab || 'apps'); document.getElementById('examplesModal').classList.remove('hidden'); }
