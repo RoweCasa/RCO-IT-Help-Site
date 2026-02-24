@@ -63,7 +63,7 @@
 
     .edit-btn {
       font-size: 0.7rem; font-weight: 700; font-family: inherit; cursor: pointer;
-      padding: 0.28rem 0.7rem; border-radius: 6px; white-space: nowrap;
+      padding: 0.28rem 1.1rem; border-radius: 6px; white-space: nowrap;
       background: var(--brand-soft); border: 1.5px solid var(--brand-hover-border);
       color: var(--brand-brown); transition: all 0.15s; line-height: 1.4;
     }
@@ -313,12 +313,12 @@
             <table class="sw-table">
               <thead>
                 <tr>
-                  <th style="width:28%">App / Software Name</th>
-                  <th style="width:15%">Who Uses It</th>
-                  <th style="width:14%">Criticality</th>
+                  <th style="width:26%">App / Software Name</th>
+                  <th style="width:14%">Who Uses It</th>
+                  <th style="width:13%">Criticality</th>
                   <th style="width:11%">Admin?</th>
-                  <th style="width:14%">Owner</th>
-                  <th style="width:18%"></th>
+                  <th style="width:13%">Owner</th>
+                  <th style="width:23%"></th>
                 </tr>
               </thead>
               <tbody id="swTableBody">
@@ -556,10 +556,13 @@ function editRow(idx) {
 
 function renderTable() {
   var tbody = document.getElementById('swTableBody');
+  var thead = document.querySelector('.sw-table thead');
   if (!softwareList.length) {
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--sb-muted);padding:2rem;font-size:0.85rem">No apps added yet — click the button below to get started.</td></tr>';
+    thead.style.display = 'none';
+    tbody.innerHTML = '<tr><td style="text-align:center;color:var(--sb-muted);padding:2rem;font-size:0.85rem">No apps added yet — click the button below to get started.</td></tr>';
     return;
   }
+  thead.style.display = '';
 
   var html = '';
   for (var i = 0; i < softwareList.length; i++) {
@@ -583,7 +586,7 @@ function renderTable() {
       + '<td><div class="sev-dots">' + dots + '</div></td>'
       + '<td>' + adm + '</td>'
       + '<td style="color:var(--sb-muted);font-size:0.78rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(sw.owner || '—') + '</td>'
-      + '<td style="text-align:right;white-space:nowrap">'
+      + '<td style="text-align:center;white-space:nowrap">'
       +   '<button class="' + btnClass + '" data-edit="' + i + '">' + btnLabel + '</button>'
       +   ' <button class="remove-btn" data-remove="' + i + '">✕</button>'
       + '</td>'
