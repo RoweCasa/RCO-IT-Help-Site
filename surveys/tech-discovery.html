@@ -701,7 +701,9 @@ function buildModal() {
     }
     appsHtml += '<div class="modal-category"><h4>' + cats[i] + '</h4><div class="modal-apps">' + tags + '</div></div>';
   }
-  document.getElementById('tab-apps').innerHTML = appsHtml;
+  document.getElementById('tab-apps').innerHTML =
+    '<p style="font-size:0.8rem;color:var(--sb-muted);margin-bottom:1.25rem;line-height:1.5;background:var(--brand-soft);border:1.5px solid var(--brand-hover-border);border-radius:9px;padding:0.6rem 0.9rem;color:var(--brand-brown);font-weight:600">💡 Click any app below to instantly add it to your list.</p>'
+    + appsHtml;
 
   // Wire up click-to-add on each tag
   var tags = document.querySelectorAll('.modal-app-tag[data-appname]');
