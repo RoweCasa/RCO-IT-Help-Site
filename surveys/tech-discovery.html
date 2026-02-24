@@ -6,7 +6,6 @@
   <title>Technology & Application Discovery Survey — RCO IT</title>
   <link rel="stylesheet" href="../styles.css"/>
   <style>
-    /* ── Survey-specific overrides ── */
     .step { display: none; }
     .step.active { display: block; }
 
@@ -14,7 +13,6 @@
     .step-header h2 { font-size: 1.3rem; font-weight: 800; color: var(--sb-text); margin-bottom: 0.3rem; }
     .step-header p  { font-size: 0.875rem; color: var(--sb-muted); line-height: 1.6; }
 
-    /* How To */
     .howto-steps { display: flex; flex-direction: column; gap: 0.75rem; margin: 1.25rem 0 1.75rem; }
     .howto-step {
       display: flex; gap: 1rem; align-items: flex-start;
@@ -30,7 +28,6 @@
     .howto-step-text strong { display: block; font-size: 0.875rem; color: var(--sb-text); margin-bottom: 0.2rem; }
     .howto-step-text span   { font-size: 0.8rem; color: var(--sb-muted); line-height: 1.5; }
 
-    /* Your Info */
     .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; max-width: 540px; }
     @media(max-width:600px){ .info-grid { grid-template-columns: 1fr; } }
     .field-wrap { display: flex; flex-direction: column; gap: 0.35rem; }
@@ -47,20 +44,20 @@
 
     /* Software table */
     .sw-table-wrap { overflow-x: auto; margin-bottom: 1rem; }
-    .sw-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; min-width: 560px; }
+    .sw-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; min-width: 580px; }
     .sw-table th {
       text-align: left; font-size: 0.68rem; font-weight: 800;
       text-transform: uppercase; letter-spacing: 0.05em;
-      color: var(--sb-muted); padding: 0 0.85rem 0.65rem;
+      color: var(--sb-muted); padding: 0 0.75rem 0.65rem;
       border-bottom: 1.5px solid var(--sb-sep);
     }
-    .sw-table td { padding: 0.55rem 0.85rem; border-bottom: 1px solid var(--sb-sep); color: var(--sb-text); vertical-align: middle; }
+    .sw-table td { padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--sb-sep); color: var(--sb-text); vertical-align: middle; }
     .sw-row:hover { background: var(--sidebar-bg); }
 
     .sw-name-input {
       background: transparent; border: none; outline: none;
       font-size: 0.82rem; font-weight: 700; font-family: inherit;
-      color: var(--sb-text); width: 100%; min-width: 140px;
+      color: var(--sb-text); width: 100%;
       border-bottom: 1.5px dashed var(--sb-border); padding-bottom: 2px;
       transition: border-color 0.15s;
     }
@@ -76,25 +73,25 @@
     .pill-no  { background: rgba(220,80,60,0.08); color: #c0392b; }
     .pill-na  { background: var(--sidebar-bg); color: var(--sb-muted); border: 1px solid var(--sb-border); }
 
-    /* Enter Details — prominent */
     .details-btn {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      font-size: 0.78rem; font-weight: 800; font-family: inherit;
-      padding: 0.45rem 1rem; border-radius: 8px;
+      display: inline-flex; align-items: center;
+      font-size: 0.72rem; font-weight: 800; font-family: inherit;
+      padding: 0.32rem 0.75rem; border-radius: 7px;
       background: var(--brand-grad); border: none;
       color: #fff; cursor: pointer; transition: opacity 0.15s;
-      white-space: nowrap; box-shadow: 0 2px 8px rgba(95,75,60,0.3);
+      white-space: nowrap; box-shadow: 0 2px 6px rgba(95,75,60,0.28);
     }
     .details-btn:hover { opacity: 0.85; }
     .details-btn.filled {
       background: var(--success-soft); border: 1.5px solid var(--success);
       color: var(--success); box-shadow: none;
     }
+
     .remove-btn {
-      font-size: 0.72rem; font-weight: 700; font-family: inherit;
-      padding: 0.28rem 0.55rem; border-radius: 7px;
+      font-size: 0.7rem; font-weight: 700; font-family: inherit;
+      padding: 0.25rem 0.5rem; border-radius: 7px;
       background: none; border: 1.5px solid var(--sb-border);
-      color: var(--sb-muted); cursor: pointer; transition: all 0.15s; margin-left: 0.35rem;
+      color: var(--sb-muted); cursor: pointer; transition: all 0.15s;
     }
     .remove-btn:hover { border-color: #c0392b; color: #c0392b; }
 
@@ -244,7 +241,7 @@
 
     <main class="content-panel">
 
-      <!-- ── STEP 1: Overview ── -->
+      <!-- STEP 1: Overview -->
       <div class="step active" id="step-0">
         <div class="step-header">
           <h2>Welcome to the Software Discovery Survey</h2>
@@ -253,7 +250,7 @@
         <p style="font-size:0.9rem;color:var(--sb-text);line-height:1.75;margin-bottom:1.5rem">
           Rowe Casa Organics is building a full inventory of every app, program, and software tool used across the company.
           This helps our IT team manage licenses, improve security, and make sure everyone has what they need to do their job.<br/><br/>
-          <strong>You don't need to be technical.</strong> Just list the tools you use at work — whether it's something you open in a browser like Asana, or a program installed on your computer like Adobe Acrobat. Skip anything you're unsure about.
+          <strong>You don't need to be technical.</strong> Just list the tools you use at work — whether it's something you open in a browser like Asana, or a program installed on your computer like Adobe. Skip anything you're unsure about.
         </p>
         <div class="howto-steps">
           <div class="howto-step">
@@ -267,7 +264,7 @@
             <div class="howto-step-num">2</div>
             <div class="howto-step-text">
               <strong>Software Details</strong>
-              <span>Add each app or program your team uses. Click <strong>Enter Details →</strong> on any row to answer a few quick questions about that tool — who owns it, how critical it is, admin access, and more.</span>
+              <span>Add each app or program your team uses. Click <strong>+ Details</strong> on any row to answer a few quick questions about that tool — who owns it, how critical it is, admin access, and more.</span>
             </div>
           </div>
           <div class="howto-step">
@@ -284,7 +281,7 @@
         </div>
       </div>
 
-      <!-- ── STEP 2: Your Info ── -->
+      <!-- STEP 2: Your Info -->
       <div class="step" id="step-1">
         <div class="step-header">
           <h2>Your Info</h2>
@@ -323,30 +320,29 @@
         </div>
       </div>
 
-      <!-- ── STEP 3: Software Details ── -->
+      <!-- STEP 3: Software Details -->
       <div class="step" id="step-2">
 
         <!-- Summary view -->
         <div id="sw-summary-view">
           <div class="step-header">
             <h2>Software Details</h2>
-            <p>List every app, program, or tool your team uses. Then click <strong style="color:var(--brand-brown)">Enter Details →</strong> on each row to fill in additional info.</p>
+            <p>List every app, program, or tool your team uses. Click <strong style="color:var(--brand-brown)">+ Details</strong> on any row to fill in additional info about that app.</p>
           </div>
 
-          <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1.25rem">
+          <div style="margin-bottom:1.25rem">
             <button class="clear-btn" style="font-size:0.78rem" onclick="openModal('apps')">App Examples</button>
-            <button class="clear-btn" style="font-size:0.78rem" onclick="openModal('owners')">App Owner Examples</button>
           </div>
 
           <div class="sw-table-wrap">
             <table class="sw-table">
               <thead>
                 <tr>
-                  <th style="width:38%">App / Software Name</th>
-                  <th style="width:13%">Criticality</th>
-                  <th style="width:12%">Admin?</th>
-                  <th style="width:16%">Owner</th>
-                  <th></th>
+                  <th>App / Software Name</th>
+                  <th style="width:12%">Criticality</th>
+                  <th style="width:11%">Admin?</th>
+                  <th style="width:15%">Owner</th>
+                  <th style="width:11%"></th>
                 </tr>
               </thead>
               <tbody id="swTableBody"></tbody>
@@ -417,7 +413,7 @@
             <label>Who owns or manages this application?</label>
             <span class="q-sub">The person responsible for the subscription or license.</span>
             <input type="text" class="detail-input" id="d_owner" placeholder="e.g. Philip Williams"/>
-            <button type="button" class="clear-btn" style="font-size:0.75rem;margin-top:0.5rem" onclick="openModal('owners')">App Owner Examples</button>
+            <button type="button" class="clear-btn" style="font-size:0.75rem;margin-top:0.5rem;display:inline-block" onclick="openModal('owners')">App Owner Examples</button>
             <p class="skip-hint" style="margin-top:0.4rem">Skip if you don't know</p>
           </div>
 
@@ -431,23 +427,20 @@
         </div>
       </div>
 
-      <!-- ── STEP 4: Review & Submit ── -->
+      <!-- STEP 4: Review & Submit -->
       <div class="step" id="step-3">
         <div class="step-header">
           <h2>Review & Submit</h2>
           <p>Check your details below, then hit submit.</p>
         </div>
-
         <div class="review-card">
           <h3>Your Info</h3>
           <div id="reviewSummary"></div>
         </div>
-
         <div class="review-card">
           <h3>Software Entries &nbsp;<span id="reviewCount" style="font-weight:400;text-transform:none;letter-spacing:0;font-size:0.8rem"></span></h3>
           <div id="reviewSwList"></div>
         </div>
-
         <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-top:0.5rem">
           <button class="card-action" id="submitBtn" onclick="submitSurvey()">Submit Survey →</button>
           <div id="submitStatus" class="contact-status"></div>
@@ -521,25 +514,25 @@
 const SHEET_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxeP-Asvk9kgGx_oz4jMWYOBldaPLM8Tm6S2XfXOfDRat-3KX1UfVXYzEju2Dc7nDwBGg/exec';
 
 const APP_EXAMPLES = {
-  'Communication':               ['Gmail','Slack','Microsoft Teams','Zoom','Outlook','Google Meet','Loom','RingCentral','Dialpad'],
-  'Productivity & File Storage': ['Google Drive','Dropbox','Microsoft 365','OneDrive','Notion','Box','TickTick'],
-  'Project Management':          ['Asana','Monday.com','Trello','ClickUp','Basecamp','Smartsheet','Jira'],
-  'HR & People':                 ['BambooHR','ADP','Gusto','Rippling','Workday','Greenhouse'],
-  'Finance & Accounting':        ['QuickBooks','Expensify','Bill.com','NetSuite','Xero','FreshBooks'],
-  'Sales & CRM':                 ['Salesforce','HubSpot','Pipedrive','Zoho CRM','Zendesk','Gorgias'],
-  'Marketing':                   ['Mailchimp','Klaviyo','Hootsuite','Google Analytics','Meta Ads','Buffer','Sprout Social','Semrush','Manychat'],
-  'E-commerce & Ops':            ['Shopify','ShipStation','Katana','Cin7','Faire','RangeMe','Okendo','Dynamatic','Lifetimely','Replo'],
-  'Design & Creative':           ['Adobe Creative Cloud','Canva','Figma','Photoshop','CapCut','Superside','Pantone Connect'],
-  'AI & Automation':             ['ChatGPT / OpenAI','Claude','Zapier','Zapier Bot','Julius AI','Read AI','Otter.ai','QuillBot','SlidesAI.io'],
-  'IT & Security':               ['1Password','LastPass','Okta','Cloudflare Dashboard','GitHub','Postman','Fly.io','manage.auth0.com','Synology Account'],
-  'Analytics & Reporting':       ['Power BI Desktop','Looker Studio','Geckoboard','Databox','Better Reports','ChartExpo'],
-  'Documents & Forms':           ['DocHub','Jotform','Scribe','Grammarly','Lumin PDF','Loom','Calendly'],
-  'Other':                       ['Pinterest','YouTube','TikTok for Business','Facebook','Instagram','Amazon','Glassdoor','ZipRecruiter','iHire','Upwork','Livestorm'],
+  'Communication & Calling':     ['Gmail','Slack','Zoom','RingCentral','Dialpad','Google Meet','Loom','Microsoft Teams','Outlook'],
+  'Project Management':          ['Asana','Trello','Notion','TickTick','Smartsheet','ClickUp'],
+  'Design & Creative':           ['Adobe','Canva','CapCut','Superside','Pantone Connect','BeFunky Photo Editor','SmartDraw','SlidesAI.io'],
+  'E-commerce & Fulfillment':    ['Shopify','Shop (Shopify)','Shopify Partners','ShipStation','Katana','Okendo','Dynamatic','Replo','Better Reports','Lifetimely'],
+  'Marketing & Social':          ['Klaviyo','Sprout Social','Semrush','Manychat','Facebook','Instagram','TikTok for Business','Pinterest','YouTube','Buffer'],
+  'Wholesale & Retail':          ['Faire','RangeMe'],
+  'Finance & Procurement':       ['Global Industrial','Expedia Group','vevor'],
+  'HR & Recruiting':             ['BambooHR','Glassdoor','iHire','ZipRecruiter','Virtualstaff','Upwork Calendar Service','Shift Scheduler'],
+  'Analytics & Reporting':       ['Power BI Desktop','Looker Studio','Geckoboard','Databox','ChartExpo','Better Reports','Lifetimely'],
+  'AI & Automation':             ['ChatGPT / OpenAI','Claude','Zapier','Zapier Bot','Julius AI','KLINGAI','Otter.ai','Read AI','QuillBot'],
+  'IT, Dev & Security':          ['GitHub','Cloudflare Dashboard','Fly.io','GoDaddy','Postman','manage.auth0.com','Synology Account','Pixel Labs / Helium 10'],
+  'Documents, Forms & Labels':   ['DocHub','Jotform','Grammarly','Lumin PDF','Scribe','Avery Design & Print Online','Foxy Labels','Labelmaker','Simplebooklet','WiseStamp'],
+  'Meetings & Events':           ['Calendly','Livestorm','Pixieset','Otter.ai','Read AI'],
+  'Other':                       ['Alignable','Amazon','MemberSpace','Dropbox','Accessibility Tracker','AI KPI Tracker','Chatbot App','Schedule Email Reports'],
 };
 
 const KNOWN_OWNERS = [
   { name:'Philip Williams', apps:'Shopify, Shopify Partners, Gorgias, ShipStation, Katana, Cloudflare Dashboard, Google Workspace' },
-  { name:'Kasey Tomasek',   apps:'Adobe Creative Cloud' },
+  { name:'Kasey Tomasek',   apps:'Adobe' },
   { name:'Chris Paulene',   apps:'BambooHR' },
   { name:'Grant / Heidi',   apps:'Asana' },
   { name:'Kaylee Pope',     apps:'Canva' },
@@ -589,26 +582,20 @@ function renderTable() {
     tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--sb-muted);padding:2rem;font-size:0.85rem">No apps added yet — click the button below to get started.</td></tr>`;
     return;
   }
-      tbody.innerHTML = softwareList.map((sw,i)=>{
+  tbody.innerHTML = softwareList.map((sw,i)=>{
     const dots = [1,2,3,4,5].map(n=>`<div class="sev-dot ${sw.severity&&n<=sw.severity?'on':''}"></div>`).join('');
     const adm = sw.admin==='Yes' ? `<span class="pill-sm pill-yes">Yes</span>`
               : sw.admin==='No'  ? `<span class="pill-sm pill-no">No</span>`
               : sw.admin         ? `<span class="pill-sm pill-na">${sw.admin}</span>`
               : `<span style="color:var(--sb-muted);font-size:0.75rem">—</span>`;
     return `<tr class="sw-row">
-      <td>
-        <div style="display:flex;align-items:center;gap:0.6rem">
-          <input class="sw-name-input" type="text" placeholder="App or software name" value="${esc(sw.name)}" oninput="softwareList[${i}].name=this.value"/>
-          <button class="details-btn ${sw.detailsFilled?'filled':''}" onclick="openDetails(${i})">
-            ${sw.detailsFilled?'✓ Filled':'+ Details'}
-          </button>
-        </div>
-      </td>
+      <td style="max-width:0"><input class="sw-name-input" type="text" placeholder="App or software name" value="${esc(sw.name)}" oninput="softwareList[${i}].name=this.value" style="width:90%"/></td>
       <td><div class="sev-dots">${dots}</div></td>
       <td>${adm}</td>
-      <td style="color:var(--sb-muted);font-size:0.78rem;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(sw.owner||'—')}</td>
-      <td style="white-space:nowrap">
-        <button class="remove-btn" onclick="removeSoftware(${i})">✕</button>
+      <td style="color:var(--sb-muted);font-size:0.78rem;max-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(sw.owner||'—')}</td>
+      <td style="white-space:nowrap;text-align:right">
+        <button class="details-btn ${sw.detailsFilled?'filled':''}" onclick="openDetails(${i})">${sw.detailsFilled?'✓ Filled':'+ Details'}</button>
+        <button class="remove-btn" style="margin-left:0.3rem" onclick="removeSoftware(${i})">✕</button>
       </td>
     </tr>`;
   }).join('');
@@ -705,7 +692,7 @@ function buildModal(){
     </div>
   `).join('');
   document.getElementById('tab-owners').innerHTML = `
-    <p style="font-size:0.8rem;color:var(--sb-muted);margin-bottom:1rem;line-height:1.5">Known owners/admins for common RCO apps. Use this as a reference when filling in the "Owner" field.</p>
+    <p style="font-size:0.8rem;color:var(--sb-muted);margin-bottom:1rem;line-height:1.5">Known owners/admins for common RCO apps. Use this as a reference when filling in the owner field.</p>
     <table class="owners-table">
       <thead><tr><th>Person</th><th>Apps They Own / Manage</th></tr></thead>
       <tbody>${KNOWN_OWNERS.map(o=>`<tr><td style="font-weight:700">${esc(o.name)}</td><td style="color:var(--sb-muted);font-size:0.78rem">${esc(o.apps)}</td></tr>`).join('')}</tbody>
