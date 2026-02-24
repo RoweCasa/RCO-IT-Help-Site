@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+.sw-table tbody tr:hover td { background: var(--sidebar-bg); }<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
@@ -40,8 +40,9 @@
       letter-spacing: 0.05em; color: var(--sb-muted); padding: 0 0.75rem 0.65rem;
       border-bottom: 1.5px solid var(--sb-sep);
     }
-    .sw-table tbody td { padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--sb-sep); vertical-align: middle; }
-    .sw-table tbody tr:hover td { background: var(--sidebar-bg); }
+    .sw-table tbody td { padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--sb-sep); vertical-align: middle; text-align: center; }
+    .sw-table tbody td:first-child { text-align: left; }
+    .sw-table tbody td:last-child { text-align: center; }
     .sw-name-input {
       background: transparent; border: none; outline: none;
       font-size: 0.82rem; font-weight: 700; font-family: inherit;
