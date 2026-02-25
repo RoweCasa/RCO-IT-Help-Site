@@ -5,6 +5,185 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>IT Help Site — Rowe Casa Organics</title>
   <link rel="stylesheet" href="styles.css"/>
+  <style>
+    /* ── Global: darker muted text + font size +1 ── */
+    :root { --sb-muted: #6a5e57; }
+    html  { font-size: 17px; }
+
+    /* ── Contact Guide Modal ── */
+    .cg-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.48);
+      backdrop-filter: blur(7px);
+      z-index: 600;
+      display: flex; align-items: center; justify-content: center;
+      padding: 1rem;
+    }
+    .cg-overlay.hidden { display: none; }
+
+    .cg-box {
+      background: var(--panel-bg);
+      border: 1.5px solid var(--sb-border);
+      border-radius: 20px;
+      padding: 2rem 2.25rem;
+      max-width: 620px; width: 100%;
+      max-height: 88vh; overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.22);
+    }
+
+    .cg-box h2 {
+      font-size: 1.2rem; font-weight: 800; color: var(--sb-text);
+      margin-bottom: 0.3rem;
+    }
+    .cg-box .cg-sub {
+      font-size: 0.85rem; color: var(--sb-muted); line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .cg-section { margin-bottom: 1.5rem; }
+    .cg-section-title {
+      font-size: 0.72rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.07em; color: var(--sb-muted);
+      margin-bottom: 0.65rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--sb-sep);
+    }
+
+    /* preferred method cards */
+    .cg-methods { display: flex; flex-direction: column; gap: 0.5rem; }
+    .cg-method {
+      display: flex; align-items: center; gap: 0.85rem;
+      background: var(--sidebar-bg); border: 1.5px solid var(--sb-border);
+      border-radius: 11px; padding: 0.75rem 1rem;
+    }
+    .cg-method-icon {
+      font-size: 1.25rem; flex-shrink: 0;
+      width: 36px; height: 36px;
+      background: var(--brand-soft); border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .cg-method-text strong {
+      display: block; font-size: 0.88rem; color: var(--sb-text); font-weight: 700;
+    }
+    .cg-method-text span {
+      font-size: 0.8rem; color: var(--sb-muted); line-height: 1.5;
+    }
+    .cg-method-text a {
+      color: var(--brand-brown); font-weight: 700; text-decoration: none;
+    }
+    .cg-method-text a:hover { text-decoration: underline; }
+
+    /* emergency box */
+    .cg-emergency {
+      background: rgba(220,80,60,0.07);
+      border: 1.5px solid rgba(220,80,60,0.28);
+      border-radius: 12px; padding: 1rem 1.25rem;
+    }
+    .cg-emergency-head {
+      display: flex; align-items: center; gap: 0.55rem;
+      font-size: 0.92rem; font-weight: 800; color: #c0392b;
+      margin-bottom: 0.55rem;
+    }
+    .cg-emergency-phone {
+      font-size: 1.05rem; font-weight: 800; color: #c0392b;
+      margin-bottom: 0.65rem;
+    }
+    .cg-emergency ul {
+      padding-left: 1.1rem; margin: 0;
+      display: flex; flex-direction: column; gap: 0.3rem;
+    }
+    .cg-emergency ul li {
+      font-size: 0.82rem; color: #8b2a1f; line-height: 1.5;
+    }
+
+    /* what to include */
+    .cg-include-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem;
+    }
+    @media(max-width:520px){ .cg-include-grid { grid-template-columns: 1fr; } }
+    .cg-include-item {
+      display: flex; align-items: flex-start; gap: 0.5rem;
+      background: var(--sidebar-bg); border: 1px solid var(--sb-border);
+      border-radius: 9px; padding: 0.55rem 0.75rem;
+      font-size: 0.8rem; color: var(--sb-text); line-height: 1.45;
+    }
+    .cg-include-item::before {
+      content: '✓'; color: var(--success); font-weight: 800;
+      font-size: 0.78rem; flex-shrink: 0; margin-top: 0.05rem;
+    }
+
+    /* ticket examples */
+    .cg-examples { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    @media(max-width:520px){ .cg-examples { grid-template-columns: 1fr; } }
+    .cg-ex-card {
+      border-radius: 11px; padding: 0.9rem 1rem;
+      border: 1.5px solid;
+    }
+    .cg-ex-good {
+      background: var(--success-soft);
+      border-color: rgba(46,204,138,0.3);
+    }
+    .cg-ex-bad {
+      background: rgba(220,80,60,0.06);
+      border-color: rgba(220,80,60,0.22);
+    }
+    .cg-ex-label {
+      font-size: 0.68rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.06em; margin-bottom: 0.45rem;
+    }
+    .cg-ex-good .cg-ex-label { color: var(--success); }
+    .cg-ex-bad  .cg-ex-label { color: #c0392b; }
+    .cg-ex-card p {
+      font-size: 0.78rem; color: var(--sb-text); line-height: 1.55; margin: 0;
+    }
+    .cg-ex-card .cg-ex-why {
+      font-size: 0.73rem; color: var(--sb-muted); margin-top: 0.45rem;
+      font-style: italic;
+    }
+
+    /* when to call vs ticket */
+    .cg-split { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    @media(max-width:520px){ .cg-split { grid-template-columns: 1fr; } }
+    .cg-split-card {
+      border-radius: 11px; padding: 0.9rem 1rem; border: 1.5px solid;
+    }
+    .cg-split-ticket {
+      background: var(--success-soft); border-color: rgba(46,204,138,0.3);
+    }
+    .cg-split-call {
+      background: rgba(220,80,60,0.06); border-color: rgba(220,80,60,0.22);
+    }
+    .cg-split-head {
+      font-size: 0.78rem; font-weight: 800; margin-bottom: 0.5rem;
+    }
+    .cg-split-ticket .cg-split-head { color: var(--success); }
+    .cg-split-call   .cg-split-head { color: #c0392b; }
+    .cg-split-card ul {
+      padding-left: 1rem; margin: 0;
+      display: flex; flex-direction: column; gap: 0.3rem;
+    }
+    .cg-split-card ul li { font-size: 0.79rem; color: var(--sb-text); line-height: 1.45; }
+
+    /* BFCM banner */
+    .cg-bfcm {
+      background: linear-gradient(135deg, #5f4b3c 0%, #8d8173 100%);
+      border-radius: 12px; padding: 1rem 1.25rem;
+      display: flex; gap: 0.75rem; align-items: flex-start;
+    }
+    .cg-bfcm-icon { font-size: 1.3rem; flex-shrink: 0; }
+    .cg-bfcm-text strong {
+      display: block; font-size: 0.9rem; color: #fff; font-weight: 800; margin-bottom: 0.25rem;
+    }
+    .cg-bfcm-text span { font-size: 0.8rem; color: rgba(255,255,255,0.82); line-height: 1.5; }
+
+    .cg-close {
+      width: 100%; margin-top: 1.5rem; padding: 0.7rem;
+      background: var(--brand-grad); color: #fff; border: none;
+      border-radius: 10px; font-size: 0.9rem; font-weight: 700;
+      font-family: inherit; cursor: pointer; transition: opacity 0.18s;
+    }
+    .cg-close:hover { opacity: 0.88; }
+  </style>
 </head>
 <body>
 
@@ -29,13 +208,12 @@
       </nav>
       <div class="sidebar-footer">
         <button class="nav-btn" data-section="knowledge" style="margin-bottom:8px">
-          <span class="nav-icon"></span> IT Knowledge Base
+          <span class="nav-icon">📚</span> IT Knowledge Base
         </button>
         <div class="sidebar-divider"></div>
         <button class="contact-btn" data-section="contact">
           ✉️ Contact Us
         </button>
-        <!-- Removed "RCO IT Help Site" text per request -->
         <div class="portal-sub">@rowecasaorganics.com</div>
       </div>
     </aside>
@@ -58,7 +236,7 @@
       <!-- CONTENT PANEL -->
       <main class="content-panel">
 
-        <!-- SURVEYS -->
+        <!-- ── SURVEYS ── -->
         <section class="section active" id="section-surveys">
           <div class="section-intro">
             <h2>IT Surveys</h2>
@@ -82,7 +260,7 @@
           </div>
         </section>
 
-        <!-- FORMS -->
+        <!-- ── FORMS ── -->
         <section class="section" id="section-forms">
           <div class="section-intro">
             <h2>Request Forms</h2>
@@ -103,14 +281,14 @@
             </div>
             <div class="card brown">
               <div class="card-top"><span class="card-status status-draft">In Progress</span></div>
-              <h3>IT Equipment & Software Request</h3>
+              <h3>IT Equipment &amp; Software Request</h3>
               <p>Request any technology need — hardware, software, or licenses — with business justification and manager approval workflow.</p>
               <div class="card-meta"><button class="card-action disabled">Coming Soon</button></div>
             </div>
           </div>
         </section>
 
-        <!-- COMPLETED -->
+        <!-- ── COMPLETED ── -->
         <section class="section" id="section-completed">
           <div class="section-intro">
             <h2>My Completed Submissions</h2>
@@ -131,7 +309,7 @@
           <div id="completedList"></div>
         </section>
 
-        <!-- KNOWLEDGE BASE -->
+        <!-- ── KNOWLEDGE BASE ── -->
         <section class="section" id="section-knowledge">
           <div class="section-intro">
             <h2>IT Knowledge Base</h2>
@@ -147,28 +325,41 @@
           </div>
         </section>
 
-        <!-- CONTACT -->
+        <!-- ── CONTACT ── -->
         <section class="section" id="section-contact">
           <div class="section-intro">
             <h2>Contact IT Support</h2>
             <p>Reach out to the RCO IT team — use the form below to compose a message, or email us directly.</p>
           </div>
 
-          <!-- How to contact IT -->
-          <div style="background:var(--sidebar-bg);border:1.5px solid var(--sb-border);border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;max-width:580px">
-            <h3 style="font-size:0.85rem;font-weight:800;color:var(--sb-text);margin-bottom:0.75rem">How to Contact IT</h3>
-            <p style="font-size:0.875rem;color:var(--sb-muted);line-height:1.7;margin-bottom:0.75rem">
-              For general IT support, questions, or requests, the best way to reach us is by email. We typically respond within one business day.
+          <!-- How to contact IT — summary card -->
+          <div style="background:var(--sidebar-bg);border:1.5px solid var(--sb-border);border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:1.25rem;max-width:580px">
+            <h3 style="font-size:0.88rem;font-weight:800;color:var(--sb-text);margin-bottom:0.6rem">How to Contact IT</h3>
+            <p style="font-size:0.875rem;color:var(--sb-muted);line-height:1.7;margin-bottom:0.9rem">
+              For general IT support, questions, or requests, the best way to reach us is by submitting a ticket or emailing us directly. We typically respond within one business day.
             </p>
-            <a href="mailto:itsupport@rowecasaorganics.com"
-               style="display:inline-flex;align-items:center;gap:0.5rem;
-                      background:var(--brand-grad);color:#fff;border:none;
-                      padding:0.55rem 1.25rem;border-radius:9px;font-size:0.875rem;
-                      font-weight:700;text-decoration:none;transition:opacity 0.15s"
-               onmouseover="this.style.opacity='0.88'"
-               onmouseout="this.style.opacity='1'">
-              ✉️ Email itsupport@rowecasaorganics.com
-            </a>
+            <div style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:center">
+              <a href="mailto:itsupport@rowecasaorganics.com"
+                 style="display:inline-flex;align-items:center;gap:0.5rem;
+                        background:var(--brand-grad);color:#fff;border:none;
+                        padding:0.55rem 1.25rem;border-radius:9px;font-size:0.875rem;
+                        font-weight:700;text-decoration:none;transition:opacity 0.15s"
+                 onmouseover="this.style.opacity='0.88'"
+                 onmouseout="this.style.opacity='1'">
+                ✉️ Email itsupport@rowecasaorganics.com
+              </a>
+              <!-- Full Guide button — opens the How to Contact IT modal -->
+              <button onclick="document.getElementById('cgModal').classList.remove('hidden')"
+                      style="display:inline-flex;align-items:center;gap:0.45rem;
+                             background:var(--brand-soft);border:1.5px solid var(--brand-hover-border);
+                             color:var(--brand-brown);padding:0.5rem 1.1rem;border-radius:9px;
+                             font-size:0.875rem;font-weight:700;font-family:inherit;cursor:pointer;
+                             transition:all 0.15s"
+                      onmouseover="this.style.background='var(--brand-grad)';this.style.color='#fff';this.style.borderColor='var(--brand-brown)'"
+                      onmouseout="this.style.background='var(--brand-soft)';this.style.color='var(--brand-brown)';this.style.borderColor='var(--brand-hover-border)'">
+                📋 How to Contact IT — Full Guide
+              </button>
+            </div>
           </div>
 
           <!-- Email compose form -->
@@ -200,6 +391,150 @@
       </main>
     </div>
   </div>
+
+  <!-- ════════════════════════════════════════════════
+       HOW TO CONTACT IT — FULL GUIDE MODAL
+       ════════════════════════════════════════════════ -->
+  <div class="cg-overlay hidden" id="cgModal"
+       onclick="if(event.target===this)this.classList.add('hidden')">
+    <div class="cg-box">
+
+      <h2>How to Contact IT</h2>
+      <p class="cg-sub">
+        We use tickets to ensure every issue is tracked, prioritized, and handled by the right person — without anything slipping through the cracks.
+        Submitting through the correct channel helps us respond faster and keep operations running smoothly.
+      </p>
+
+      <!-- Preferred methods -->
+      <div class="cg-section">
+        <div class="cg-section-title">✅ Preferred Methods — Each creates a ticket automatically</div>
+        <div class="cg-methods">
+          <div class="cg-method">
+            <div class="cg-method-icon">✉️</div>
+            <div class="cg-method-text">
+              <strong>Email</strong>
+              <span><a href="mailto:itsupport@rowecasaorganics.com">itsupport@rowecasaorganics.com</a></span>
+            </div>
+          </div>
+          <div class="cg-method">
+            <div class="cg-method-icon">🌐</div>
+            <div class="cg-method-text">
+              <strong>IT Portal</strong>
+              <span><a href="https://it.rowecasaorganics.com" target="_blank">it.rowecasaorganics.com</a></span>
+            </div>
+          </div>
+          <div class="cg-method">
+            <div class="cg-method-icon">💬</div>
+            <div class="cg-method-text">
+              <strong>Slack</strong>
+              <span>#rco-it-support</span>
+            </div>
+          </div>
+          <div class="cg-method">
+            <div class="cg-method-icon">🖥️</div>
+            <div class="cg-method-text">
+              <strong>System Tray Ticket Form</strong>
+              <span>Click the RCO IT Agent icon near the clock → select <em>IT Ticket Form</em> → fill in details → Save.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Emergency -->
+      <div class="cg-section">
+        <div class="cg-section-title">🚨 Emergencies — Critical Issues Only</div>
+        <div class="cg-emergency">
+          <div class="cg-emergency-head">📞 IT Emergency Line</div>
+          <div class="cg-emergency-phone">469-893-1998</div>
+          <p style="font-size:0.8rem;color:#8b2a1f;margin-bottom:0.6rem;line-height:1.5">Use this only for true critical events:</p>
+          <ul>
+            <li>Internet or network outage — wait ~5–10 minutes first before calling</li>
+            <li>Major system failure where nobody can work</li>
+            <li>Any cybersecurity event (suspected hacking, phishing link clicked, etc.)</li>
+            <li>Production or shipping halted due to IT issues</li>
+            <li>Google Workspace or Deacom outages</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- What to include -->
+      <div class="cg-section">
+        <div class="cg-section-title">📝 What to Include in Your Ticket</div>
+        <div class="cg-include-grid">
+          <div class="cg-include-item">What you were trying to do</div>
+          <div class="cg-include-item">What happened (describe the issue)</div>
+          <div class="cg-include-item">What should have happened</div>
+          <div class="cg-include-item">Any error messages (text or screenshot)</div>
+          <div class="cg-include-item">Device location (Office, Warehouse, Station #)</div>
+          <div class="cg-include-item">Whether others are affected</div>
+          <div class="cg-include-item">Whether you've already rebooted</div>
+          <div class="cg-include-item">Anyone else who needs to be notified</div>
+        </div>
+      </div>
+
+      <!-- Ticket examples -->
+      <div class="cg-section">
+        <div class="cg-section-title">🧩 Good vs. Bad Ticket Examples</div>
+        <div class="cg-examples">
+          <div class="cg-ex-card cg-ex-good">
+            <div class="cg-ex-label">✅ Good Ticket</div>
+            <p><strong>Subject:</strong> Can't print labels on Station 14<br/><br/>
+            While printing shipping labels in Chrome, I get "Printer unreachable." Started at 9:40 AM. Rebooted computer and printer — error persists. Model: Zebra ZD421. We can still print to Station 12. Screenshot attached.</p>
+            <p class="cg-ex-why">Clear, detailed, and immediately actionable.</p>
+          </div>
+          <div class="cg-ex-card cg-ex-bad">
+            <div class="cg-ex-label">❌ Bad Ticket</div>
+            <p><strong>Subject:</strong> Printer broken<br/><br/>
+            Printer doesn't work. Please fix ASAP.</p>
+            <p class="cg-ex-why">Missing: location, device info, error details, steps already tried.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- When to ticket vs call -->
+      <div class="cg-section">
+        <div class="cg-section-title">📞 When to Ticket vs. When to Call</div>
+        <div class="cg-split">
+          <div class="cg-split-card cg-split-ticket">
+            <div class="cg-split-head">✅ Submit a Ticket</div>
+            <ul>
+              <li>Issue affecting one or a few users</li>
+              <li>Multi-user issue with a workaround available</li>
+              <li>General requests (equipment, software, moves)</li>
+              <li>Access changes (badges, printers, permissions)</li>
+              <li>General IT questions</li>
+            </ul>
+          </div>
+          <div class="cg-split-card cg-split-call">
+            <div class="cg-split-head">🚨 Call Immediately</div>
+            <ul>
+              <li>Multiple people can't work — no workaround</li>
+              <li>Production or shipping stopped or severely slowed</li>
+              <li>Entire site loses internet or network</li>
+              <li>Deacom, Google Workspace, or core systems down</li>
+            </ul>
+          </div>
+        </div>
+        <p style="font-size:0.8rem;color:var(--sb-muted);margin-top:0.75rem;font-style:italic">
+          Simple rule: If it affects everyone or critical work stops — call us.
+        </p>
+      </div>
+
+      <!-- BFCM banner -->
+      <div class="cg-section" style="margin-bottom:0">
+        <div class="cg-bfcm">
+          <div class="cg-bfcm-icon">🔺</div>
+          <div class="cg-bfcm-text">
+            <strong>BFCM Blackout — Nov 28 – Dec 13</strong>
+            <span>All issues impacting production or shipping are escalated to high priority. Call immediately for anything affecting fulfillment during this window.</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="cg-close" onclick="document.getElementById('cgModal').classList.add('hidden')">Got it — Close Guide</button>
+    </div>
+  </div>
+  <!-- ── end How to Contact IT modal ── -->
 
   <script type="module" src="app.js"></script>
 
