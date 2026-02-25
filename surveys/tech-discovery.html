@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Technology & Application Discovery Survey — RCO IT</title>
+  <title>RCO IT Software Inventory</title>
   <link rel="stylesheet" href="../styles.css"/>
   <style>
     .step { display: none; }
@@ -166,7 +166,21 @@
     .modal-category { margin-bottom: 1.25rem; }
     .modal-category h4 { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--sb-muted); margin-bottom: 0.5rem; }
     .modal-apps { display: flex; flex-wrap: wrap; gap: 0.4rem; }
-    .modal-app-tag {
+    .app-examples-wrap { display: inline-flex; align-items: center; gap: 0.4rem; }
+    .info-tip {
+      width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--brand-hover-border);
+      background: var(--brand-soft); color: var(--brand-brown); font-size: 0.68rem; font-weight: 800;
+      display: inline-flex; align-items: center; justify-content: center; cursor: default;
+      position: relative; flex-shrink: 0;
+    }
+    .info-tip:hover .tip-text { display: block; }
+    .tip-text {
+      display: none; position: absolute; bottom: 125%; left: 50%; transform: translateX(-50%);
+      background: var(--sb-text); color: #fff; font-size: 0.72rem; font-weight: 500;
+      padding: 0.4rem 0.7rem; border-radius: 7px; white-space: nowrap; z-index: 10;
+      line-height: 1.4; pointer-events: none;
+    }
+    .tip-text::after { content:''; position:absolute; top:100%; left:50%; transform:translateX(-50%); border:5px solid transparent; border-top-color: var(--sb-text); }
       background: var(--sidebar-bg); border: 1px solid var(--sb-border); border-radius: 8px;
       padding: 0.28rem 0.65rem; font-size: 0.78rem; color: var(--sb-text); font-weight: 600;
       cursor: pointer; transition: all 0.15s;
@@ -205,8 +219,8 @@
   <div class="main-wrap">
     <header class="topbar">
       <div class="topbar-left">
-        <div class="topbar-title">Technology & Application Discovery Survey</div>
-        <div class="topbar-desc">Help us track every app and software your team uses.</div>
+        <div class="topbar-title">RCO IT Software Inventory</div>
+        <div class="topbar-desc">Help us build a complete inventory of every app and tool your team uses.</div>
       </div>
       <div class="topbar-right">
         <div class="survey-progress-wrap">
@@ -221,13 +235,12 @@
       <!-- STEP 1 -->
       <div class="step active" id="step-0">
         <div class="step-header">
-          <h2>Welcome to the Software Discovery Survey</h2>
-          <p>This should take just a few minutes. Here's what to expect.</p>
+          <h2>RCO IT Software Inventory</h2>
+          <p>Help us build a complete list of all software and apps used at Rowe Casa Organics.</p>
         </div>
         <p style="font-size:0.9rem;color:var(--sb-text);line-height:1.75;margin-bottom:1.5rem">
-          Rowe Casa Organics is building a full inventory of every app, program, and software tool used across the company.
-          This helps our IT team manage licenses, improve security, and make sure everyone has what they need to do their job.<br/><br/>
-          <strong>You don't need to be technical.</strong> Just list the tools you use at work — whether it's something you open in a browser like Asana, or a program installed on your computer like Adobe. Skip anything you're unsure about.
+          We need your help to create a complete list of all software and apps used at Rowe Casa Organics. This allows IT to manage costs, improve security, and ensure everyone has the right tools.<br/><br/>
+          Please list the work-related tools you use — websites, desktop programs, and mobile apps. Your input helps us build an accurate company-wide inventory.
         </p>
         <div class="howto-steps">
           <div class="howto-step">
@@ -262,7 +275,7 @@
       <div class="step" id="step-1">
         <div class="step-header">
           <h2>Your Info</h2>
-          <p>Just the basics so we know who submitted this.</p>
+          <p style="font-size:0.78rem;color:var(--sb-muted);font-style:italic">Please review the Overview tab for details on this survey.</p>
         </div>
         <div class="info-grid">
           <div class="field-wrap">
@@ -302,10 +315,11 @@
         <div id="sw-summary-view">
           <div class="step-header">
             <h2>Software Details</h2>
-            <p>List every app, program, or tool your team uses. Click <strong style="color:var(--brand-brown)">Edit Details</strong> on any row to fill in additional info about that app.</p>
+            <p style="font-size:0.78rem;color:var(--sb-muted);font-style:italic">Please review the Overview tab for details on this survey.</p>
           </div>
-          <div style="margin-bottom:1.25rem">
+          <div class="app-examples-wrap" style="margin-bottom:1.25rem">
             <button class="clear-btn" style="font-size:0.78rem" onclick="openModal('apps')">App Examples</button>
+            <div class="info-tip">?<span class="tip-text">Click any app to instantly add it to your list</span></div>
           </div>
           <div class="sw-table-wrap">
             <table class="sw-table">
@@ -342,14 +356,14 @@
             <div class="pill-group" id="d-who-pills">
               <button type="button" class="pill-btn" onclick="setPill('d_who',this,'Just me')">Just me</button>
               <button type="button" class="pill-btn" onclick="setPill('d_who',this,'My team')">My team</button>
-              <button type="button" class="pill-btn" onclick="setPill('d_who',this,'Whole department')">Whole department</button>
+              <button type="button" class="pill-btn" onclick="setPill('d_who',this,'Company-wide')">Company-wide</button>
             </div>
             <input type="hidden" id="d_who"/>
           </div>
 
           <div class="detail-q">
-            <label>How critical is this tool to your job?</label>
-            <span class="q-sub">1 = Nice to have &nbsp;·&nbsp; 5 = Can't do my job without it</span>
+            <label>How critical is this tool for you?</label>
+            <span class="q-sub">1 = Nice to have &nbsp;·&nbsp; 5 = Critical</span>
             <div class="sev-group">
               <button type="button" class="sev-btn" onclick="setSev(1)">1</button>
               <button type="button" class="sev-btn" onclick="setSev(2)">2</button>
@@ -358,12 +372,12 @@
               <button type="button" class="sev-btn" onclick="setSev(5)">5</button>
               <input type="hidden" id="d_severity"/>
             </div>
-            <div class="sev-labels"><span>Not critical</span><span>Essential</span></div>
+            <div class="sev-labels"><span>Nice to have</span><span>Critical</span></div>
           </div>
 
           <div class="detail-q">
             <label>Do you have admin access?</label>
-            <span class="q-sub">Admin = you can add/remove users or change account settings.</span>
+            <span class="q-sub">This means you can add or remove users or change account settings.</span>
             <div class="pill-group" id="d-admin-pills">
               <button type="button" class="pill-btn" onclick="setPill('d_admin',this,'Yes')">Yes</button>
               <button type="button" class="pill-btn" onclick="setPill('d_admin',this,'No')">No</button>
@@ -373,11 +387,11 @@
           </div>
 
           <div class="detail-q">
-            <label>Who owns or manages this application?</label>
-            <span class="q-sub">The person responsible for the subscription or license.</span>
+            <label>Who is responsible for adding new accounts or licenses?</label>
+            <span class="q-sub">The person who manages access, billing, or new user provisioning for this tool.</span>
             <input type="text" class="detail-input" id="d_owner" placeholder="e.g. Philip Williams"/>
             <div style="margin-top:0.5rem">
-              <button type="button" class="clear-btn" style="font-size:0.75rem" onclick="openModal('owners')">App Owner Examples</button>
+              <button type="button" class="clear-btn" style="font-size:0.75rem;background:var(--brand-grad);color:#fff;border-color:var(--brand-brown)" onclick="openModal('owners')">App Owner Examples</button>
             </div>
             <p class="skip-hint" style="margin-top:0.4rem">Skip if you don't know</p>
           </div>
@@ -454,6 +468,11 @@
       return;
     }
     window._currentUser = user;
+    // Pre-fill Your Info fields
+    var nameEl  = document.getElementById('info_name');
+    var emailEl = document.getElementById('info_email');
+    if (emailEl && !emailEl.value) emailEl.value = user.email;
+    if (nameEl  && !nameEl.value  && user.displayName) nameEl.value = user.displayName;
   });
 
   window.saveSubmission = async function(data) {
@@ -790,7 +809,7 @@ async function submitSurvey() {
     payload[b+'_admin']=sw.admin; payload[b+'_owner']=sw.owner; payload[b+'_notes']=sw.notes;
   }
   fetch(SHEET_ENDPOINT, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) }).catch(function(){});
-  var saved = window.saveSubmission ? await window.saveSubmission({ title:'Technology & Application Discovery Survey', dept:dept, url:'surveys/tech-discovery.html' }) : true;
+  var saved = window.saveSubmission ? await window.saveSubmission({ title:'RCO IT Software Inventory', dept:dept, url:'surveys/tech-discovery.html' }) : true;
   if (saved) {
     stat.textContent = '✅ Survey submitted! Redirecting you back to the portal…';
     stat.className = 'contact-status success'; btn.textContent = 'Submitted ✓';
