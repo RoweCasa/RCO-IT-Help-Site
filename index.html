@@ -35,7 +35,7 @@
         <button class="contact-btn" data-section="contact">
           ✉️ Contact Us
         </button>
-        <div class="portal-label">RCO IT Help Site</div>
+        <!-- Removed "RCO IT Help Site" text per request -->
         <div class="portal-sub">@rowecasaorganics.com</div>
       </div>
     </aside>
@@ -69,7 +69,7 @@
               <div class="card-top">
                 <span class="card-status status-active">Active</span>
               </div>
-              <h3>Technology & Application Discovery Survey</h3>
+              <h3>RCO IT Software Inventory</h3>
               <p>Help us build a complete inventory of every tool, app, SaaS platform, and account used across your department. For team leads and managers.</p>
               <div class="card-meta">
                 <div class="card-meta-left">
@@ -115,7 +115,18 @@
           <div class="section-intro">
             <h2>My Completed Submissions</h2>
             <p>A record of all surveys and forms you have submitted.</p>
-            <button class="clear-btn" style="margin-top:0.75rem" id="refreshBtn">↻ Refresh</button>
+            <div style="display:flex;align-items:center;gap:0.75rem;margin-top:0.75rem;flex-wrap:wrap">
+              <button class="clear-btn" style="margin:0" id="refreshBtn">↻ Refresh</button>
+              <a href="https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID_HERE/edit"
+                 target="_blank"
+                 style="font-size:0.78rem;font-weight:700;color:var(--brand-brown);text-decoration:none;
+                        background:var(--brand-soft);border:1.5px solid var(--brand-hover-border);
+                        padding:0.38rem 0.85rem;border-radius:8px;transition:all 0.15s;display:inline-flex;align-items:center;gap:0.35rem"
+                 onmouseover="this.style.background='var(--brand-grad)';this.style.color='#fff'"
+                 onmouseout="this.style.background='var(--brand-soft)';this.style.color='var(--brand-brown)'">
+                📊 View / Edit in Google Sheets
+              </a>
+            </div>
           </div>
           <div id="completedList"></div>
         </section>
@@ -140,8 +151,27 @@
         <section class="section" id="section-contact">
           <div class="section-intro">
             <h2>Contact IT Support</h2>
-            <p>Send a message directly to the RCO IT team. We'll get back to you as soon as possible.</p>
+            <p>Reach out to the RCO IT team — use the form below to compose a message, or email us directly.</p>
           </div>
+
+          <!-- How to contact IT -->
+          <div style="background:var(--sidebar-bg);border:1.5px solid var(--sb-border);border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;max-width:580px">
+            <h3 style="font-size:0.85rem;font-weight:800;color:var(--sb-text);margin-bottom:0.75rem">How to Contact IT</h3>
+            <p style="font-size:0.875rem;color:var(--sb-muted);line-height:1.7;margin-bottom:0.75rem">
+              For general IT support, questions, or requests, the best way to reach us is by email. We typically respond within one business day.
+            </p>
+            <a href="mailto:itsupport@rowecasaorganics.com"
+               style="display:inline-flex;align-items:center;gap:0.5rem;
+                      background:var(--brand-grad);color:#fff;border:none;
+                      padding:0.55rem 1.25rem;border-radius:9px;font-size:0.875rem;
+                      font-weight:700;text-decoration:none;transition:opacity 0.15s"
+               onmouseover="this.style.opacity='0.88'"
+               onmouseout="this.style.opacity='1'">
+              ✉️ Email itsupport@rowecasaorganics.com
+            </a>
+          </div>
+
+          <!-- Email compose form -->
           <div class="contact-form-wrap">
             <div class="contact-field">
               <label for="contactFrom">Your Email Address</label>
