@@ -35,9 +35,6 @@ const LEVELS = { it_admin: 4, leadership: 3, director: 2, manager: 1, staff: 0 }
 const MEMBERS = {
 
   // ── IT TEAM ─────────────────────────────────────────────────────────────────
-  // Full access + Google Sheets links + view all submissions
-  // ⚠️  Kasey Tomasek, Hayden Howell, Chase Parrish — no @rowecasaorganics.com
-  //     address found in BambooHR. Uncomment and fill in when confirmed.
   it_admin: [
     'philip@rowecasaorganics.com',          // Philip Williams   — Chief Information Officer
     'andrew.neidley@rowecasaorganics.com',  // Andrew Neidley    — IT Specialist
@@ -47,7 +44,6 @@ const MEMBERS = {
   ],
 
   // ── OWNERS + C-SUITE ────────────────────────────────────────────────────────
-  // All surveys visible + their own submissions. No Google Sheets.
   leadership: [
     'mike@rowecasaorganics.com',            // Mike Guzzardo     — Co-Owner / CEO
     'jill@rowecasaorganics.com',            // Jill Rowe         — Co-Owner / New Product Development
@@ -61,8 +57,6 @@ const MEMBERS = {
   ],
 
   // ── DIRECTORS ───────────────────────────────────────────────────────────────
-  // director-level+ surveys visible + their own submissions. No Sheets.
-
   director: [
     'carly@rowecasaorganics.com',               // Carly Barron       — Executive Director of Branding & Experience
     'kristen@rowecasaorganics.com',             // Kristen Duncan     — Marketing Director
@@ -81,7 +75,6 @@ const MEMBERS = {
   ],
 
   // ── MANAGERS & SUPERVISORS ──────────────────────────────────────────────────
-  // manager-level+ surveys visible + their own submissions. No Sheets.
   manager: [
     // Customer Care
     'kelsea.berry@rowecasaorganics.com',        // Kelsea Berry          — Customer Care Manager
@@ -133,43 +126,33 @@ const MEMBERS = {
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CONTENT CONFIGURATION
-// Defines every survey and form, who can see it, and where its Sheet lives.
-// ─────────────────────────────────────────────────────────────────────────────
-// ── ACCESS LEVEL REFERENCE ────────────────────────────────────────────────
-// When you're ready to restrict a survey or form, change its minRole to one of:
-//   'staff'      → everyone with an @rowecasaorganics.com account (default)
-//   'manager'    → managers, supervisors, directors, leadership, IT
-//   'director'   → directors, leadership, IT
-//   'leadership' → owners + C-suite + IT
-//   'it_admin'   → IT team only
-//
-// Users below the minRole will NOT see the card at all — it's fully hidden.
 // ─────────────────────────────────────────────────────────────────────────────
 export const CONTENT_CONFIG = {
   surveys: [
     {
       id:       'tech-discovery',
       title:    'RCO IT Software Inventory',
-      minRole:  'staff',   // ← open to everyone for now; tighten when ready
-      sheetUrl: 'https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID_HERE/edit',
+      // Restricted to managers and above — not company-wide.
+      // Covers: managers, supervisors, directors, leadership, IT.
+      // General staff (warehouse, production line, etc.) will not see this survey.
+      minRole:  'manager',
+      sheetUrl: 'https://docs.google.com/spreadsheets/d/1qGufmR0KvRCU8OhQiZgf1R9CnvEvBBHogAcUh6XbOeM/edit?gid=72884401#gid=72884401',
       url:      'surveys/tech-discovery.html',
     },
-    // Add future surveys here — example:
-    // { id: 'next-survey', title: '...', minRole: 'staff', sheetUrl: '...', url: '...' },
   ],
 
   forms: [
     {
       id:       'onboarding',
       title:    'User Onboarding Request',
-      minRole:  'staff',   // ← open to everyone for now
+      minRole:  'staff',
       sheetUrl: 'https://docs.google.com/spreadsheets/d/YOUR_ONBOARDING_SHEET_ID/edit',
-      url:      null,      // set to path once the form goes live
+      url:      null,
     },
     {
       id:       'offboarding',
       title:    'User Offboarding Request',
-      minRole:  'staff',   // ← open to everyone for now
+      minRole:  'staff',
       sheetUrl: 'https://docs.google.com/spreadsheets/d/YOUR_OFFBOARDING_SHEET_ID/edit',
       url:      null,
     },
