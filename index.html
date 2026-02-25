@@ -6,50 +6,85 @@
   <title>IT Help Site — Rowe Casa Organics</title>
   <link rel="stylesheet" href="styles.css"/>
   <style>
-    /* ── Global: darker muted text + font size +1 ── */
     :root { --sb-muted: #6a5e57; }
     html  { font-size: 17px; }
 
+    /* Copy toast */
+    .copy-toast {
+      position: fixed; bottom: 1.75rem; left: 50%;
+      transform: translateX(-50%) translateY(8px);
+      background: #2ecc8a; color: #fff;
+      font-size: 0.82rem; font-weight: 700;
+      padding: 0.55rem 1.4rem; border-radius: 999px;
+      box-shadow: 0 4px 16px rgba(46,204,138,0.35);
+      opacity: 0; transition: opacity 0.22s, transform 0.22s;
+      pointer-events: none; z-index: 900; white-space: nowrap;
+    }
+    .copy-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* Sidebar email button */
+    .portal-email-btn {
+      display: block; width: 100%;
+      background: none; border: 1px solid var(--sb-border);
+      border-radius: 8px; padding: 0.4rem 0.6rem;
+      font-size: 0.67rem; color: var(--sb-muted);
+      font-family: inherit; font-weight: 600;
+      cursor: pointer; text-align: center;
+      transition: all 0.18s; margin-top: 4px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .portal-email-btn:hover {
+      background: var(--brand-soft);
+      border-color: var(--brand-hover-border);
+      color: var(--brand-brown);
+    }
+
+    /* Copy link button on cards */
+    .card-copy-btn {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      background: none; border: 1.5px solid var(--sb-border);
+      color: var(--sb-muted); padding: 0.28rem 0.65rem;
+      border-radius: 7px; font-size: 0.72rem; font-weight: 700;
+      font-family: inherit; cursor: pointer; transition: all 0.15s;
+    }
+    .card-copy-btn:hover {
+      border-color: var(--brand-hover-border);
+      color: var(--brand-brown); background: var(--brand-soft);
+    }
+    .card-copy-btn.disabled {
+      opacity: 0.4; cursor: not-allowed; pointer-events: none;
+    }
+
+    /* Resubmit note */
+    .resubmit-note {
+      background: var(--brand-soft);
+      border: 1.5px solid var(--brand-hover-border);
+      border-radius: 10px; padding: 0.65rem 1rem;
+      margin-bottom: 1.25rem; font-size: 0.82rem;
+      color: var(--brand-brown); font-weight: 600; line-height: 1.55;
+    }
+
     /* ── Contact Guide Modal ── */
     .cg-overlay {
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.48);
-      backdrop-filter: blur(7px);
-      z-index: 600;
-      display: flex; align-items: center; justify-content: center;
-      padding: 1rem;
+      position: fixed; inset: 0; background: rgba(0,0,0,0.48);
+      backdrop-filter: blur(7px); z-index: 600;
+      display: flex; align-items: center; justify-content: center; padding: 1rem;
     }
     .cg-overlay.hidden { display: none; }
-
     .cg-box {
-      background: var(--panel-bg);
-      border: 1.5px solid var(--sb-border);
-      border-radius: 20px;
-      padding: 2rem 2.25rem;
-      max-width: 620px; width: 100%;
-      max-height: 88vh; overflow-y: auto;
+      background: var(--panel-bg); border: 1.5px solid var(--sb-border);
+      border-radius: 20px; padding: 2rem 2.25rem;
+      max-width: 620px; width: 100%; max-height: 88vh; overflow-y: auto;
       box-shadow: 0 20px 60px rgba(0,0,0,0.22);
     }
-
-    .cg-box h2 {
-      font-size: 1.2rem; font-weight: 800; color: var(--sb-text);
-      margin-bottom: 0.3rem;
-    }
-    .cg-box .cg-sub {
-      font-size: 0.85rem; color: var(--sb-muted); line-height: 1.6;
-      margin-bottom: 1.5rem;
-    }
-
+    .cg-box h2 { font-size: 1.2rem; font-weight: 800; color: var(--sb-text); margin-bottom: 0.3rem; }
+    .cg-sub    { font-size: 0.85rem; color: var(--sb-muted); line-height: 1.6; margin-bottom: 1.5rem; }
     .cg-section { margin-bottom: 1.5rem; }
     .cg-section-title {
       font-size: 0.72rem; font-weight: 800; text-transform: uppercase;
       letter-spacing: 0.07em; color: var(--sb-muted);
-      margin-bottom: 0.65rem;
-      padding-bottom: 0.4rem;
-      border-bottom: 1px solid var(--sb-sep);
+      margin-bottom: 0.65rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--sb-sep);
     }
-
-    /* preferred method cards */
     .cg-methods { display: flex; flex-direction: column; gap: 0.5rem; }
     .cg-method {
       display: flex; align-items: center; gap: 0.85rem;
@@ -57,125 +92,57 @@
       border-radius: 11px; padding: 0.75rem 1rem;
     }
     .cg-method-icon {
-      font-size: 1.25rem; flex-shrink: 0;
-      width: 36px; height: 36px;
+      font-size: 1.25rem; flex-shrink: 0; width: 36px; height: 36px;
       background: var(--brand-soft); border-radius: 9px;
       display: flex; align-items: center; justify-content: center;
     }
-    .cg-method-text strong {
-      display: block; font-size: 0.88rem; color: var(--sb-text); font-weight: 700;
-    }
-    .cg-method-text span {
-      font-size: 0.8rem; color: var(--sb-muted); line-height: 1.5;
-    }
-    .cg-method-text a {
-      color: var(--brand-brown); font-weight: 700; text-decoration: none;
-    }
+    .cg-method-text strong { display: block; font-size: 0.88rem; color: var(--sb-text); font-weight: 700; }
+    .cg-method-text span   { font-size: 0.8rem; color: var(--sb-muted); line-height: 1.5; }
+    .cg-method-text a      { color: var(--brand-brown); font-weight: 700; text-decoration: none; }
     .cg-method-text a:hover { text-decoration: underline; }
-
-    /* emergency box */
     .cg-emergency {
-      background: rgba(220,80,60,0.07);
-      border: 1.5px solid rgba(220,80,60,0.28);
+      background: rgba(220,80,60,0.07); border: 1.5px solid rgba(220,80,60,0.28);
       border-radius: 12px; padding: 1rem 1.25rem;
     }
-    .cg-emergency-head {
-      display: flex; align-items: center; gap: 0.55rem;
-      font-size: 0.92rem; font-weight: 800; color: #c0392b;
-      margin-bottom: 0.55rem;
-    }
-    .cg-emergency-phone {
-      font-size: 1.05rem; font-weight: 800; color: #c0392b;
-      margin-bottom: 0.65rem;
-    }
-    .cg-emergency ul {
-      padding-left: 1.1rem; margin: 0;
-      display: flex; flex-direction: column; gap: 0.3rem;
-    }
-    .cg-emergency ul li {
-      font-size: 0.82rem; color: #8b2a1f; line-height: 1.5;
-    }
-
-    /* what to include */
-    .cg-include-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem;
-    }
-    @media(max-width:520px){ .cg-include-grid { grid-template-columns: 1fr; } }
+    .cg-emergency-head  { display: flex; align-items: center; gap: 0.55rem; font-size: 0.92rem; font-weight: 800; color: #c0392b; margin-bottom: 0.55rem; }
+    .cg-emergency-phone { font-size: 1.05rem; font-weight: 800; color: #c0392b; margin-bottom: 0.65rem; }
+    .cg-emergency ul    { padding-left: 1.1rem; margin: 0; display: flex; flex-direction: column; gap: 0.3rem; }
+    .cg-emergency ul li { font-size: 0.82rem; color: #8b2a1f; line-height: 1.5; }
+    .cg-include-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem; }
+    @media(max-width:520px){ .cg-include-grid,.cg-examples,.cg-split { grid-template-columns: 1fr; } }
     .cg-include-item {
       display: flex; align-items: flex-start; gap: 0.5rem;
       background: var(--sidebar-bg); border: 1px solid var(--sb-border);
       border-radius: 9px; padding: 0.55rem 0.75rem;
       font-size: 0.8rem; color: var(--sb-text); line-height: 1.45;
     }
-    .cg-include-item::before {
-      content: '✓'; color: var(--success); font-weight: 800;
-      font-size: 0.78rem; flex-shrink: 0; margin-top: 0.05rem;
-    }
-
-    /* ticket examples */
+    .cg-include-item::before { content:'✓'; color: var(--success); font-weight: 800; font-size: 0.78rem; flex-shrink: 0; margin-top: 0.05rem; }
     .cg-examples { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
-    @media(max-width:520px){ .cg-examples { grid-template-columns: 1fr; } }
-    .cg-ex-card {
-      border-radius: 11px; padding: 0.9rem 1rem;
-      border: 1.5px solid;
-    }
-    .cg-ex-good {
-      background: var(--success-soft);
-      border-color: rgba(46,204,138,0.3);
-    }
-    .cg-ex-bad {
-      background: rgba(220,80,60,0.06);
-      border-color: rgba(220,80,60,0.22);
-    }
-    .cg-ex-label {
-      font-size: 0.68rem; font-weight: 800; text-transform: uppercase;
-      letter-spacing: 0.06em; margin-bottom: 0.45rem;
-    }
+    .cg-ex-card { border-radius: 11px; padding: 0.9rem 1rem; border: 1.5px solid; }
+    .cg-ex-good { background: var(--success-soft); border-color: rgba(46,204,138,0.3); }
+    .cg-ex-bad  { background: rgba(220,80,60,0.06); border-color: rgba(220,80,60,0.22); }
+    .cg-ex-label { font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.45rem; }
     .cg-ex-good .cg-ex-label { color: var(--success); }
     .cg-ex-bad  .cg-ex-label { color: #c0392b; }
-    .cg-ex-card p {
-      font-size: 0.78rem; color: var(--sb-text); line-height: 1.55; margin: 0;
-    }
-    .cg-ex-card .cg-ex-why {
-      font-size: 0.73rem; color: var(--sb-muted); margin-top: 0.45rem;
-      font-style: italic;
-    }
-
-    /* when to call vs ticket */
+    .cg-ex-card p   { font-size: 0.78rem; color: var(--sb-text); line-height: 1.55; margin: 0; }
+    .cg-ex-why      { font-size: 0.73rem; color: var(--sb-muted); margin-top: 0.45rem; font-style: italic; }
     .cg-split { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
-    @media(max-width:520px){ .cg-split { grid-template-columns: 1fr; } }
-    .cg-split-card {
-      border-radius: 11px; padding: 0.9rem 1rem; border: 1.5px solid;
-    }
-    .cg-split-ticket {
-      background: var(--success-soft); border-color: rgba(46,204,138,0.3);
-    }
-    .cg-split-call {
-      background: rgba(220,80,60,0.06); border-color: rgba(220,80,60,0.22);
-    }
-    .cg-split-head {
-      font-size: 0.78rem; font-weight: 800; margin-bottom: 0.5rem;
-    }
+    .cg-split-card   { border-radius: 11px; padding: 0.9rem 1rem; border: 1.5px solid; }
+    .cg-split-ticket { background: var(--success-soft); border-color: rgba(46,204,138,0.3); }
+    .cg-split-call   { background: rgba(220,80,60,0.06); border-color: rgba(220,80,60,0.22); }
+    .cg-split-head   { font-size: 0.78rem; font-weight: 800; margin-bottom: 0.5rem; }
     .cg-split-ticket .cg-split-head { color: var(--success); }
     .cg-split-call   .cg-split-head { color: #c0392b; }
-    .cg-split-card ul {
-      padding-left: 1rem; margin: 0;
-      display: flex; flex-direction: column; gap: 0.3rem;
-    }
+    .cg-split-card ul   { padding-left: 1rem; margin: 0; display: flex; flex-direction: column; gap: 0.3rem; }
     .cg-split-card ul li { font-size: 0.79rem; color: var(--sb-text); line-height: 1.45; }
-
-    /* BFCM banner */
     .cg-bfcm {
       background: linear-gradient(135deg, #5f4b3c 0%, #8d8173 100%);
       border-radius: 12px; padding: 1rem 1.25rem;
       display: flex; gap: 0.75rem; align-items: flex-start;
     }
     .cg-bfcm-icon { font-size: 1.3rem; flex-shrink: 0; }
-    .cg-bfcm-text strong {
-      display: block; font-size: 0.9rem; color: #fff; font-weight: 800; margin-bottom: 0.25rem;
-    }
-    .cg-bfcm-text span { font-size: 0.8rem; color: rgba(255,255,255,0.82); line-height: 1.5; }
-
+    .cg-bfcm-text strong { display: block; font-size: 0.9rem; color: #fff; font-weight: 800; margin-bottom: 0.25rem; }
+    .cg-bfcm-text span   { font-size: 0.8rem; color: rgba(255,255,255,0.82); line-height: 1.5; }
     .cg-close {
       width: 100%; margin-top: 1.5rem; padding: 0.7rem;
       background: var(--brand-grad); color: #fff; border: none;
@@ -211,10 +178,13 @@
           <span class="nav-icon">📚</span> IT Knowledge Base
         </button>
         <div class="sidebar-divider"></div>
-        <button class="contact-btn" data-section="contact">
-          ✉️ Contact Us
+        <button class="contact-btn" data-section="contact">✉️ Contact Us</button>
+        <!-- Email IT Support button — replaces the plain @rowecasaorganics.com text -->
+        <button class="portal-email-btn"
+                title="Email itsupport@rowecasaorganics.com"
+                onclick="window.open('https://mail.google.com/mail/?view=cm&fs=1&to=itsupport%40rowecasaorganics.com','_blank')">
+          ✉️ itsupport@rowecasaorganics.com
         </button>
-        <div class="portal-sub">@rowecasaorganics.com</div>
       </div>
     </aside>
 
@@ -242,6 +212,9 @@
             <h2>IT Surveys</h2>
             <p>Complete your assigned surveys to help our team manage technology across the organization.</p>
           </div>
+          <div class="resubmit-note">
+            💡 Already submitted a survey? Feel free to resubmit anytime if you forgot to add something or need to make updates — each submission is saved separately.
+          </div>
           <div class="cards">
             <div class="card brown">
               <div class="card-top">
@@ -254,7 +227,14 @@
                   <span class="meta-label">Est. completion time</span>
                   <span class="meta-value">10 – 15 mins</span>
                 </div>
-                <button class="card-action" id="startSurveyBtn">Start →</button>
+                <div style="display:flex;align-items:center;gap:0.5rem">
+                  <button class="card-copy-btn"
+                          onclick="copyLink(getSurveyUrl('surveys/tech-discovery.html'), this)"
+                          title="Copy a direct link to this survey">
+                    🔗 Copy Link
+                  </button>
+                  <button class="card-action" id="startSurveyBtn">Start →</button>
+                </div>
               </div>
             </div>
           </div>
@@ -266,24 +246,36 @@
             <h2>Request Forms</h2>
             <p>Submit IT requests for new employees, departing staff, or equipment and software needs.</p>
           </div>
+          <div class="resubmit-note">
+            💡 Already submitted a form? Feel free to resubmit anytime if you forgot to include something — each submission is saved separately.
+          </div>
           <div class="cards">
             <div class="card brown">
               <div class="card-top"><span class="card-status status-draft">In Progress</span></div>
               <h3>User Onboarding Request</h3>
               <p>Submit everything IT needs to provision a new employee — role, system access, devices, and software requirements.</p>
-              <div class="card-meta"><button class="card-action disabled">Coming Soon</button></div>
+              <div class="card-meta">
+                <button class="card-copy-btn disabled" title="Link available when form is live">🔗 Copy Link</button>
+                <button class="card-action disabled">Coming Soon</button>
+              </div>
             </div>
             <div class="card brown">
               <div class="card-top"><span class="card-status status-draft">In Progress</span></div>
               <h3>User Offboarding Request</h3>
               <p>Capture separation details for a departing employee — access revocation, email handling, file transfer, and device return.</p>
-              <div class="card-meta"><button class="card-action disabled">Coming Soon</button></div>
+              <div class="card-meta">
+                <button class="card-copy-btn disabled" title="Link available when form is live">🔗 Copy Link</button>
+                <button class="card-action disabled">Coming Soon</button>
+              </div>
             </div>
             <div class="card brown">
               <div class="card-top"><span class="card-status status-draft">In Progress</span></div>
               <h3>IT Equipment &amp; Software Request</h3>
               <p>Request any technology need — hardware, software, or licenses — with business justification and manager approval workflow.</p>
-              <div class="card-meta"><button class="card-action disabled">Coming Soon</button></div>
+              <div class="card-meta">
+                <button class="card-copy-btn disabled" title="Link available when form is live">🔗 Copy Link</button>
+                <button class="card-action disabled">Coming Soon</button>
+              </div>
             </div>
           </div>
         </section>
@@ -299,7 +291,8 @@
                  target="_blank"
                  style="font-size:0.78rem;font-weight:700;color:var(--brand-brown);text-decoration:none;
                         background:var(--brand-soft);border:1.5px solid var(--brand-hover-border);
-                        padding:0.38rem 0.85rem;border-radius:8px;transition:all 0.15s;display:inline-flex;align-items:center;gap:0.35rem"
+                        padding:0.38rem 0.85rem;border-radius:8px;transition:all 0.15s;
+                        display:inline-flex;align-items:center;gap:0.35rem"
                  onmouseover="this.style.background='var(--brand-grad)';this.style.color='#fff'"
                  onmouseout="this.style.background='var(--brand-soft)';this.style.color='var(--brand-brown)'">
                 📊 View / Edit in Google Sheets
@@ -332,34 +325,23 @@
             <p>Reach out to the RCO IT team — use the form below to compose a message, or email us directly.</p>
           </div>
 
-          <!-- How to contact IT — summary card -->
-          <div style="background:var(--sidebar-bg);border:1.5px solid var(--sb-border);border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:1.25rem;max-width:580px">
+          <!-- Summary card — email button removed, Full Guide button kept -->
+          <div style="background:var(--sidebar-bg);border:1.5px solid var(--sb-border);border-radius:14px;
+                      padding:1.25rem 1.5rem;margin-bottom:1.25rem;max-width:580px">
             <h3 style="font-size:0.88rem;font-weight:800;color:var(--sb-text);margin-bottom:0.6rem">How to Contact IT</h3>
             <p style="font-size:0.875rem;color:var(--sb-muted);line-height:1.7;margin-bottom:0.9rem">
-              For general IT support, questions, or requests, the best way to reach us is by submitting a ticket or emailing us directly. We typically respond within one business day.
+              For general IT support, questions, or requests, the best way to reach us is by submitting a ticket or
+              emailing us directly. We typically respond within one business day.
             </p>
-            <div style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:center">
-              <a href="mailto:itsupport@rowecasaorganics.com"
-                 style="display:inline-flex;align-items:center;gap:0.5rem;
-                        background:var(--brand-grad);color:#fff;border:none;
-                        padding:0.55rem 1.25rem;border-radius:9px;font-size:0.875rem;
-                        font-weight:700;text-decoration:none;transition:opacity 0.15s"
-                 onmouseover="this.style.opacity='0.88'"
-                 onmouseout="this.style.opacity='1'">
-                ✉️ Email itsupport@rowecasaorganics.com
-              </a>
-              <!-- Full Guide button — opens the How to Contact IT modal -->
-              <button onclick="document.getElementById('cgModal').classList.remove('hidden')"
-                      style="display:inline-flex;align-items:center;gap:0.45rem;
-                             background:var(--brand-soft);border:1.5px solid var(--brand-hover-border);
-                             color:var(--brand-brown);padding:0.5rem 1.1rem;border-radius:9px;
-                             font-size:0.875rem;font-weight:700;font-family:inherit;cursor:pointer;
-                             transition:all 0.15s"
-                      onmouseover="this.style.background='var(--brand-grad)';this.style.color='#fff';this.style.borderColor='var(--brand-brown)'"
-                      onmouseout="this.style.background='var(--brand-soft)';this.style.color='var(--brand-brown)';this.style.borderColor='var(--brand-hover-border)'">
-                📋 How to Contact IT — Full Guide
-              </button>
-            </div>
+            <button onclick="document.getElementById('cgModal').classList.remove('hidden')"
+                    style="display:inline-flex;align-items:center;gap:0.45rem;
+                           background:var(--brand-soft);border:1.5px solid var(--brand-hover-border);
+                           color:var(--brand-brown);padding:0.5rem 1.1rem;border-radius:9px;
+                           font-size:0.875rem;font-weight:700;font-family:inherit;cursor:pointer;transition:all 0.15s"
+                    onmouseover="this.style.background='var(--brand-grad)';this.style.color='#fff';this.style.borderColor='var(--brand-brown)'"
+                    onmouseout="this.style.background='var(--brand-soft)';this.style.color='var(--brand-brown)';this.style.borderColor='var(--brand-hover-border)'">
+              📋 How to Contact IT — Full Guide
+            </button>
           </div>
 
           <!-- Email compose form -->
@@ -392,20 +374,19 @@
     </div>
   </div>
 
-  <!-- ════════════════════════════════════════════════
+  <!-- Copy link toast notification -->
+  <div id="copyToast" class="copy-toast">🔗 Link copied to clipboard!</div>
+
+  <!-- ══════════════════════════════════════════════
        HOW TO CONTACT IT — FULL GUIDE MODAL
-       ════════════════════════════════════════════════ -->
+       ══════════════════════════════════════════════ -->
   <div class="cg-overlay hidden" id="cgModal"
        onclick="if(event.target===this)this.classList.add('hidden')">
     <div class="cg-box">
 
       <h2>How to Contact IT</h2>
-      <p class="cg-sub">
-        We use tickets to ensure every issue is tracked, prioritized, and handled by the right person — without anything slipping through the cracks.
-        Submitting through the correct channel helps us respond faster and keep operations running smoothly.
-      </p>
+      <p class="cg-sub">We use tickets to ensure every issue is tracked, prioritized, and handled by the right person — without anything slipping through the cracks. Submitting through the correct channel helps us respond faster and keep operations running smoothly.</p>
 
-      <!-- Preferred methods -->
       <div class="cg-section">
         <div class="cg-section-title">✅ Preferred Methods — Each creates a ticket automatically</div>
         <div class="cg-methods">
@@ -440,7 +421,6 @@
         </div>
       </div>
 
-      <!-- Emergency -->
       <div class="cg-section">
         <div class="cg-section-title">🚨 Emergencies — Critical Issues Only</div>
         <div class="cg-emergency">
@@ -448,7 +428,7 @@
           <div class="cg-emergency-phone">469-893-1998</div>
           <p style="font-size:0.8rem;color:#8b2a1f;margin-bottom:0.6rem;line-height:1.5">Use this only for true critical events:</p>
           <ul>
-            <li>Internet or network outage — wait ~5–10 minutes first before calling</li>
+            <li>Internet or network outage — wait ~5–10 minutes first</li>
             <li>Major system failure where nobody can work</li>
             <li>Any cybersecurity event (suspected hacking, phishing link clicked, etc.)</li>
             <li>Production or shipping halted due to IT issues</li>
@@ -457,7 +437,6 @@
         </div>
       </div>
 
-      <!-- What to include -->
       <div class="cg-section">
         <div class="cg-section-title">📝 What to Include in Your Ticket</div>
         <div class="cg-include-grid">
@@ -472,7 +451,6 @@
         </div>
       </div>
 
-      <!-- Ticket examples -->
       <div class="cg-section">
         <div class="cg-section-title">🧩 Good vs. Bad Ticket Examples</div>
         <div class="cg-examples">
@@ -491,7 +469,6 @@
         </div>
       </div>
 
-      <!-- When to ticket vs call -->
       <div class="cg-section">
         <div class="cg-section-title">📞 When to Ticket vs. When to Call</div>
         <div class="cg-split">
@@ -520,7 +497,6 @@
         </p>
       </div>
 
-      <!-- BFCM banner -->
       <div class="cg-section" style="margin-bottom:0">
         <div class="cg-bfcm">
           <div class="cg-bfcm-icon">🔺</div>
@@ -534,9 +510,40 @@
       <button class="cg-close" onclick="document.getElementById('cgModal').classList.add('hidden')">Got it — Close Guide</button>
     </div>
   </div>
-  <!-- ── end How to Contact IT modal ── -->
+
+  <script>
+    /* ── URL helper ── */
+    function getSurveyUrl(path) {
+      var href = window.location.href.split('?')[0].split('#')[0];
+      var base = href.endsWith('/') ? href : href.substring(0, href.lastIndexOf('/') + 1);
+      return base + path;
+    }
+
+    /* ── Copy link with toast ── */
+    function copyLink(url, btn) {
+      var orig = btn.innerHTML;
+      var done = function() {
+        showToast();
+        btn.innerHTML = '✓ Copied!';
+        setTimeout(function() { btn.innerHTML = orig; }, 2000);
+      };
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(url).then(done).catch(function() { fallbackCopy(url); done(); });
+      } else { fallbackCopy(url); done(); }
+    }
+    function fallbackCopy(url) {
+      var el = document.createElement('textarea');
+      el.value = url; el.style.position = 'fixed'; el.style.opacity = '0';
+      document.body.appendChild(el); el.select();
+      document.execCommand('copy'); document.body.removeChild(el);
+    }
+    function showToast() {
+      var t = document.getElementById('copyToast');
+      t.classList.add('show');
+      setTimeout(function() { t.classList.remove('show'); }, 2500);
+    }
+  </script>
 
   <script type="module" src="app.js"></script>
-
 </body>
 </html>
