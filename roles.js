@@ -62,8 +62,7 @@ const MEMBERS = {
 
   // ── DIRECTORS ───────────────────────────────────────────────────────────────
   // director-level+ surveys visible + their own submissions. No Sheets.
-  // ⚠️  Kevin Ludwig (Director of Product Innovation) and
-  //     Cammie McCarty (Director of Accounting) — no @rowecasaorganics.com listed.
+
   director: [
     'carly@rowecasaorganics.com',               // Carly Barron       — Executive Director of Branding & Experience
     'kristen@rowecasaorganics.com',             // Kristen Duncan     — Marketing Director
