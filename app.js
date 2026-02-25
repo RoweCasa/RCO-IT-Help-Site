@@ -7,43 +7,44 @@ import { initializeApp }                                    from 'https://www.gs
 import { getAuth, onAuthStateChanged, signOut }             from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, collection, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
-// ── Config ────────────────────────────────────────────────────
+// ── Config ─────────────────────────────────────────────────────────────────
 const FIREBASE_CONFIG = {
-  apiKey:            "AIzaSyBRKBzxTYzBnBHo-YY8fSxTSSkM3uyujmc",
-  authDomain:        "ithelpsite-4ec53.firebaseapp.com",
-  projectId:         "ithelpsite-4ec53",
-  storageBucket:     "ithelpsite-4ec53.firebasestorage.app",
-  messagingSenderId: "893459212285",
-  appId:             "1:893459212285:web:194adf30886cbb28c21b94",
-  measurementId:     "G-H6WM1LWQ4V"
+  apiKey:            'AIzaSyBRKBzxTYzBnBHo-YY8fSxTSSkM3uyujmc',
+  authDomain:        'ithelpsite-4ec53.firebaseapp.com',
+  projectId:         'ithelpsite-4ec53',
+  storageBucket:     'ithelpsite-4ec53.firebasestorage.app',
+  messagingSenderId: '893459212285',
+  appId:             '1:893459212285:web:194adf30886cbb28c21b94',
+  measurementId:     'G-H6WM1LWQ4V'
 };
 
 const ALLOWED_DOMAIN = '@rowecasaorganics.com';
 
-// ── Init ──────────────────────────────────────────────────────
+// ── Init ────────────────────────────────────────────────────────────────────
 const app  = initializeApp(FIREBASE_CONFIG);
 const auth = getAuth(app);
 const db   = getFirestore(app);
 
 let currentUser = null;
 
-// ── Auth guard ────────────────────────────────────────────────
+// ── Auth guard ──────────────────────────────────────────────────────────────
 onAuthStateChanged(auth, user => {
   if (!user || !user.email.endsWith(ALLOWED_DOMAIN)) {
     signOut(auth).finally(() => window.location.replace('login.html'));
     return;
   }
   currentUser = user;
+
   const userEl = document.getElementById('topbarUser');
   if (userEl) userEl.textContent = user.email;
 });
 
-// ── Sign out ──────────────────────────────────────────────────
+// ── Sign out ────────────────────────────────────────────────────────────────
 document.getElementById('authBtn')?.addEventListener('click', () => {
   signOut(auth).then(() => window.location.replace('login.html'));
 });
 
-// ── Sidebar nav — wire all [data-section] buttons ─────────────
+// ── Sidebar nav — wire all [data-section] buttons ──────────────────────────
 document.querySelectorAll('[data-section]').forEach(btn => {
   btn.addEventListener('click', () => {
     const name = btn.dataset.section;
@@ -55,25 +56,32 @@ document.querySelectorAll('[data-section]').forEach(btn => {
   });
 });
 
-// ── Start survey button ───────────────────────────────────────
+// ── Start survey button ─────────────────────────────────────────────────────
 document.getElementById('startSurveyBtn')?.addEventListener('click', () => {
   window.location.href = 'surveys/tech-discovery.html';
 });
 
-// ── Refresh button ────────────────────────────────────────────
+// ── Refresh button ──────────────────────────────────────────────────────────
 document.getElementById('refreshBtn')?.addEventListener('click', () => {
   renderCompleted();
 });
 
-// ── Completed submissions ─────────────────────────────────────
+// ── Completed submissions ───────────────────────────────────────────────────
+// Populates the Surveys and Forms subsections in the Completed tab separately.
+// Google Sheets links are shown/hidden by the roles module in index.html,
+// not here — this function only handles the submission cards.
 async function renderCompleted() {
-  const list = document.getElementById('completedList');
-  if (!list) return;
+  const surveysList = document.getElementById('completedSurveysList');
+  const formsList   = document.getElementById('completedFormsList');
+  if (!surveysList || !formsList) return;
 
-  list.innerHTML = `<div class="empty-state">
-    <div class="login-spinner" style="margin:2rem auto"></div>
-    <p style="color:var(--sb-muted)">Loading your submissions...</p>
-  </div>`;
+  const spinner = `
+    <div class="empty-state" style="padding:1.5rem 0">
+      <div class="login-spinner" style="margin:1rem auto"></div>
+      <p style="color:var(--sb-muted)">Loading submissions...</p>
+    </div>`;
+  surveysList.innerHTML = spinner;
+  formsList.innerHTML   = spinner;
 
   // Wait for auth to resolve if currentUser isn't set yet
   if (!currentUser) {
@@ -81,73 +89,115 @@ async function renderCompleted() {
       const unsub = onAuthStateChanged(auth, user => {
         if (user) { currentUser = user; unsub(); resolve(); }
       });
-      setTimeout(resolve, 5000); // fallback
+      setTimeout(resolve, 5000); // fallback timeout
     });
   }
 
   if (!currentUser) {
-    list.innerHTML = `<div class="empty-state">
+    const msg = `<div class="empty-state" style="padding:1.5rem 0">
       <p style="color:var(--sb-muted)">Please sign in to view your submissions.</p>
     </div>`;
+    surveysList.innerHTML = msg;
+    formsList.innerHTML   = msg;
     return;
   }
 
   console.log('renderCompleted — currentUser:', currentUser.email);
 
   try {
-    const q    = query(collection(db, 'submissions'), where('uid', '==', currentUser.uid));
-    const snap = await getDocs(q);
-
-    console.log('Firestore returned', snap.size, 'docs for', currentUser.email);
-
-    if (snap.empty) {
-      list.innerHTML = `<div class="empty-state">
-        <div class="empty-icon">📭</div>
-        <h3>No submissions yet</h3>
-        <p>Complete a survey or form and your submissions will appear here.</p>
-      </div>`;
-      return;
+    // IT admins (canViewAllSubmissions) get every submission;
+    // everyone else only sees their own.
+    // window._canViewAllSubmissions is set by the roles module in index.html.
+    let q;
+    if (window._canViewAllSubmissions) {
+      q = query(collection(db, 'submissions'));
+    } else {
+      q = query(collection(db, 'submissions'), where('uid', '==', currentUser.uid));
     }
 
-    list.innerHTML = `<div class="cards">` + snap.docs.map(doc => {
-      const s    = doc.data();
-      const date = s.submittedAt?.toDate
-        ? s.submittedAt.toDate().toLocaleString('en-US', {
-            month: 'short', day: 'numeric', year: 'numeric',
-            hour: 'numeric', minute: '2-digit'
-          })
-        : '—';
-      return `<div class="card brown completed-card">
-        <div class="card-top">
-          <span class="card-status status-active">Submitted</span>
-        </div>
-        <h3>${s.title || 'Survey'}</h3>
-        <p style="font-size:0.82rem;line-height:1.7">
-          <strong>Department:</strong> ${s.dept      || '—'}<br/>
-          <strong>Submitted:</strong>  ${date}<br/>
-          <strong>By:</strong>         ${s.userEmail || '—'}
-        </p>
-        <div class="card-meta">
-          <button class="card-action" data-url="${s.url || '#'}">Take Again →</button>
-        </div>
-      </div>`;
-    }).join('') + `</div>`;
+    const snap = await getDocs(q);
+    console.log('Firestore returned', snap.size, 'docs');
 
-    list.querySelectorAll('[data-url]').forEach(btn => {
-      btn.addEventListener('click', () => window.location.href = btn.dataset.url);
+    // ── Sort submissions into Surveys vs Forms using CONTENT_CONFIG from roles.js
+    // window._contentConfig is exposed by the roles module in index.html.
+    const cfg          = window._contentConfig || { surveys: [], forms: [] };
+    const surveyTitles = cfg.surveys.map(s => s.title.toLowerCase());
+    const formTitles   = cfg.forms.map(f => f.title.toLowerCase());
+
+    const surveysData = [];
+    const formsData   = [];
+    const otherData   = []; // anything that doesn't match a known title goes here
+
+    snap.docs.forEach(doc => {
+      const title = (doc.data().title || '').toLowerCase();
+      if (surveyTitles.some(t => title.includes(t) || t.includes(title))) {
+        surveysData.push(doc);
+      } else if (formTitles.some(t => title.includes(t) || t.includes(title))) {
+        formsData.push(doc);
+      } else {
+        otherData.push(doc); // bucket unknown types into surveys for now
+      }
+    });
+
+    // ── Render a set of docs into card HTML ──────────────────────────────────
+    function renderCards(docs) {
+      if (!docs.length) {
+        return `<div class="empty-state" style="padding:1.5rem 0">
+          <div class="empty-icon">📭</div>
+          <p style="color:var(--sb-muted)">No submissions yet.</p>
+        </div>`;
+      }
+
+      return `<div class="cards">` + docs.map(doc => {
+        const s    = doc.data();
+        const date = s.submittedAt?.toDate
+          ? s.submittedAt.toDate().toLocaleString('en-US', {
+              month: 'short', day: 'numeric', year: 'numeric',
+              hour: 'numeric', minute: '2-digit'
+            })
+          : '—';
+
+        return `<div class="card brown completed-card">
+          <div class="card-top">
+            <span class="card-status status-active">Submitted</span>
+          </div>
+          <h3>${s.title || 'Submission'}</h3>
+          <p style="font-size:0.82rem;line-height:1.7">
+            <strong>Department:</strong> ${s.dept      || '—'}<br/>
+            <strong>Submitted:</strong>  ${date}<br/>
+            <strong>By:</strong>         ${s.userEmail || '—'}
+          </p>
+          <div class="card-meta">
+            <button class="card-action" data-url="${s.url || '#'}">Take Again →</button>
+          </div>
+        </div>`;
+      }).join('') + `</div>`;
+    }
+
+    // Render — unknown submissions get bucketed into the Surveys section
+    surveysList.innerHTML = renderCards([...surveysData, ...otherData]);
+    formsList.innerHTML   = renderCards(formsData);
+
+    // Wire "Take Again" buttons
+    [surveysList, formsList].forEach(list => {
+      list.querySelectorAll('[data-url]').forEach(btn => {
+        btn.addEventListener('click', () => window.location.href = btn.dataset.url);
+      });
     });
 
   } catch (err) {
     console.error('Firestore error:', err);
-    list.innerHTML = `<div class="empty-state">
+    const errHtml = `<div class="empty-state" style="padding:1.5rem 0">
       <div class="empty-icon">⚠️</div>
       <h3>Could not load submissions</h3>
       <p style="color:var(--sb-muted)">${err.message}</p>
     </div>`;
+    surveysList.innerHTML = errHtml;
+    formsList.innerHTML   = errHtml;
   }
 }
 
-// ── Contact form ──────────────────────────────────────────────
+// ── Contact form ────────────────────────────────────────────────────────────
 document.getElementById('sendBtn')?.addEventListener('click', () => {
   const from    = document.getElementById('contactFrom')?.value.trim();
   const subject = document.getElementById('contactSubject')?.value.trim();
@@ -167,7 +217,7 @@ document.getElementById('sendBtn')?.addEventListener('click', () => {
 });
 
 document.getElementById('clearBtn')?.addEventListener('click', () => {
-  ['contactFrom','contactSubject','contactBody'].forEach(id => {
+  ['contactFrom', 'contactSubject', 'contactBody'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
