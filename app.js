@@ -68,8 +68,10 @@ document.getElementById('refreshBtn')?.addEventListener('click', () => {
 
 // ── Completed submissions ───────────────────────────────────────────────────
 // Populates the Surveys and Forms subsections in the Completed tab separately.
-// Google Sheets links are shown/hidden by the roles module in index.html,
-// not here — this function only handles the submission cards.
+// Google Sheets links are shown/hidden by the roles module in index.html.
+// Expose on window so the toggle buttons in index.html can call it directly.
+window._renderCompleted = renderCompleted;
+
 async function renderCompleted() {
   const surveysList = document.getElementById('completedSurveysList');
   const formsList   = document.getElementById('completedFormsList');
@@ -105,11 +107,11 @@ async function renderCompleted() {
   console.log('renderCompleted — currentUser:', currentUser.email);
 
   try {
-    // IT admins (canViewAllSubmissions) get every submission;
-    // everyone else only sees their own.
-    // window._canViewAllSubmissions is set by the roles module in index.html.
+    // IT admins see all submissions when toggled to "All Submissions",
+    // otherwise always show only their own.
+    // window._submissionsView and window._canViewAllSubmissions are set by index.html.
     let q;
-    if (window._canViewAllSubmissions) {
+    if (window._canViewAllSubmissions && window._submissionsView === 'all') {
       q = query(collection(db, 'submissions'));
     } else {
       q = query(collection(db, 'submissions'), where('uid', '==', currentUser.uid));
