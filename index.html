@@ -169,18 +169,42 @@
     }
     .cg-close:hover { opacity: 0.88; }
 
-    /* ── IT Admin submissions toggle ── */
+    /* ── Completed tab controls ── */
+    .completed-controls {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap; gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1.5px solid var(--sb-sep);
+    }
+    /* type tabs — Surveys / Forms */
+    .type-tabs {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      background: var(--sidebar-bg); border: 1.5px solid var(--sb-border);
+      border-radius: 999px; padding: 0.25rem;
+    }
+    .type-tab {
+      padding: 0.35rem 1.1rem; border-radius: 999px; border: none;
+      font-size: 0.8rem; font-weight: 700; font-family: inherit;
+      cursor: pointer; transition: all 0.18s; background: none;
+      color: var(--sb-muted);
+    }
+    .type-tab.active {
+      background: var(--brand-grad); color: #fff;
+      box-shadow: 0 2px 8px rgba(95,75,60,0.25);
+    }
+    /* IT admin scope toggle — My / Everyone's */
     .submissions-toggle {
-      display: none; /* shown by JS for IT admins only */
-      align-items: center; gap: 0.5rem;
-      background: var(--sidebar-bg);
-      border: 1.5px solid var(--sb-border);
+      display: none;
+      align-items: center; gap: 0.3rem;
+      background: var(--sidebar-bg); border: 1.5px solid var(--sb-border);
       border-radius: 999px; padding: 0.25rem;
     }
     .submissions-toggle.visible { display: inline-flex; }
     .toggle-btn {
-      padding: 0.32rem 0.9rem; border-radius: 999px; border: none;
-      font-size: 0.75rem; font-weight: 700; font-family: inherit;
+      padding: 0.35rem 1.1rem; border-radius: 999px; border: none;
+      font-size: 0.8rem; font-weight: 700; font-family: inherit;
       cursor: pointer; transition: all 0.18s; background: none;
       color: var(--sb-muted);
     }
@@ -188,6 +212,12 @@
       background: var(--brand-grad); color: #fff;
       box-shadow: 0 2px 8px rgba(95,75,60,0.25);
     }
+    /* Sheet links row — IT admin only */
+    .sheet-links-row {
+      display: none; width: 100%;
+      flex-wrap: wrap; gap: 0.5rem;
+    }
+    .sheet-links-row.visible { display: flex; }
 
     /* ── Auth loading overlay ── */
     .auth-loading {
@@ -351,68 +381,55 @@
         <!-- ── COMPLETED ── -->
         <section class="section" id="section-completed">
           <div class="section-intro">
-            <h2>My Completed Submissions</h2>
+            <h2>Completed Submissions</h2>
             <p>A record of surveys and forms you have submitted.</p>
-            <div style="display:flex;align-items:center;gap:0.75rem;margin-top:0.75rem;flex-wrap:wrap">
-              <button class="clear-btn" style="margin:0" id="refreshBtn">↻ Refresh</button>
-              <!-- IT admin only — toggled visible by roles module -->
+          </div>
+
+          <!-- Controls row: type tabs + scope toggle + refresh -->
+          <div class="completed-controls">
+            <div style="display:flex;align-items:center;gap:0.65rem;flex-wrap:wrap">
+              <!-- Surveys / Forms tabs -->
+              <div class="type-tabs">
+                <button class="type-tab active" id="tabSurveys"
+                        onclick="setTypeTab('surveys')">📋 Surveys</button>
+                <button class="type-tab" id="tabForms"
+                        onclick="setTypeTab('forms')">📝 Forms</button>
+              </div>
+              <!-- IT admin only: My Submissions / Everyone's -->
               <div class="submissions-toggle" id="submissionsToggle">
                 <button class="toggle-btn active" id="toggleMine"
                         onclick="setSubmissionsView('mine')">My Submissions</button>
                 <button class="toggle-btn" id="toggleAll"
-                        onclick="setSubmissionsView('all')">All Submissions</button>
+                        onclick="setSubmissionsView('all')">Everyone's</button>
               </div>
             </div>
+            <!-- Refresh -->
+            <button class="clear-btn" style="margin:0" id="refreshBtn">↻ Refresh</button>
           </div>
 
-          <!-- Surveys subsection -->
-          <div class="completed-type-block">
-            <div class="completed-type-header">
-              <span class="completed-type-title">📋 Surveys</span>
-              <!-- Sheet links are hidden by default; JS shows them for IT admins only -->
-              <a id="sheetLink-tech-discovery"
-                 class="completed-sheet-link"
-                 href="https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID_HERE/edit"
-                 target="_blank">
-                📊 Software Inventory — Sheets
-              </a>
-            </div>
-            <div id="completedSurveysList">
-              <div class="empty-state" style="padding:1.5rem 0">
-                <p style="color:var(--sb-muted)">No survey submissions yet.</p>
-              </div>
-            </div>
+          <!-- IT admin sheet links — shown below controls, hidden for others -->
+          <div class="sheet-links-row" id="sheetLinksRow">
+            <a id="sheetLink-tech-discovery"
+               class="completed-sheet-link"
+               href="https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID_HERE/edit"
+               target="_blank">📊 Software Inventory</a>
+            <a id="sheetLink-onboarding"
+               class="completed-sheet-link"
+               href="https://docs.google.com/spreadsheets/d/YOUR_ONBOARDING_SHEET_ID/edit"
+               target="_blank">📊 Onboarding</a>
+            <a id="sheetLink-offboarding"
+               class="completed-sheet-link"
+               href="https://docs.google.com/spreadsheets/d/YOUR_OFFBOARDING_SHEET_ID/edit"
+               target="_blank">📊 Offboarding</a>
+            <a id="sheetLink-equipment"
+               class="completed-sheet-link"
+               href="https://docs.google.com/spreadsheets/d/YOUR_EQUIPMENT_SHEET_ID/edit"
+               target="_blank">📊 Equipment Requests</a>
           </div>
 
-          <!-- Forms subsection -->
-          <div class="completed-type-block">
-            <div class="completed-type-header">
-              <span class="completed-type-title">📝 Request Forms</span>
-              <a id="sheetLink-onboarding"
-                 class="completed-sheet-link"
-                 href="https://docs.google.com/spreadsheets/d/YOUR_ONBOARDING_SHEET_ID/edit"
-                 target="_blank">
-                📊 Onboarding — Sheets
-              </a>
-              <a id="sheetLink-offboarding"
-                 class="completed-sheet-link"
-                 href="https://docs.google.com/spreadsheets/d/YOUR_OFFBOARDING_SHEET_ID/edit"
-                 target="_blank">
-                📊 Offboarding — Sheets
-              </a>
-              <a id="sheetLink-equipment"
-                 class="completed-sheet-link"
-                 href="https://docs.google.com/spreadsheets/d/YOUR_EQUIPMENT_SHEET_ID/edit"
-                 target="_blank">
-                📊 Equipment Requests — Sheets
-              </a>
-            </div>
-            <div id="completedFormsList">
-              <div class="empty-state" style="padding:1.5rem 0">
-                <p style="color:var(--sb-muted)">No form submissions yet.</p>
-              </div>
-            </div>
-          </div>
+          <!-- Content panels — only one visible at a time -->
+          <div id="completedSurveysList"></div>
+          <div id="completedFormsList" style="display:none"></div>
         </section>
 
         <!-- ── KNOWLEDGE BASE ── -->
@@ -595,6 +612,15 @@
 
     // Track which view IT admins are on so refresh respects it
     window._submissionsView = 'mine';
+    window._typeTab = 'surveys';
+
+    function setTypeTab(tab) {
+      window._typeTab = tab;
+      document.getElementById('tabSurveys').classList.toggle('active', tab === 'surveys');
+      document.getElementById('tabForms').classList.toggle('active',   tab === 'forms');
+      document.getElementById('completedSurveysList').style.display = tab === 'surveys' ? '' : 'none';
+      document.getElementById('completedFormsList').style.display   = tab === 'forms'   ? '' : 'none';
+    }
 
     function setSubmissionsView(mode) {
       window._submissionsView = mode;
@@ -688,8 +714,9 @@
       if (sn) sn.classList.toggle('show', surveysVisible === 0);
       if (fn) fn.classList.toggle('show', formsVisible === 0);
 
-      // 4. Google Sheets links — IT admin only
+      // 4. Google Sheets links row — IT admin only
       if (canViewSheets(email)) {
+        document.getElementById('sheetLinksRow')?.classList.add('visible');
         document.querySelectorAll('.completed-sheet-link').forEach(el => el.classList.add('visible'));
       }
 
