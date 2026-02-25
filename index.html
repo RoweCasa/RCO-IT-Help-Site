@@ -25,7 +25,7 @@
     /* Sidebar email button */
     .portal-email-btn {
       display: block; width: 100%;
-      background: none; border: 1px solid var(--sb-border);
+      background: none; border: none;
       border-radius: 8px; padding: 0.4rem 0.6rem;
       font-size: 0.67rem; color: var(--sb-muted);
       font-family: inherit; font-weight: 600;
@@ -35,34 +35,20 @@
     }
     .portal-email-btn:hover {
       background: var(--brand-soft);
-      border-color: var(--brand-hover-border);
       color: var(--brand-brown);
     }
 
     /* Copy link button on cards */
     .card-copy-btn {
-      display: inline-flex; align-items: center; gap: 0.3rem;
-      background: none; border: 1.5px solid var(--sb-border);
-      color: var(--sb-muted); padding: 0.28rem 0.65rem;
-      border-radius: 7px; font-size: 0.72rem; font-weight: 700;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: none; border: none;
+      color: var(--sb-muted); padding: 0.2rem 0.35rem;
+      border-radius: 6px; font-size: 0.75rem;
       font-family: inherit; cursor: pointer; transition: all 0.15s;
+      min-width: 24px;
     }
-    .card-copy-btn:hover {
-      border-color: var(--brand-hover-border);
-      color: var(--brand-brown); background: var(--brand-soft);
-    }
-    .card-copy-btn.disabled {
-      opacity: 0.4; cursor: not-allowed; pointer-events: none;
-    }
-
-    /* Resubmit note */
-    .resubmit-note {
-      background: var(--brand-soft);
-      border: 1.5px solid var(--brand-hover-border);
-      border-radius: 10px; padding: 0.65rem 1rem;
-      margin-bottom: 1.25rem; font-size: 0.82rem;
-      color: var(--brand-brown); font-weight: 600; line-height: 1.55;
-    }
+    .card-copy-btn:hover { color: var(--brand-brown); background: var(--brand-soft); }
+    .card-copy-btn.disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
 
     /* ── Contact Guide Modal ── */
     .cg-overlay {
@@ -175,15 +161,15 @@
       </nav>
       <div class="sidebar-footer">
         <button class="nav-btn" data-section="knowledge" style="margin-bottom:8px">
-          <span class="nav-icon">📚</span> IT Knowledge Base
+          <span class="nav-icon"></span> IT Knowledge Base
         </button>
         <div class="sidebar-divider"></div>
         <button class="contact-btn" data-section="contact">✉️ Contact Us</button>
-        <!-- Email IT Support button — replaces the plain @rowecasaorganics.com text -->
+        <!-- itsupport email button — no border, no emoji -->
         <button class="portal-email-btn"
                 title="Email itsupport@rowecasaorganics.com"
                 onclick="window.open('https://mail.google.com/mail/?view=cm&fs=1&to=itsupport%40rowecasaorganics.com','_blank')">
-          ✉️ itsupport@rowecasaorganics.com
+          itsupport@rowecasaorganics.com
         </button>
       </div>
     </aside>
@@ -211,9 +197,7 @@
           <div class="section-intro">
             <h2>IT Surveys</h2>
             <p>Complete your assigned surveys to help our team manage technology across the organization.</p>
-          </div>
-          <div class="resubmit-note">
-            💡 Already submitted a survey? Feel free to resubmit anytime if you forgot to add something or need to make updates — each submission is saved separately.
+            <p style="font-size:0.78rem;color:var(--sb-muted);margin-top:0.35rem">Feel free to resubmit anytime if you forgot to add something or need to make updates — each submission is saved separately.</p>
           </div>
           <div class="cards">
             <div class="card brown">
@@ -231,7 +215,7 @@
                   <button class="card-copy-btn"
                           onclick="copyLink(getSurveyUrl('surveys/tech-discovery.html'), this)"
                           title="Copy a direct link to this survey">
-                    🔗 Copy Link
+                    🔗
                   </button>
                   <button class="card-action" id="startSurveyBtn">Start →</button>
                 </div>
@@ -245,9 +229,7 @@
           <div class="section-intro">
             <h2>Request Forms</h2>
             <p>Submit IT requests for new employees, departing staff, or equipment and software needs.</p>
-          </div>
-          <div class="resubmit-note">
-            💡 Already submitted a form? Feel free to resubmit anytime if you forgot to include something — each submission is saved separately.
+            <p style="font-size:0.78rem;color:var(--sb-muted);margin-top:0.35rem">Feel free to resubmit anytime if you forgot to add something or need to make updates — each submission is saved separately.</p>
           </div>
           <div class="cards">
             <div class="card brown">
@@ -255,7 +237,7 @@
               <h3>User Onboarding Request</h3>
               <p>Submit everything IT needs to provision a new employee — role, system access, devices, and software requirements.</p>
               <div class="card-meta">
-                <button class="card-copy-btn disabled" title="Link available when form is live">🔗 Copy Link</button>
+                <button class="card-copy-btn disabled" title="Link available when form is live">🔗</button>
                 <button class="card-action disabled">Coming Soon</button>
               </div>
             </div>
@@ -264,7 +246,7 @@
               <h3>User Offboarding Request</h3>
               <p>Capture separation details for a departing employee — access revocation, email handling, file transfer, and device return.</p>
               <div class="card-meta">
-                <button class="card-copy-btn disabled" title="Link available when form is live">🔗 Copy Link</button>
+                <button class="card-copy-btn disabled" title="Link available when form is live">🔗</button>
                 <button class="card-action disabled">Coming Soon</button>
               </div>
             </div>
@@ -273,7 +255,7 @@
               <h3>IT Equipment &amp; Software Request</h3>
               <p>Request any technology need — hardware, software, or licenses — with business justification and manager approval workflow.</p>
               <div class="card-meta">
-                <button class="card-copy-btn disabled" title="Link available when form is live">🔗 Copy Link</button>
+                <button class="card-copy-btn disabled" title="Link available when form is live">🔗</button>
                 <button class="card-action disabled">Coming Soon</button>
               </div>
             </div>
@@ -521,11 +503,12 @@
 
     /* ── Copy link with toast ── */
     function copyLink(url, btn) {
-      var orig = btn.innerHTML;
       var done = function() {
         showToast();
-        btn.innerHTML = '✓ Copied!';
-        setTimeout(function() { btn.innerHTML = orig; }, 2000);
+        var orig = btn.innerHTML;
+        btn.innerHTML = '✓';
+        btn.style.color = 'var(--success)';
+        setTimeout(function() { btn.innerHTML = orig; btn.style.color = ''; }, 2000);
       };
       if (navigator.clipboard) {
         navigator.clipboard.writeText(url).then(done).catch(function() { fallbackCopy(url); done(); });
