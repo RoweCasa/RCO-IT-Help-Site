@@ -51,7 +51,10 @@ document.querySelectorAll('[data-section]').forEach(btn => {
     document.querySelectorAll('[data-section]').forEach(b => b.classList.remove('active'));
     document.getElementById('section-' + name)?.classList.add('active');
     btn.classList.add('active');
-    if (name === 'completed') renderCompleted();
+    if (name === 'completed') {
+      renderCompleted();
+      if (typeof window.renderSubFilters === 'function') window.renderSubFilters(window._typeTab || 'surveys');
+    }
   });
 });
 
@@ -81,7 +84,7 @@ function showListError(msg) {
   if (fl) fl.innerHTML = html;
 }
 
-const PAGE_SIZE = 6;
+const PAGE_SIZE = 5;
 
 function renderCards(docs, containerId) {
   const container = document.getElementById(containerId);
@@ -178,7 +181,6 @@ async function renderCompleted() {
   }
 
   // ── Wait for roles module to set window._canViewAllSubmissions (max 4s) ───
-  // Roles module fires its own onAuthStateChanged which sets this flag.
   if (window._canViewAllSubmissions === undefined) {
     await new Promise(resolve => {
       let attempts = 0;
@@ -193,8 +195,6 @@ async function renderCompleted() {
   }
 
   try {
-    // IT admins in "Everyone's" mode query all submissions;
-    // everyone else (and IT in "My Submissions" mode) queries only their own.
     const viewAll = window._canViewAllSubmissions === true
                     && window._submissionsView === 'all';
 
@@ -205,14 +205,28 @@ async function renderCompleted() {
     const snap = await getDocs(q);
     console.log(`renderCompleted — ${snap.size} docs, viewAll=${viewAll}`);
 
+    // ── Apply sub-filter if a specific survey/form is selected ────────────
+    const cfg        = window._contentConfig || { surveys: [], forms: [] };
+    let filteredDocs = snap.docs;
+    const subFilter  = window._subFilter;
+    if (subFilter) {
+      const fi = [...cfg.surveys, ...cfg.forms].find(c => c.id === subFilter);
+      if (fi) {
+        const ft = fi.title.toLowerCase();
+        filteredDocs = filteredDocs.filter(doc => {
+          const t = (doc.data().title || '').toLowerCase();
+          return t.includes(ft) || ft.includes(t);
+        });
+      }
+    }
+
     // ── Sort into surveys vs forms ────────────────────────────────────────
-    const cfg          = window._contentConfig || { surveys: [], forms: [] };
     const surveyTitles = cfg.surveys.map(s => s.title.toLowerCase());
     const formTitles   = cfg.forms.map(f => f.title.toLowerCase());
 
     const surveysData = [], formsData = [], otherData = [];
 
-    snap.docs.forEach(doc => {
+    filteredDocs.forEach(doc => {
       const title = (doc.data().title || '').toLowerCase();
       if (surveyTitles.some(t => title.includes(t) || t.includes(title))) {
         surveysData.push(doc);
