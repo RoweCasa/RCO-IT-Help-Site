@@ -9,12 +9,24 @@
     :root { --sb-muted: #6a5e57; }
     html  { font-size: 17px; }
 
-    /* Copy toast */
+    /* ── Role badge ── */
+    .role-badge {
+      font-size: 0.68rem; font-weight: 800; padding: 0.22rem 0.65rem;
+      border-radius: 999px; letter-spacing: 0.04em; text-transform: uppercase;
+      white-space: nowrap; display: none; /* shown by JS once role is known */
+    }
+    .role-badge[data-role]                { display: inline-block; }
+    .role-badge[data-role="it_admin"]     { background: rgba(46,204,138,0.15); color: #1aaf72; }
+    .role-badge[data-role="leadership"]   { background: rgba(95,75,60,0.12);   color: #5f4b3c; }
+    .role-badge[data-role="director"]     { background: rgba(189,153,121,0.2); color: #8d5e30; }
+    .role-badge[data-role="manager"]      { background: rgba(245,166,35,0.15); color: #b8860b; }
+    .role-badge[data-role="staff"]        { background: var(--sidebar-bg);     color: var(--sb-muted); border:1px solid var(--sb-border); }
+
+    /* ── Copy toast ── */
     .copy-toast {
       position: fixed; bottom: 1.75rem; left: 50%;
       transform: translateX(-50%) translateY(8px);
-      background: #2ecc8a; color: #fff;
-      font-size: 0.82rem; font-weight: 700;
+      background: #2ecc8a; color: #fff; font-size: 0.82rem; font-weight: 700;
       padding: 0.55rem 1.4rem; border-radius: 999px;
       box-shadow: 0 4px 16px rgba(46,204,138,0.35);
       opacity: 0; transition: opacity 0.22s, transform 0.22s;
@@ -22,33 +34,53 @@
     }
     .copy-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    /* Sidebar email button */
+    /* ── Sidebar email button ── */
     .portal-email-btn {
-      display: block; width: 100%;
-      background: none; border: none;
+      display: block; width: 100%; background: none; border: none;
       border-radius: 8px; padding: 0.4rem 0.6rem;
       font-size: 0.67rem; color: var(--sb-muted);
-      font-family: inherit; font-weight: 600;
-      cursor: pointer; text-align: center;
-      transition: all 0.18s; margin-top: 4px;
+      font-family: inherit; font-weight: 600; cursor: pointer;
+      text-align: center; transition: all 0.18s; margin-top: 4px;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
-    .portal-email-btn:hover {
-      background: var(--brand-soft);
-      color: var(--brand-brown);
-    }
+    .portal-email-btn:hover { background: var(--brand-soft); color: var(--brand-brown); }
 
-    /* Copy link button on cards */
+    /* ── Copy link icon button on cards ── */
     .card-copy-btn {
       display: inline-flex; align-items: center; justify-content: center;
-      background: none; border: none;
-      color: var(--sb-muted); padding: 0.2rem 0.35rem;
-      border-radius: 6px; font-size: 0.75rem;
-      font-family: inherit; cursor: pointer; transition: all 0.15s;
-      min-width: 24px;
+      background: none; border: none; color: var(--sb-muted);
+      padding: 0.2rem 0.35rem; border-radius: 6px; font-size: 0.75rem;
+      font-family: inherit; cursor: pointer; transition: all 0.15s; min-width: 24px;
     }
     .card-copy-btn:hover { color: var(--brand-brown); background: var(--brand-soft); }
     .card-copy-btn.disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
+
+    /* ── Completed section — organized ── */
+    .completed-type-block {
+      margin-bottom: 2rem;
+    }
+    .completed-type-header {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 0.5rem;
+      padding-bottom: 0.6rem;
+      margin-bottom: 0.9rem;
+      border-bottom: 1.5px solid var(--sb-sep);
+    }
+    .completed-type-title {
+      font-size: 0.78rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.07em; color: var(--sb-muted);
+    }
+    .completed-sheet-link {
+      display: none; /* shown by JS for IT admins only */
+      align-items: center; gap: 0.35rem;
+      font-size: 0.75rem; font-weight: 700; color: var(--brand-brown);
+      text-decoration: none;
+      background: var(--brand-soft); border: 1.5px solid var(--brand-hover-border);
+      padding: 0.28rem 0.75rem; border-radius: 7px; transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .completed-sheet-link:hover { background: var(--brand-grad); color: #fff; border-color: var(--brand-brown); }
+    .completed-sheet-link.visible { display: inline-flex; }
 
     /* ── Contact Guide Modal ── */
     .cg-overlay {
@@ -90,7 +122,7 @@
       background: rgba(220,80,60,0.07); border: 1.5px solid rgba(220,80,60,0.28);
       border-radius: 12px; padding: 1rem 1.25rem;
     }
-    .cg-emergency-head  { display: flex; align-items: center; gap: 0.55rem; font-size: 0.92rem; font-weight: 800; color: #c0392b; margin-bottom: 0.55rem; }
+    .cg-emergency-head  { font-size: 0.92rem; font-weight: 800; color: #c0392b; margin-bottom: 0.55rem; }
     .cg-emergency-phone { font-size: 1.05rem; font-weight: 800; color: #c0392b; margin-bottom: 0.65rem; }
     .cg-emergency ul    { padding-left: 1.1rem; margin: 0; display: flex; flex-direction: column; gap: 0.3rem; }
     .cg-emergency ul li { font-size: 0.82rem; color: #8b2a1f; line-height: 1.5; }
@@ -119,7 +151,7 @@
     .cg-split-head   { font-size: 0.78rem; font-weight: 800; margin-bottom: 0.5rem; }
     .cg-split-ticket .cg-split-head { color: var(--success); }
     .cg-split-call   .cg-split-head { color: #c0392b; }
-    .cg-split-card ul   { padding-left: 1rem; margin: 0; display: flex; flex-direction: column; gap: 0.3rem; }
+    .cg-split-card ul    { padding-left: 1rem; margin: 0; display: flex; flex-direction: column; gap: 0.3rem; }
     .cg-split-card ul li { font-size: 0.79rem; color: var(--sb-text); line-height: 1.45; }
     .cg-bfcm {
       background: linear-gradient(135deg, #5f4b3c 0%, #8d8173 100%);
@@ -136,6 +168,14 @@
       font-family: inherit; cursor: pointer; transition: opacity 0.18s;
     }
     .cg-close:hover { opacity: 0.88; }
+
+    /* ── No-access notice for restricted surveys ── */
+    .access-notice {
+      background: var(--sidebar-bg); border: 1.5px solid var(--sb-border);
+      border-radius: 12px; padding: 2rem; text-align: center;
+      color: var(--sb-muted); font-size: 0.875rem; display: none;
+    }
+    .access-notice.show { display: block; }
   </style>
 </head>
 <body>
@@ -165,7 +205,6 @@
         </button>
         <div class="sidebar-divider"></div>
         <button class="contact-btn" data-section="contact">✉️ Contact Us</button>
-        <!-- itsupport email button — no border, no emoji -->
         <button class="portal-email-btn"
                 title="Email itsupport@rowecasaorganics.com"
                 onclick="window.open('https://mail.google.com/mail/?view=cm&fs=1&to=itsupport%40rowecasaorganics.com','_blank')">
@@ -184,6 +223,7 @@
           <div class="topbar-desc">Submit surveys, request IT support, or reach out to our team directly.</div>
         </div>
         <div class="topbar-right">
+          <span class="role-badge" id="roleBadge"></span>
           <span class="topbar-user" id="topbarUser">Not signed in</span>
           <button class="sign-btn" id="authBtn">Sign Out</button>
         </div>
@@ -199,8 +239,10 @@
             <p>Complete your assigned surveys to help our team manage technology across the organization.</p>
             <p style="font-size:0.78rem;color:var(--sb-muted);margin-top:0.35rem">Feel free to resubmit anytime if you forgot to add something or need to make updates — each submission is saved separately.</p>
           </div>
+
+          <!-- Cards are shown/hidden by roles.js based on data-content-id -->
           <div class="cards">
-            <div class="card brown">
+            <div class="card brown" data-content-id="tech-discovery" style="display:none">
               <div class="card-top">
                 <span class="card-status status-active">Active</span>
               </div>
@@ -214,13 +256,16 @@
                 <div style="display:flex;align-items:center;gap:0.5rem">
                   <button class="card-copy-btn"
                           onclick="copyLink(getSurveyUrl('surveys/tech-discovery.html'), this)"
-                          title="Copy a direct link to this survey">
-                    🔗
-                  </button>
+                          title="Copy a direct link to this survey">🔗</button>
                   <button class="card-action" id="startSurveyBtn">Start →</button>
                 </div>
               </div>
             </div>
+          </div>
+
+          <!-- Shown if the signed-in user has no access to any survey -->
+          <div class="access-notice" id="surveysAccessNotice">
+            No surveys are currently assigned to your role. Check back soon or contact IT if you think this is an error.
           </div>
         </section>
 
@@ -232,7 +277,7 @@
             <p style="font-size:0.78rem;color:var(--sb-muted);margin-top:0.35rem">Feel free to resubmit anytime if you forgot to add something or need to make updates — each submission is saved separately.</p>
           </div>
           <div class="cards">
-            <div class="card brown">
+            <div class="card brown" data-content-id="onboarding" style="display:none">
               <div class="card-top"><span class="card-status status-draft">In Progress</span></div>
               <h3>User Onboarding Request</h3>
               <p>Submit everything IT needs to provision a new employee — role, system access, devices, and software requirements.</p>
@@ -241,7 +286,7 @@
                 <button class="card-action disabled">Coming Soon</button>
               </div>
             </div>
-            <div class="card brown">
+            <div class="card brown" data-content-id="offboarding" style="display:none">
               <div class="card-top"><span class="card-status status-draft">In Progress</span></div>
               <h3>User Offboarding Request</h3>
               <p>Capture separation details for a departing employee — access revocation, email handling, file transfer, and device return.</p>
@@ -250,7 +295,7 @@
                 <button class="card-action disabled">Coming Soon</button>
               </div>
             </div>
-            <div class="card brown">
+            <div class="card brown" data-content-id="equipment" style="display:none">
               <div class="card-top"><span class="card-status status-draft">In Progress</span></div>
               <h3>IT Equipment &amp; Software Request</h3>
               <p>Request any technology need — hardware, software, or licenses — with business justification and manager approval workflow.</p>
@@ -260,28 +305,69 @@
               </div>
             </div>
           </div>
+          <div class="access-notice" id="formsAccessNotice">
+            No forms are currently assigned to your role. Contact IT if you think this is an error.
+          </div>
         </section>
 
         <!-- ── COMPLETED ── -->
         <section class="section" id="section-completed">
           <div class="section-intro">
             <h2>My Completed Submissions</h2>
-            <p>A record of all surveys and forms you have submitted.</p>
+            <p>A record of surveys and forms you have submitted.</p>
             <div style="display:flex;align-items:center;gap:0.75rem;margin-top:0.75rem;flex-wrap:wrap">
               <button class="clear-btn" style="margin:0" id="refreshBtn">↻ Refresh</button>
-              <a href="https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID_HERE/edit"
-                 target="_blank"
-                 style="font-size:0.78rem;font-weight:700;color:var(--brand-brown);text-decoration:none;
-                        background:var(--brand-soft);border:1.5px solid var(--brand-hover-border);
-                        padding:0.38rem 0.85rem;border-radius:8px;transition:all 0.15s;
-                        display:inline-flex;align-items:center;gap:0.35rem"
-                 onmouseover="this.style.background='var(--brand-grad)';this.style.color='#fff'"
-                 onmouseout="this.style.background='var(--brand-soft)';this.style.color='var(--brand-brown)'">
-                📊 View / Edit in Google Sheets
-              </a>
             </div>
           </div>
-          <div id="completedList"></div>
+
+          <!-- Surveys subsection -->
+          <div class="completed-type-block">
+            <div class="completed-type-header">
+              <span class="completed-type-title">📋 Surveys</span>
+              <!-- Sheet links are hidden by default; JS shows them for IT admins only -->
+              <a id="sheetLink-tech-discovery"
+                 class="completed-sheet-link"
+                 href="https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID_HERE/edit"
+                 target="_blank">
+                📊 Software Inventory — Sheets
+              </a>
+            </div>
+            <div id="completedSurveysList">
+              <div class="empty-state" style="padding:1.5rem 0">
+                <p style="color:var(--sb-muted)">No survey submissions yet.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Forms subsection -->
+          <div class="completed-type-block">
+            <div class="completed-type-header">
+              <span class="completed-type-title">📝 Request Forms</span>
+              <a id="sheetLink-onboarding"
+                 class="completed-sheet-link"
+                 href="https://docs.google.com/spreadsheets/d/YOUR_ONBOARDING_SHEET_ID/edit"
+                 target="_blank">
+                📊 Onboarding — Sheets
+              </a>
+              <a id="sheetLink-offboarding"
+                 class="completed-sheet-link"
+                 href="https://docs.google.com/spreadsheets/d/YOUR_OFFBOARDING_SHEET_ID/edit"
+                 target="_blank">
+                📊 Offboarding — Sheets
+              </a>
+              <a id="sheetLink-equipment"
+                 class="completed-sheet-link"
+                 href="https://docs.google.com/spreadsheets/d/YOUR_EQUIPMENT_SHEET_ID/edit"
+                 target="_blank">
+                📊 Equipment Requests — Sheets
+              </a>
+            </div>
+            <div id="completedFormsList">
+              <div class="empty-state" style="padding:1.5rem 0">
+                <p style="color:var(--sb-muted)">No form submissions yet.</p>
+              </div>
+            </div>
+          </div>
         </section>
 
         <!-- ── KNOWLEDGE BASE ── -->
@@ -307,7 +393,6 @@
             <p>Reach out to the RCO IT team — use the form below to compose a message, or email us directly.</p>
           </div>
 
-          <!-- Summary card — email button removed, Full Guide button kept -->
           <div style="background:var(--sidebar-bg);border:1.5px solid var(--sb-border);border-radius:14px;
                       padding:1.25rem 1.5rem;margin-bottom:1.25rem;max-width:580px">
             <h3 style="font-size:0.88rem;font-weight:800;color:var(--sb-text);margin-bottom:0.6rem">How to Contact IT</h3>
@@ -326,7 +411,6 @@
             </button>
           </div>
 
-          <!-- Email compose form -->
           <div class="contact-form-wrap">
             <div class="contact-field">
               <label for="contactFrom">Your Email Address</label>
@@ -356,53 +440,24 @@
     </div>
   </div>
 
-  <!-- Copy link toast notification -->
+  <!-- Copy toast -->
   <div id="copyToast" class="copy-toast">🔗 Link copied to clipboard!</div>
 
-  <!-- ══════════════════════════════════════════════
-       HOW TO CONTACT IT — FULL GUIDE MODAL
-       ══════════════════════════════════════════════ -->
+  <!-- ── How to Contact IT Modal ── -->
   <div class="cg-overlay hidden" id="cgModal"
        onclick="if(event.target===this)this.classList.add('hidden')">
     <div class="cg-box">
-
       <h2>How to Contact IT</h2>
       <p class="cg-sub">We use tickets to ensure every issue is tracked, prioritized, and handled by the right person — without anything slipping through the cracks. Submitting through the correct channel helps us respond faster and keep operations running smoothly.</p>
-
       <div class="cg-section">
         <div class="cg-section-title">✅ Preferred Methods — Each creates a ticket automatically</div>
         <div class="cg-methods">
-          <div class="cg-method">
-            <div class="cg-method-icon">✉️</div>
-            <div class="cg-method-text">
-              <strong>Email</strong>
-              <span><a href="mailto:itsupport@rowecasaorganics.com">itsupport@rowecasaorganics.com</a></span>
-            </div>
-          </div>
-          <div class="cg-method">
-            <div class="cg-method-icon">🌐</div>
-            <div class="cg-method-text">
-              <strong>IT Portal</strong>
-              <span><a href="https://it.rowecasaorganics.com" target="_blank">it.rowecasaorganics.com</a></span>
-            </div>
-          </div>
-          <div class="cg-method">
-            <div class="cg-method-icon">💬</div>
-            <div class="cg-method-text">
-              <strong>Slack</strong>
-              <span>#rco-it-support</span>
-            </div>
-          </div>
-          <div class="cg-method">
-            <div class="cg-method-icon">🖥️</div>
-            <div class="cg-method-text">
-              <strong>System Tray Ticket Form</strong>
-              <span>Click the RCO IT Agent icon near the clock → select <em>IT Ticket Form</em> → fill in details → Save.</span>
-            </div>
-          </div>
+          <div class="cg-method"><div class="cg-method-icon">✉️</div><div class="cg-method-text"><strong>Email</strong><span><a href="mailto:itsupport@rowecasaorganics.com">itsupport@rowecasaorganics.com</a></span></div></div>
+          <div class="cg-method"><div class="cg-method-icon">🌐</div><div class="cg-method-text"><strong>IT Portal</strong><span><a href="https://it.rowecasaorganics.com" target="_blank">it.rowecasaorganics.com</a></span></div></div>
+          <div class="cg-method"><div class="cg-method-icon">💬</div><div class="cg-method-text"><strong>Slack</strong><span>#rco-it-support</span></div></div>
+          <div class="cg-method"><div class="cg-method-icon">🖥️</div><div class="cg-method-text"><strong>System Tray Ticket Form</strong><span>Click the RCO IT Agent icon near the clock → select <em>IT Ticket Form</em> → fill in details → Save.</span></div></div>
         </div>
       </div>
-
       <div class="cg-section">
         <div class="cg-section-title">🚨 Emergencies — Critical Issues Only</div>
         <div class="cg-emergency">
@@ -418,7 +473,6 @@
           </ul>
         </div>
       </div>
-
       <div class="cg-section">
         <div class="cg-section-title">📝 What to Include in Your Ticket</div>
         <div class="cg-include-grid">
@@ -432,25 +486,21 @@
           <div class="cg-include-item">Anyone else who needs to be notified</div>
         </div>
       </div>
-
       <div class="cg-section">
         <div class="cg-section-title">🧩 Good vs. Bad Ticket Examples</div>
         <div class="cg-examples">
           <div class="cg-ex-card cg-ex-good">
             <div class="cg-ex-label">✅ Good Ticket</div>
-            <p><strong>Subject:</strong> Can't print labels on Station 14<br/><br/>
-            While printing shipping labels in Chrome, I get "Printer unreachable." Started at 9:40 AM. Rebooted computer and printer — error persists. Model: Zebra ZD421. We can still print to Station 12. Screenshot attached.</p>
+            <p><strong>Subject:</strong> Can't print labels on Station 14<br/><br/>While printing shipping labels in Chrome, I get "Printer unreachable." Started at 9:40 AM. Rebooted computer and printer — error persists. Model: Zebra ZD421. We can still print to Station 12. Screenshot attached.</p>
             <p class="cg-ex-why">Clear, detailed, and immediately actionable.</p>
           </div>
           <div class="cg-ex-card cg-ex-bad">
             <div class="cg-ex-label">❌ Bad Ticket</div>
-            <p><strong>Subject:</strong> Printer broken<br/><br/>
-            Printer doesn't work. Please fix ASAP.</p>
+            <p><strong>Subject:</strong> Printer broken<br/><br/>Printer doesn't work. Please fix ASAP.</p>
             <p class="cg-ex-why">Missing: location, device info, error details, steps already tried.</p>
           </div>
         </div>
       </div>
-
       <div class="cg-section">
         <div class="cg-section-title">📞 When to Ticket vs. When to Call</div>
         <div class="cg-split">
@@ -474,11 +524,8 @@
             </ul>
           </div>
         </div>
-        <p style="font-size:0.8rem;color:var(--sb-muted);margin-top:0.75rem;font-style:italic">
-          Simple rule: If it affects everyone or critical work stops — call us.
-        </p>
+        <p style="font-size:0.8rem;color:var(--sb-muted);margin-top:0.75rem;font-style:italic">Simple rule: If it affects everyone or critical work stops — call us.</p>
       </div>
-
       <div class="cg-section" style="margin-bottom:0">
         <div class="cg-bfcm">
           <div class="cg-bfcm-icon">🔺</div>
@@ -488,26 +535,24 @@
           </div>
         </div>
       </div>
-
       <button class="cg-close" onclick="document.getElementById('cgModal').classList.add('hidden')">Got it — Close Guide</button>
     </div>
   </div>
 
+  <!-- ═══════════════════════════════════════════════
+       UTILITY SCRIPTS (non-module, runs immediately)
+       ═══════════════════════════════════════════════ -->
   <script>
-    /* ── URL helper ── */
     function getSurveyUrl(path) {
       var href = window.location.href.split('?')[0].split('#')[0];
       var base = href.endsWith('/') ? href : href.substring(0, href.lastIndexOf('/') + 1);
       return base + path;
     }
-
-    /* ── Copy link with toast ── */
     function copyLink(url, btn) {
       var done = function() {
         showToast();
         var orig = btn.innerHTML;
-        btn.innerHTML = '✓';
-        btn.style.color = 'var(--success)';
+        btn.innerHTML = '✓'; btn.style.color = 'var(--success)';
         setTimeout(function() { btn.innerHTML = orig; btn.style.color = ''; }, 2000);
       };
       if (navigator.clipboard) {
@@ -517,8 +562,8 @@
     function fallbackCopy(url) {
       var el = document.createElement('textarea');
       el.value = url; el.style.position = 'fixed'; el.style.opacity = '0';
-      document.body.appendChild(el); el.select();
-      document.execCommand('copy'); document.body.removeChild(el);
+      document.body.appendChild(el); el.select(); document.execCommand('copy');
+      document.body.removeChild(el);
     }
     function showToast() {
       var t = document.getElementById('copyToast');
@@ -527,6 +572,75 @@
     }
   </script>
 
+  <!-- ═══════════════════════════════════════════════
+       ROLE-BASED ACCESS  (module — imports roles.js)
+       ═══════════════════════════════════════════════ -->
+  <script type="module">
+    import { initializeApp, getApps, getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+    import { getAuth, onAuthStateChanged }     from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+    import {
+      getRole, getRoleLabel,
+      canAccess, canViewSheets,
+      CONTENT_CONFIG
+    } from './roles.js';
+
+    const FIREBASE_CONFIG = {
+      apiKey:'AIzaSyBRKBzxTYzBnBHo-YY8fSxTSSkM3uyujmc',
+      authDomain:'ithelpsite-4ec53.firebaseapp.com',
+      projectId:'ithelpsite-4ec53',
+      storageBucket:'ithelpsite-4ec53.firebasestorage.app',
+      messagingSenderId:'893459212285',
+      appId:'1:893459212285:web:194adf30886cbb28c21b94'
+    };
+    const fbApp = getApps().length ? getApp() : initializeApp(FIREBASE_CONFIG);
+    const auth  = getAuth(fbApp);
+
+    onAuthStateChanged(auth, user => {
+      if (!user || !user.email.endsWith('@rowecasaorganics.com')) return;
+      const email = user.email;
+      const role  = getRole(email);
+
+      // 1. Role badge in topbar
+      const badge = document.getElementById('roleBadge');
+      if (badge) { badge.textContent = getRoleLabel(email); badge.dataset.role = role; }
+
+      // 2. Pre-fill contact form
+      const cf = document.getElementById('contactFrom');
+      if (cf && !cf.value) cf.value = email;
+
+      // 3. Show survey/form cards based on access
+      let surveysVisible = 0, formsVisible = 0;
+      document.querySelectorAll('[data-content-id]').forEach(card => {
+        const id  = card.dataset.contentId;
+        const cfg = [...CONTENT_CONFIG.surveys, ...CONTENT_CONFIG.forms].find(c => c.id === id);
+        if (!cfg) return;
+        const show = canAccess(email, id);
+        card.style.display = show ? '' : 'none';
+        if (show && CONTENT_CONFIG.surveys.some(s => s.id === id)) surveysVisible++;
+        if (show && CONTENT_CONFIG.forms.some(f => f.id === id))   formsVisible++;
+      });
+
+      // Show "no access" notices if nothing is visible
+      const sn = document.getElementById('surveysAccessNotice');
+      const fn = document.getElementById('formsAccessNotice');
+      if (sn) sn.classList.toggle('show', surveysVisible === 0);
+      if (fn) fn.classList.toggle('show', formsVisible === 0);
+
+      // 4. Google Sheets links — IT admin only
+      if (canViewSheets(email)) {
+        document.querySelectorAll('.completed-sheet-link').forEach(el => el.classList.add('visible'));
+      }
+
+      // Expose role for app.js renderCompleted to use
+      window._userEmail = email;
+      window._userRole  = role;
+      window._canViewSheets = canViewSheets(email);
+      window._contentConfig = CONTENT_CONFIG;
+    });
+  </script>
+
+  <!-- app.js handles auth state, nav, contact form, and renderCompleted -->
   <script type="module" src="app.js"></script>
+
 </body>
 </html>
