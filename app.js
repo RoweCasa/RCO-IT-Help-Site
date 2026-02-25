@@ -34,7 +34,6 @@ onAuthStateChanged(auth, user => {
     return;
   }
   currentUser = user;
-
   const userEl = document.getElementById('topbarUser');
   if (userEl) userEl.textContent = user.email;
 });
@@ -44,7 +43,7 @@ document.getElementById('authBtn')?.addEventListener('click', () => {
   signOut(auth).then(() => window.location.replace('login.html'));
 });
 
-// ── Sidebar nav — wire all [data-section] buttons ──────────────────────────
+// ── Sidebar nav ─────────────────────────────────────────────────────────────
 document.querySelectorAll('[data-section]').forEach(btn => {
   btn.addEventListener('click', () => {
     const name = btn.dataset.section;
@@ -66,69 +65,152 @@ document.getElementById('refreshBtn')?.addEventListener('click', () => {
   renderCompleted();
 });
 
-// ── Completed submissions ───────────────────────────────────────────────────
-// Populates the Surveys and Forms subsections in the Completed tab separately.
-// Google Sheets links are shown/hidden by the roles module in index.html.
-// Expose on window so the toggle buttons in index.html can call it directly.
+// ── Expose renderCompleted for toggle buttons ───────────────────────────────
 window._renderCompleted = renderCompleted;
 
+// ── Helpers ─────────────────────────────────────────────────────────────────
+function showListError(msg) {
+  const html = `<div class="empty-state" style="padding:1.5rem 0">
+    <div class="empty-icon">⚠️</div>
+    <h3>Could not load submissions</h3>
+    <p style="color:var(--sb-muted)">${msg}</p>
+  </div>`;
+  const sl = document.getElementById('completedSurveysList');
+  const fl = document.getElementById('completedFormsList');
+  if (sl) sl.innerHTML = html;
+  if (fl) fl.innerHTML = html;
+}
+
+const PAGE_SIZE = 6;
+
+function renderCards(docs, containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  if (!docs.length) {
+    container.innerHTML = `<div class="empty-state" style="padding:1.5rem 0">
+      <div class="empty-icon">📭</div>
+      <p style="color:var(--sb-muted)">No submissions yet.</p>
+    </div>`;
+    return;
+  }
+
+  function buildCard(doc) {
+    const s    = doc.data();
+    const date = s.submittedAt?.toDate
+      ? s.submittedAt.toDate().toLocaleString('en-US', {
+          month: 'short', day: 'numeric', year: 'numeric',
+          hour: 'numeric', minute: '2-digit'
+        })
+      : '—';
+    return `<div class="card brown completed-card">
+      <div class="card-top">
+        <span class="card-status status-active">Submitted</span>
+      </div>
+      <h3>${s.title || 'Submission'}</h3>
+      <p style="font-size:0.82rem;line-height:1.7">
+        <strong>Department:</strong> ${s.dept      || '—'}<br/>
+        <strong>Submitted:</strong>  ${date}<br/>
+        <strong>By:</strong>         ${s.userEmail || '—'}
+      </p>
+      <div class="card-meta">
+        <button class="card-action" data-url="${s.url || '#'}">Take Again →</button>
+      </div>
+    </div>`;
+  }
+
+  const visible  = docs.slice(0, PAGE_SIZE);
+  const overflow = docs.slice(PAGE_SIZE);
+
+  let html = `<div class="cards">${visible.map(buildCard).join('')}</div>`;
+
+  if (overflow.length) {
+    html += `
+      <div id="${containerId}-more" class="cards" style="display:none">
+        ${overflow.map(buildCard).join('')}
+      </div>
+      <div style="text-align:center;margin-top:1rem" id="${containerId}-more-wrap">
+        <button class="clear-btn" style="font-size:0.82rem;font-weight:700"
+                id="${containerId}-showmore">
+          Show ${overflow.length} more submission${overflow.length !== 1 ? 's' : ''} ↓
+        </button>
+      </div>`;
+  }
+
+  container.innerHTML = html;
+
+  document.getElementById(`${containerId}-showmore`)?.addEventListener('click', () => {
+    document.getElementById(`${containerId}-more`).style.display = '';
+    document.getElementById(`${containerId}-more-wrap`).style.display = 'none';
+  });
+
+  container.querySelectorAll('[data-url]').forEach(btn => {
+    btn.addEventListener('click', () => window.location.href = btn.dataset.url);
+  });
+}
+
+// ── Completed submissions ───────────────────────────────────────────────────
 async function renderCompleted() {
   const surveysList = document.getElementById('completedSurveysList');
   const formsList   = document.getElementById('completedFormsList');
   if (!surveysList || !formsList) return;
 
-  const spinner = `
-    <div class="empty-state" style="padding:1.5rem 0">
-      <div class="login-spinner" style="margin:1rem auto"></div>
-      <p style="color:var(--sb-muted)">Loading submissions...</p>
-    </div>`;
+  const spinner = `<div class="empty-state" style="padding:1.5rem 0">
+    <div class="login-spinner" style="margin:1rem auto"></div>
+    <p style="color:var(--sb-muted)">Loading submissions...</p>
+  </div>`;
   surveysList.innerHTML = spinner;
   formsList.innerHTML   = spinner;
 
-  // Wait for auth to resolve if currentUser isn't set yet
+  // ── Wait for auth if needed (max 6s) ──────────────────────────────────────
   if (!currentUser) {
     await new Promise(resolve => {
       const unsub = onAuthStateChanged(auth, user => {
         if (user) { currentUser = user; unsub(); resolve(); }
       });
-      setTimeout(resolve, 5000); // fallback timeout
+      setTimeout(resolve, 6000);
     });
   }
 
   if (!currentUser) {
-    const msg = `<div class="empty-state" style="padding:1.5rem 0">
-      <p style="color:var(--sb-muted)">Please sign in to view your submissions.</p>
-    </div>`;
-    surveysList.innerHTML = msg;
-    formsList.innerHTML   = msg;
+    showListError('Not signed in. Please refresh the page.');
     return;
   }
 
-  console.log('renderCompleted — currentUser:', currentUser.email);
+  // ── Wait for roles module to set window._canViewAllSubmissions (max 4s) ───
+  // Roles module fires its own onAuthStateChanged which sets this flag.
+  if (window._canViewAllSubmissions === undefined) {
+    await new Promise(resolve => {
+      let attempts = 0;
+      const interval = setInterval(() => {
+        attempts++;
+        if (window._canViewAllSubmissions !== undefined || attempts >= 40) {
+          clearInterval(interval);
+          resolve();
+        }
+      }, 100);
+    });
+  }
 
   try {
-    // IT admins see all submissions when toggled to "All Submissions",
-    // otherwise always show only their own.
-    // window._submissionsView and window._canViewAllSubmissions are set by index.html.
-    let q;
-    if (window._canViewAllSubmissions && window._submissionsView === 'all') {
-      q = query(collection(db, 'submissions'));
-    } else {
-      q = query(collection(db, 'submissions'), where('uid', '==', currentUser.uid));
-    }
+    // IT admins in "Everyone's" mode query all submissions;
+    // everyone else (and IT in "My Submissions" mode) queries only their own.
+    const viewAll = window._canViewAllSubmissions === true
+                    && window._submissionsView === 'all';
+
+    const q = viewAll
+      ? query(collection(db, 'submissions'))
+      : query(collection(db, 'submissions'), where('uid', '==', currentUser.uid));
 
     const snap = await getDocs(q);
-    console.log('Firestore returned', snap.size, 'docs');
+    console.log(`renderCompleted — ${snap.size} docs, viewAll=${viewAll}`);
 
-    // ── Sort submissions into Surveys vs Forms using CONTENT_CONFIG from roles.js
-    // window._contentConfig is exposed by the roles module in index.html.
+    // ── Sort into surveys vs forms ────────────────────────────────────────
     const cfg          = window._contentConfig || { surveys: [], forms: [] };
     const surveyTitles = cfg.surveys.map(s => s.title.toLowerCase());
     const formTitles   = cfg.forms.map(f => f.title.toLowerCase());
 
-    const surveysData = [];
-    const formsData   = [];
-    const otherData   = []; // anything that doesn't match a known title goes here
+    const surveysData = [], formsData = [], otherData = [];
 
     snap.docs.forEach(doc => {
       const title = (doc.data().title || '').toLowerCase();
@@ -137,91 +219,17 @@ async function renderCompleted() {
       } else if (formTitles.some(t => title.includes(t) || t.includes(title))) {
         formsData.push(doc);
       } else {
-        otherData.push(doc); // bucket unknown types into surveys for now
+        otherData.push(doc);
       }
     });
 
-    // ── Render a set of docs into card HTML with "show more" after 6 ────────
-    const PAGE_SIZE = 6;
-    function renderCards(docs, containerId) {
-      const container = document.getElementById(containerId);
-      if (!container) return;
-
-      if (!docs.length) {
-        container.innerHTML = `<div class="empty-state" style="padding:1.5rem 0">
-          <div class="empty-icon">📭</div>
-          <p style="color:var(--sb-muted)">No submissions yet.</p>
-        </div>`;
-        return;
-      }
-
-      function buildCards(subset) {
-        return subset.map(doc => {
-          const s    = doc.data();
-          const date = s.submittedAt?.toDate
-            ? s.submittedAt.toDate().toLocaleString('en-US', {
-                month: 'short', day: 'numeric', year: 'numeric',
-                hour: 'numeric', minute: '2-digit'
-              })
-            : '—';
-          return `<div class="card brown completed-card">
-            <div class="card-top">
-              <span class="card-status status-active">Submitted</span>
-            </div>
-            <h3>${s.title || 'Submission'}</h3>
-            <p style="font-size:0.82rem;line-height:1.7">
-              <strong>Department:</strong> ${s.dept      || '—'}<br/>
-              <strong>Submitted:</strong>  ${date}<br/>
-              <strong>By:</strong>         ${s.userEmail || '—'}
-            </p>
-            <div class="card-meta">
-              <button class="card-action" data-url="${s.url || '#'}">Take Again →</button>
-            </div>
-          </div>`;
-        }).join('');
-      }
-
-      const visible  = docs.slice(0, PAGE_SIZE);
-      const overflow = docs.slice(PAGE_SIZE);
-
-      let html = `<div class="cards" id="${containerId}-cards">${buildCards(visible)}</div>`;
-
-      if (overflow.length) {
-        html += `<div id="${containerId}-more" class="cards" style="display:none">${buildCards(overflow)}</div>
-          <div style="text-align:center;margin-top:1rem">
-            <button class="clear-btn" id="${containerId}-showmore"
-                    style="font-size:0.82rem;font-weight:700">
-              Show ${overflow.length} more submission${overflow.length !== 1 ? 's' : ''} ↓
-            </button>
-          </div>`;
-      }
-
-      container.innerHTML = html;
-
-      // Wire "show more"
-      const showMoreBtn = document.getElementById(`${containerId}-showmore`);
-      if (showMoreBtn) {
-        showMoreBtn.addEventListener('click', () => {
-          document.getElementById(`${containerId}-more`).style.display = '';
-          showMoreBtn.parentElement.style.display = 'none';
-        });
-      }
-
-      // Wire "Take Again" buttons
-      container.querySelectorAll('[data-url]').forEach(btn => {
-        btn.addEventListener('click', () => window.location.href = btn.dataset.url);
-      });
-    }
+    // Unknown types bucket into Surveys
+    renderCards([...surveysData, ...otherData], 'completedSurveysList');
+    renderCards(formsData, 'completedFormsList');
 
   } catch (err) {
     console.error('Firestore error:', err);
-    const errHtml = `<div class="empty-state" style="padding:1.5rem 0">
-      <div class="empty-icon">⚠️</div>
-      <h3>Could not load submissions</h3>
-      <p style="color:var(--sb-muted)">${err.message}</p>
-    </div>`;
-    surveysList.innerHTML = errHtml;
-    formsList.innerHTML   = errHtml;
+    showListError(err.message);
   }
 }
 
