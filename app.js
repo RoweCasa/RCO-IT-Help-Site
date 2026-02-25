@@ -141,51 +141,77 @@ async function renderCompleted() {
       }
     });
 
-    // ── Render a set of docs into card HTML ──────────────────────────────────
-    function renderCards(docs) {
+    // ── Render a set of docs into card HTML with "show more" after 6 ────────
+    const PAGE_SIZE = 6;
+    function renderCards(docs, containerId) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+
       if (!docs.length) {
-        return `<div class="empty-state" style="padding:1.5rem 0">
+        container.innerHTML = `<div class="empty-state" style="padding:1.5rem 0">
           <div class="empty-icon">📭</div>
           <p style="color:var(--sb-muted)">No submissions yet.</p>
         </div>`;
+        return;
       }
 
-      return `<div class="cards">` + docs.map(doc => {
-        const s    = doc.data();
-        const date = s.submittedAt?.toDate
-          ? s.submittedAt.toDate().toLocaleString('en-US', {
-              month: 'short', day: 'numeric', year: 'numeric',
-              hour: 'numeric', minute: '2-digit'
-            })
-          : '—';
+      function buildCards(subset) {
+        return subset.map(doc => {
+          const s    = doc.data();
+          const date = s.submittedAt?.toDate
+            ? s.submittedAt.toDate().toLocaleString('en-US', {
+                month: 'short', day: 'numeric', year: 'numeric',
+                hour: 'numeric', minute: '2-digit'
+              })
+            : '—';
+          return `<div class="card brown completed-card">
+            <div class="card-top">
+              <span class="card-status status-active">Submitted</span>
+            </div>
+            <h3>${s.title || 'Submission'}</h3>
+            <p style="font-size:0.82rem;line-height:1.7">
+              <strong>Department:</strong> ${s.dept      || '—'}<br/>
+              <strong>Submitted:</strong>  ${date}<br/>
+              <strong>By:</strong>         ${s.userEmail || '—'}
+            </p>
+            <div class="card-meta">
+              <button class="card-action" data-url="${s.url || '#'}">Take Again →</button>
+            </div>
+          </div>`;
+        }).join('');
+      }
 
-        return `<div class="card brown completed-card">
-          <div class="card-top">
-            <span class="card-status status-active">Submitted</span>
-          </div>
-          <h3>${s.title || 'Submission'}</h3>
-          <p style="font-size:0.82rem;line-height:1.7">
-            <strong>Department:</strong> ${s.dept      || '—'}<br/>
-            <strong>Submitted:</strong>  ${date}<br/>
-            <strong>By:</strong>         ${s.userEmail || '—'}
-          </p>
-          <div class="card-meta">
-            <button class="card-action" data-url="${s.url || '#'}">Take Again →</button>
-          </div>
-        </div>`;
-      }).join('') + `</div>`;
-    }
+      const visible  = docs.slice(0, PAGE_SIZE);
+      const overflow = docs.slice(PAGE_SIZE);
 
-    // Render — unknown submissions get bucketed into the Surveys section
-    surveysList.innerHTML = renderCards([...surveysData, ...otherData]);
-    formsList.innerHTML   = renderCards(formsData);
+      let html = `<div class="cards" id="${containerId}-cards">${buildCards(visible)}</div>`;
 
-    // Wire "Take Again" buttons
-    [surveysList, formsList].forEach(list => {
-      list.querySelectorAll('[data-url]').forEach(btn => {
+      if (overflow.length) {
+        html += `<div id="${containerId}-more" class="cards" style="display:none">${buildCards(overflow)}</div>
+          <div style="text-align:center;margin-top:1rem">
+            <button class="clear-btn" id="${containerId}-showmore"
+                    style="font-size:0.82rem;font-weight:700">
+              Show ${overflow.length} more submission${overflow.length !== 1 ? 's' : ''} ↓
+            </button>
+          </div>`;
+      }
+
+      container.innerHTML = html;
+
+      // Wire "show more"
+      const showMoreBtn = document.getElementById(`${containerId}-showmore`);
+      if (showMoreBtn) {
+        showMoreBtn.addEventListener('click', () => {
+          document.getElementById(`${containerId}-more`).style.display = '';
+          showMoreBtn.parentElement.style.display = 'none';
+        });
+      }
+
+      // Wire "Take Again" buttons
+      container.querySelectorAll('[data-url]').forEach(btn => {
         btn.addEventListener('click', () => window.location.href = btn.dataset.url);
       });
-    });
+    }
 
   } catch (err) {
     console.error('Firestore error:', err);
