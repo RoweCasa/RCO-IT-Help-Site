@@ -77,6 +77,8 @@ const MEMBERS = {
     'darcie.snyder@rowecasaorganics.com',       // Darcie Snyder      — Director of Night Operations
     'laura@rowecasaorganics.com',               // Laura Williams     — Executive Director of R&D
     'krystle@rowecasaorganics.com',             // Krystle Wright     — Creative Director
+    'kevin.ludwig@rowecasaorganics.com',        // Kevin Ludwig       — Director of Product Innovation
+    'cammie.mccarty@rowecasaorganics.com',      // Cammie McCarty     — Director of Accounting
   ],
 
   // ── MANAGERS & SUPERVISORS ──────────────────────────────────────────────────
@@ -134,16 +136,26 @@ const MEMBERS = {
 // CONTENT CONFIGURATION
 // Defines every survey and form, who can see it, and where its Sheet lives.
 // ─────────────────────────────────────────────────────────────────────────────
+// ── ACCESS LEVEL REFERENCE ────────────────────────────────────────────────
+// When you're ready to restrict a survey or form, change its minRole to one of:
+//   'staff'      → everyone with an @rowecasaorganics.com account (default)
+//   'manager'    → managers, supervisors, directors, leadership, IT
+//   'director'   → directors, leadership, IT
+//   'leadership' → owners + C-suite + IT
+//   'it_admin'   → IT team only
+//
+// Users below the minRole will NOT see the card at all — it's fully hidden.
+// ─────────────────────────────────────────────────────────────────────────────
 export const CONTENT_CONFIG = {
   surveys: [
     {
       id:       'tech-discovery',
       title:    'RCO IT Software Inventory',
-      minRole:  'manager',   // manager and above can see and fill this out
+      minRole:  'staff',   // ← open to everyone for now; tighten when ready
       sheetUrl: 'https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID_HERE/edit',
       url:      'surveys/tech-discovery.html',
     },
-    // Add future surveys here:
+    // Add future surveys here — example:
     // { id: 'next-survey', title: '...', minRole: 'staff', sheetUrl: '...', url: '...' },
   ],
 
@@ -151,21 +163,21 @@ export const CONTENT_CONFIG = {
     {
       id:       'onboarding',
       title:    'User Onboarding Request',
-      minRole:  'manager',
+      minRole:  'staff',   // ← open to everyone for now
       sheetUrl: 'https://docs.google.com/spreadsheets/d/YOUR_ONBOARDING_SHEET_ID/edit',
-      url:      null, // set to path when live
+      url:      null,      // set to path once the form goes live
     },
     {
       id:       'offboarding',
       title:    'User Offboarding Request',
-      minRole:  'manager',
+      minRole:  'staff',   // ← open to everyone for now
       sheetUrl: 'https://docs.google.com/spreadsheets/d/YOUR_OFFBOARDING_SHEET_ID/edit',
       url:      null,
     },
     {
       id:       'equipment',
       title:    'IT Equipment & Software Request',
-      minRole:  'staff',   // any employee can request equipment
+      minRole:  'staff',
       sheetUrl: 'https://docs.google.com/spreadsheets/d/YOUR_EQUIPMENT_SHEET_ID/edit',
       url:      null,
     },
