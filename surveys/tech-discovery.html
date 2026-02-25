@@ -6,26 +6,30 @@
   <title>RCO IT Software Inventory</title>
   <link rel="stylesheet" href="../styles.css"/>
   <style>
+    /* ── Global overrides: darker muted + font size +1 ── */
+    :root { --sb-muted: #6a5e57; }
+    html  { font-size: 17px; }
+
     .step { display: none; }
     .step.active { display: block; }
 
     .step-header { margin-bottom: 1.75rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--sb-sep); }
-    .step-header h2 { font-size: 1.3rem; font-weight: 800; color: var(--sb-text); margin-bottom: 0.3rem; }
-    .step-header p  { font-size: 0.875rem; color: var(--sb-muted); line-height: 1.6; }
+    .step-header h2 { font-size: 1.35rem; font-weight: 800; color: var(--sb-text); margin-bottom: 0.3rem; }
+    .step-header p  { font-size: 0.9rem; color: var(--sb-muted); line-height: 1.6; }
 
     .howto-steps { display: flex; flex-direction: column; gap: 0.75rem; margin: 1.25rem 0 1.75rem; }
     .howto-step { display: flex; gap: 1rem; align-items: flex-start; background: var(--sidebar-bg); border: 1.5px solid var(--sb-border); border-radius: 12px; padding: 0.9rem 1.1rem; }
     .howto-step-num { width: 28px; height: 28px; border-radius: 50%; background: var(--brand-grad); color: #fff; font-size: 0.78rem; font-weight: 800; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-    .howto-step-text strong { display: block; font-size: 0.875rem; color: var(--sb-text); margin-bottom: 0.2rem; }
-    .howto-step-text span { font-size: 0.8rem; color: var(--sb-muted); line-height: 1.5; }
+    .howto-step-text strong { display: block; font-size: 0.9rem; color: var(--sb-text); margin-bottom: 0.2rem; }
+    .howto-step-text span   { font-size: 0.82rem; color: var(--sb-muted); line-height: 1.5; }
 
     .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; max-width: 540px; }
     @media(max-width:600px){ .info-grid { grid-template-columns: 1fr; } }
     .field-wrap { display: flex; flex-direction: column; gap: 0.35rem; }
-    .field-wrap label { font-size: 0.82rem; font-weight: 700; color: var(--sb-text); }
+    .field-wrap label { font-size: 0.86rem; font-weight: 700; color: var(--sb-text); }
     .field-wrap input, .field-wrap select {
       background: var(--sidebar-bg); border: 1.5px solid var(--sb-border); border-radius: 9px;
-      padding: 0.6rem 0.85rem; font-size: 0.875rem; font-family: inherit; color: var(--sb-text);
+      padding: 0.6rem 0.85rem; font-size: 0.9rem; font-family: inherit; color: var(--sb-text);
       outline: none; width: 100%; transition: border-color 0.15s, box-shadow 0.15s;
     }
     .field-wrap input:focus, .field-wrap select:focus {
@@ -33,9 +37,9 @@
     }
 
     .sw-table-wrap { overflow-x: auto; margin-bottom: 1rem; }
-    .sw-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; table-layout: fixed; }
+    .sw-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; table-layout: fixed; }
     .sw-table thead th {
-      text-align: left; font-size: 0.68rem; font-weight: 800; text-transform: uppercase;
+      text-align: left; font-size: 0.73rem; font-weight: 800; text-transform: uppercase;
       letter-spacing: 0.05em; color: var(--sb-muted); padding: 0 0.75rem 0.65rem;
       border-bottom: 1.5px solid var(--sb-sep);
     }
@@ -44,7 +48,7 @@
 
     .sw-name-input {
       background: transparent; border: none; outline: none;
-      font-size: 0.82rem; font-weight: 700; font-family: inherit;
+      font-size: 0.85rem; font-weight: 700; font-family: inherit;
       color: var(--sb-text); width: 100%;
       border-bottom: 1.5px dashed var(--sb-border); padding-bottom: 2px;
       transition: border-color 0.15s; display: block;
@@ -56,23 +60,23 @@
     .sev-dot  { width: 9px; height: 9px; border-radius: 50%; background: var(--sb-sep); }
     .sev-dot.on { background: var(--brand-brown); }
 
-    .pill-sm { font-size: 0.68rem; font-weight: 700; padding: 0.18rem 0.5rem; border-radius: 999px; white-space: nowrap; }
+    .pill-sm  { font-size: 0.72rem; font-weight: 700; padding: 0.18rem 0.5rem; border-radius: 999px; white-space: nowrap; }
     .pill-yes { background: var(--success-soft); color: var(--success); }
     .pill-no  { background: rgba(220,80,60,0.08); color: #c0392b; }
     .pill-na  { background: var(--sidebar-bg); color: var(--sb-muted); border: 1px solid var(--sb-border); }
 
     .edit-btn {
-      font-size: 0.7rem; font-weight: 700; font-family: inherit; cursor: pointer;
+      font-size: 0.73rem; font-weight: 700; font-family: inherit; cursor: pointer;
       padding: 0.28rem 1.1rem; border-radius: 6px; white-space: nowrap;
       background: var(--brand-soft); border: 1.5px solid var(--brand-hover-border);
       color: var(--brand-brown); transition: all 0.15s; line-height: 1.4;
     }
-    .edit-btn:hover { background: var(--brand-grad); color: #fff; border-color: var(--brand-brown); }
-    .edit-btn.done { background: var(--brand-soft); border-color: var(--brand-hover-border); color: var(--brand-brown); }
-    .edit-btn.done:hover { background: var(--brand-grad); color: #fff; border-color: var(--brand-brown); }
+    .edit-btn:hover       { background: var(--brand-grad); color: #fff; border-color: var(--brand-brown); }
+    .edit-btn.done        { background: var(--brand-soft); border-color: var(--brand-hover-border); color: var(--brand-brown); }
+    .edit-btn.done:hover  { background: var(--brand-grad); color: #fff; border-color: var(--brand-brown); }
 
     .remove-btn {
-      font-size: 0.7rem; font-weight: 700; font-family: inherit; cursor: pointer;
+      font-size: 0.72rem; font-weight: 700; font-family: inherit; cursor: pointer;
       padding: 0.25rem 0.5rem; border-radius: 6px; margin-left: 0.6rem;
       background: none; border: 1.5px solid var(--sb-border); color: var(--sb-muted);
       transition: all 0.15s; line-height: 1.4;
@@ -83,7 +87,7 @@
       width: 100%; padding: 0.8rem; margin-top: 0.25rem;
       border: 2px dashed var(--sb-border); border-radius: 12px;
       background: none; color: var(--sb-muted);
-      font-size: 0.875rem; font-weight: 700; font-family: inherit;
+      font-size: 0.9rem; font-weight: 700; font-family: inherit;
       cursor: pointer; transition: all 0.18s;
     }
     .add-sw-btn:hover { border-color: var(--brand-hover-border); color: var(--brand-brown); background: var(--brand-soft); }
@@ -93,105 +97,161 @@
     .details-back {
       display: inline-flex; align-items: center; gap: 0.5rem;
       background: none; border: none; color: var(--sb-muted);
-      font-family: inherit; font-size: 0.82rem; font-weight: 700;
+      font-family: inherit; font-size: 0.85rem; font-weight: 700;
       cursor: pointer; padding: 0; margin-bottom: 1.5rem; transition: color 0.15s;
     }
     .details-back:hover { color: var(--brand-brown); }
     .details-context { background: var(--sidebar-bg); border: 1.5px solid var(--sb-border); border-radius: 12px; padding: 0.9rem 1.25rem; margin-bottom: 1.75rem; }
     .details-context-name { font-size: 1.1rem; font-weight: 800; color: var(--sb-text); }
-    .details-context-sub  { font-size: 0.78rem; color: var(--sb-muted); margin-top: 0.15rem; }
+    .details-context-sub  { font-size: 0.8rem; color: var(--sb-muted); margin-top: 0.15rem; }
 
     .detail-q { margin-bottom: 1.5rem; }
-    .detail-q label { display: block; font-size: 0.95rem; font-weight: 700; color: var(--sb-text); margin-bottom: 0.2rem; }
-    .detail-q .q-sub { font-size: 0.8rem; color: var(--sb-muted); margin-bottom: 0.65rem; display: block; }
+    .detail-q label      { display: block; font-size: 0.98rem; font-weight: 700; color: var(--sb-text); margin-bottom: 0.2rem; }
+    .detail-q .q-sub     { font-size: 0.82rem; color: var(--sb-muted); margin-bottom: 0.65rem; display: block; }
 
     .pill-group { display: flex; gap: 0.4rem; flex-wrap: wrap; }
     .pill-btn {
       padding: 0.42rem 1rem; border-radius: 999px;
       border: 1.5px solid var(--sb-border); background: var(--panel-bg);
-      color: var(--sb-text); font-size: 0.82rem; font-weight: 600;
+      color: var(--sb-text); font-size: 0.85rem; font-weight: 600;
       font-family: inherit; cursor: pointer; transition: all 0.15s;
     }
-    .pill-btn:hover { border-color: var(--brand-hover-border); }
+    .pill-btn:hover    { border-color: var(--brand-hover-border); }
     .pill-btn.selected { background: var(--brand-grad); border-color: var(--brand-brown); color: #fff; }
 
     .sev-group { display: flex; gap: 0.5rem; align-items: center; }
     .sev-btn {
-      width: 42px; height: 42px; border-radius: 10px;
+      width: 44px; height: 44px; border-radius: 10px;
       border: 1.5px solid var(--sb-border); background: var(--panel-bg);
-      font-size: 0.9rem; font-weight: 800; font-family: inherit; color: var(--sb-muted);
+      font-size: 0.95rem; font-weight: 800; font-family: inherit; color: var(--sb-muted);
       cursor: pointer; transition: all 0.15s; display: flex; align-items: center; justify-content: center;
     }
-    .sev-btn:hover { border-color: var(--brand-hover-border); color: var(--brand-brown); }
+    .sev-btn:hover    { border-color: var(--brand-hover-border); color: var(--brand-brown); }
     .sev-btn.selected { background: var(--brand-grad); border-color: var(--brand-brown); color: #fff; }
-    .sev-labels { display: flex; justify-content: space-between; font-size: 0.68rem; color: var(--sb-muted); margin-top: 0.3rem; max-width: 230px; }
+    .sev-labels { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--sb-muted); margin-top: 0.3rem; max-width: 250px; }
 
     .detail-input {
       width: 100%; max-width: 420px; background: var(--sidebar-bg);
       border: 1.5px solid var(--sb-border); border-radius: 9px; padding: 0.6rem 0.9rem;
-      font-size: 0.875rem; font-family: inherit; color: var(--sb-text); outline: none;
+      font-size: 0.9rem; font-family: inherit; color: var(--sb-text); outline: none;
       transition: border-color 0.15s, box-shadow 0.15s;
     }
     .detail-input:focus { border-color: var(--brand-hover-border); box-shadow: 0 0 0 3px rgba(189,153,121,0.15); }
 
     .detail-textarea {
       width: 100%; background: var(--sidebar-bg); border: 1.5px solid var(--sb-border);
-      border-radius: 9px; padding: 0.6rem 0.9rem; font-size: 0.875rem; font-family: inherit;
+      border-radius: 9px; padding: 0.6rem 0.9rem; font-size: 0.9rem; font-family: inherit;
       color: var(--sb-text); outline: none; resize: vertical;
       transition: border-color 0.15s, box-shadow 0.15s;
     }
     .detail-textarea:focus { border-color: var(--brand-hover-border); box-shadow: 0 0 0 3px rgba(189,153,121,0.15); }
-    .skip-hint { font-size: 0.72rem; color: var(--sb-muted); font-style: italic; margin-top: 0.3rem; }
+    .skip-hint { font-size: 0.74rem; color: var(--sb-muted); font-style: italic; margin-top: 0.3rem; }
 
     .review-card { background: var(--sidebar-bg); border: 1.5px solid var(--sb-border); border-radius: 14px; padding: 1.25rem 1.5rem; margin-bottom: 1.25rem; }
-    .review-card h3 { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--sb-muted); margin-bottom: 0.75rem; }
+    .review-card h3 { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--sb-muted); margin-bottom: 0.75rem; }
     .review-sw-item {
       display: flex; align-items: center; justify-content: space-between;
       padding: 0.6rem 0.9rem; border-radius: 10px;
       background: var(--panel-bg); border: 1px solid var(--sb-border);
-      margin-bottom: 0.45rem; font-size: 0.82rem;
+      margin-bottom: 0.45rem; font-size: 0.85rem;
     }
     .review-sw-item strong { color: var(--sb-text); font-weight: 700; }
-    .review-sw-item span { color: var(--sb-muted); font-size: 0.75rem; text-align: right; max-width: 55%; }
+    .review-sw-item span   { color: var(--sb-muted); font-size: 0.78rem; text-align: right; max-width: 55%; }
 
+    /* ── App Examples modal ── */
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); backdrop-filter: blur(6px); z-index: 300; display: flex; align-items: center; justify-content: center; padding: 1rem; }
     .modal-overlay.hidden { display: none; }
     .modal-box { background: var(--panel-bg); border: 1.5px solid var(--sb-border); border-radius: 20px; padding: 1.75rem; max-width: 640px; width: 100%; max-height: 82vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
-    .modal-box h3 { font-size: 1.05rem; font-weight: 800; color: var(--sb-text); margin-bottom: 1.1rem; }
+    .modal-box h3 { font-size: 1.08rem; font-weight: 800; color: var(--sb-text); margin-bottom: 1.1rem; }
     .modal-tabs { display: flex; gap: 0.4rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
-    .modal-tab { padding: 0.38rem 0.9rem; border-radius: 999px; font-size: 0.78rem; font-weight: 700; font-family: inherit; border: 1.5px solid var(--sb-border); background: var(--panel-bg); color: var(--sb-muted); cursor: pointer; transition: all 0.15s; }
+    .modal-tab { padding: 0.38rem 0.9rem; border-radius: 999px; font-size: 0.8rem; font-weight: 700; font-family: inherit; border: 1.5px solid var(--sb-border); background: var(--panel-bg); color: var(--sb-muted); cursor: pointer; transition: all 0.15s; }
     .modal-tab.active { background: var(--brand-grad); border-color: transparent; color: #fff; }
     .modal-tab-content { display: none; }
     .modal-tab-content.active { display: block; }
     .modal-category { margin-bottom: 1.25rem; }
-    .modal-category h4 { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--sb-muted); margin-bottom: 0.5rem; }
+    .modal-category h4 { font-size: 0.73rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--sb-muted); margin-bottom: 0.5rem; }
     .modal-apps { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+    /* ── FIX: App example tags — selector was previously missing ── */
+    .modal-app-tag {
+      background: var(--sidebar-bg);
+      border: 1px solid var(--sb-border);
+      border-radius: 8px;
+      padding: 0.3rem 0.7rem;
+      font-size: 0.8rem;
+      color: var(--sb-text);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: inline-block;
+      user-select: none;
+    }
+    .modal-app-tag:hover {
+      background: var(--brand-soft);
+      border-color: var(--brand-hover-border);
+      color: var(--brand-brown);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(95,75,60,0.15);
+    }
+    .modal-app-tag.added {
+      background: var(--success-soft);
+      border-color: var(--success);
+      color: var(--success);
+      cursor: default;
+      transform: none;
+    }
+
     .app-examples-wrap { display: inline-flex; align-items: center; gap: 0.4rem; }
     .info-tip {
-      width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--brand-hover-border);
-      background: var(--brand-soft); color: var(--brand-brown); font-size: 0.68rem; font-weight: 800;
+      width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--brand-hover-border);
+      background: var(--brand-soft); color: var(--brand-brown); font-size: 0.7rem; font-weight: 800;
       display: inline-flex; align-items: center; justify-content: center; cursor: default;
       position: relative; flex-shrink: 0;
     }
     .info-tip:hover .tip-text { display: block; }
     .tip-text {
       display: none; position: absolute; bottom: 125%; left: 50%; transform: translateX(-50%);
-      background: var(--sb-text); color: #fff; font-size: 0.72rem; font-weight: 500;
+      background: var(--sb-text); color: #fff; font-size: 0.74rem; font-weight: 500;
       padding: 0.4rem 0.7rem; border-radius: 7px; white-space: nowrap; z-index: 10;
       line-height: 1.4; pointer-events: none;
     }
     .tip-text::after { content:''; position:absolute; top:100%; left:50%; transform:translateX(-50%); border:5px solid transparent; border-top-color: var(--sb-text); }
-      background: var(--sidebar-bg); border: 1px solid var(--sb-border); border-radius: 8px;
-      padding: 0.28rem 0.65rem; font-size: 0.78rem; color: var(--sb-text); font-weight: 600;
-      cursor: pointer; transition: all 0.15s;
-    }
-    .modal-app-tag:hover { background: var(--brand-soft); border-color: var(--brand-hover-border); color: var(--brand-brown); }
-    .modal-app-tag.added { background: var(--success-soft); border-color: var(--success); color: var(--success); }
-    .owners-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
-    .owners-table th { text-align: left; font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--sb-muted); padding: 0 0.75rem 0.6rem; border-bottom: 1.5px solid var(--sb-sep); }
+
+    .owners-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    .owners-table th { text-align: left; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--sb-muted); padding: 0 0.75rem 0.6rem; border-bottom: 1.5px solid var(--sb-sep); }
     .owners-table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--sb-sep); color: var(--sb-text); }
     .owners-table tr:last-child td { border-bottom: none; }
-    .modal-close { width: 100%; margin-top: 1.25rem; padding: 0.65rem; background: var(--brand-grad); color: #fff; border: none; border-radius: 10px; font-size: 0.875rem; font-weight: 700; font-family: inherit; cursor: pointer; }
+    .modal-close { width: 100%; margin-top: 1.25rem; padding: 0.65rem; background: var(--brand-grad); color: #fff; border: none; border-radius: 10px; font-size: 0.9rem; font-weight: 700; font-family: inherit; cursor: pointer; }
+
+    /* ── Floating Help button ── */
+    .help-fab {
+      position: fixed; bottom: 1.75rem; right: 1.75rem;
+      width: 50px; height: 50px; border-radius: 50%;
+      background: var(--brand-grad); color: #fff; border: none;
+      font-size: 1.35rem; font-weight: 900; cursor: pointer;
+      box-shadow: 0 4px 18px rgba(95,75,60,0.35); z-index: 200;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+      font-family: inherit;
+    }
+    .help-fab:hover { transform: scale(1.12); box-shadow: 0 6px 24px rgba(95,75,60,0.45); }
+
+    /* ── Help modal ── */
+    .help-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); backdrop-filter: blur(6px); z-index: 500; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+    .help-modal-overlay.hidden { display: none; }
+    .help-modal-box { background: var(--panel-bg); border: 1.5px solid var(--sb-border); border-radius: 20px; padding: 2rem; max-width: 500px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.22); max-height: 88vh; overflow-y: auto; }
+    .help-modal-box h3 { font-size: 1.15rem; font-weight: 800; color: var(--sb-text); margin-bottom: 0.35rem; }
+    .help-modal-sub { font-size: 0.85rem; color: var(--sb-muted); margin-bottom: 1.25rem; line-height: 1.6; }
+    .help-step { display: flex; gap: 0.9rem; align-items: flex-start; background: var(--sidebar-bg); border: 1.5px solid var(--sb-border); border-radius: 12px; padding: 0.85rem 1rem; margin-bottom: 0.65rem; }
+    .help-step-num { width: 26px; height: 26px; border-radius: 50%; background: var(--brand-grad); color: #fff; font-size: 0.76rem; font-weight: 800; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .help-step-text strong { display: block; font-size: 0.88rem; color: var(--sb-text); margin-bottom: 0.15rem; }
+    .help-step-text span { font-size: 0.8rem; color: var(--sb-muted); line-height: 1.5; }
+    .help-tip-box { background: var(--brand-soft); border: 1.5px solid var(--brand-hover-border); border-radius: 10px; padding: 0.75rem 1rem; margin-top: 1rem; font-size: 0.82rem; color: var(--brand-brown); line-height: 1.6; font-weight: 600; }
+    .help-modal-close { width: 100%; margin-top: 1.25rem; padding: 0.65rem; background: var(--brand-grad); color: #fff; border: none; border-radius: 10px; font-size: 0.9rem; font-weight: 700; font-family: inherit; cursor: pointer; }
+
+    /* ── Inline validation error (replaces alert()) ── */
+    .step-err { display: none; margin-top: 0.85rem; background: rgba(220,80,60,0.09); color: #c0392b; border: 1px solid rgba(220,80,60,0.25); border-radius: 9px; padding: 0.65rem 1rem; font-size: 0.85rem; font-weight: 600; }
+    .step-err.show { display: block; }
   </style>
 </head>
 <body>
@@ -211,7 +271,6 @@
     <div class="sidebar-footer">
       <div class="sidebar-divider" style="margin-bottom:0.75rem"></div>
       <button class="contact-btn" onclick="window.location.href='../index.html'">← Back to Portal</button>
-      <div class="portal-label">RCO IT Help Site</div>
       <div class="portal-sub">@rowecasaorganics.com</div>
     </div>
   </aside>
@@ -232,15 +291,17 @@
 
     <main class="content-panel">
 
-      <!-- STEP 1 -->
+      <!-- ── STEP 1: Overview ── -->
       <div class="step active" id="step-0">
         <div class="step-header">
           <h2>RCO IT Software Inventory</h2>
           <p>Help us build a complete list of all software and apps used at Rowe Casa Organics.</p>
         </div>
-        <p style="font-size:0.9rem;color:var(--sb-text);line-height:1.75;margin-bottom:1.5rem">
-          We need your help to create a complete list of all software and apps used at Rowe Casa Organics. This allows IT to manage costs, improve security, and ensure everyone has the right tools.<br/><br/>
-          Please list the work-related tools you use — websites, desktop programs, and mobile apps. Your input helps us build an accurate company-wide inventory.
+        <p style="font-size:0.93rem;color:var(--sb-text);line-height:1.8;margin-bottom:1.5rem">
+          We need your help to create a complete list of all software and apps used at Rowe Casa Organics.
+          This allows IT to manage costs, improve security, and ensure everyone has the right tools.<br/><br/>
+          Please list the work-related tools you use — websites, desktop programs, and mobile apps.
+          Your input helps us build an accurate company-wide inventory.
         </p>
         <div class="howto-steps">
           <div class="howto-step">
@@ -267,15 +328,17 @@
         </div>
         <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
           <button class="card-action" onclick="goTo(1)">Get Started →</button>
-          <span style="font-size:0.8rem;color:var(--sb-muted)">Or use the sidebar to navigate between steps.</span>
+          <button class="clear-btn" onclick="openHelpModal()" style="display:inline-flex;align-items:center;gap:0.4rem">
+            ❓ Need Help?
+          </button>
         </div>
       </div>
 
-      <!-- STEP 2 -->
+      <!-- ── STEP 2: Your Info ── -->
       <div class="step" id="step-1">
         <div class="step-header">
           <h2>Your Info</h2>
-          <p style="font-size:0.78rem;color:var(--sb-muted);font-style:italic">Please review the Overview tab for details on this survey.</p>
+          <p style="font-size:0.8rem;color:var(--sb-muted);font-style:italic">Please review the Overview tab for details on this survey.</p>
         </div>
         <div class="info-grid">
           <div class="field-wrap">
@@ -305,20 +368,22 @@
             </select>
           </div>
         </div>
+        <!-- Inline validation — no more alert() -->
+        <div id="step1Err" class="step-err">⚠️ Please fill in your name, email, and department before continuing.</div>
         <div style="margin-top:1.5rem">
           <button class="card-action" onclick="goToStep2()">Next: Software Details →</button>
         </div>
       </div>
 
-      <!-- STEP 3 -->
+      <!-- ── STEP 3: Software Details ── -->
       <div class="step" id="step-2">
         <div id="sw-summary-view">
           <div class="step-header">
             <h2>Software Details</h2>
-            <p style="font-size:0.78rem;color:var(--sb-muted);font-style:italic">Please review the Overview tab for details on this survey.</p>
+            <p style="font-size:0.8rem;color:var(--sb-muted);font-style:italic">Please review the Overview tab for details on this survey.</p>
           </div>
           <div class="app-examples-wrap" style="margin-bottom:1.25rem">
-            <button class="clear-btn" style="font-size:0.78rem" onclick="openModal('apps')">App Examples</button>
+            <button class="clear-btn" style="font-size:0.8rem" onclick="openModal('apps')">App Examples</button>
             <div class="info-tip">?<span class="tip-text">Click any app to instantly add it to your list</span></div>
           </div>
           <div class="sw-table-wrap">
@@ -406,7 +471,7 @@
         </div>
       </div>
 
-      <!-- STEP 4 -->
+      <!-- ── STEP 4: Review & Submit ── -->
       <div class="step" id="step-3">
         <div class="step-header">
           <h2>Review & Submit</h2>
@@ -417,7 +482,7 @@
           <div id="reviewSummary"></div>
         </div>
         <div class="review-card">
-          <h3>Software Entries <span id="reviewCount" style="font-weight:400;text-transform:none;letter-spacing:0;font-size:0.8rem"></span></h3>
+          <h3>Software Entries <span id="reviewCount" style="font-weight:400;text-transform:none;letter-spacing:0;font-size:0.82rem"></span></h3>
           <div id="reviewSwList"></div>
         </div>
         <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-top:0.5rem">
@@ -430,7 +495,7 @@
   </div>
 </div>
 
-<!-- Modal -->
+<!-- ── App Examples Modal ── -->
 <div class="modal-overlay hidden" id="examplesModal">
   <div class="modal-box">
     <h3>Reference</h3>
@@ -444,7 +509,53 @@
   </div>
 </div>
 
-<!-- Firebase -->
+<!-- ── Help Modal ── -->
+<div class="help-modal-overlay hidden" id="helpModal">
+  <div class="help-modal-box">
+    <h3>How to Complete This Survey</h3>
+    <p class="help-modal-sub">This survey helps IT build a complete inventory of every tool and app used across Rowe Casa Organics. Here's how it works:</p>
+
+    <div class="help-step">
+      <div class="help-step-num">1</div>
+      <div class="help-step-text">
+        <strong>Your Info</strong>
+        <span>Enter your name, work email, and department. These fields may already be filled in for you.</span>
+      </div>
+    </div>
+    <div class="help-step">
+      <div class="help-step-num">2</div>
+      <div class="help-step-text">
+        <strong>Add Your Apps</strong>
+        <span>On the Software Details step, click <strong>+ Add an app or software</strong> and type the name. Use <strong>App Examples</strong> to browse and click common tools to add them instantly.</span>
+      </div>
+    </div>
+    <div class="help-step">
+      <div class="help-step-num">3</div>
+      <div class="help-step-text">
+        <strong>Edit Details (Optional but Helpful)</strong>
+        <span>Click <strong>Edit Details</strong> on any row to answer a few quick questions: who uses it, how critical it is, whether you have admin access, and who manages it. Skip anything you're unsure about.</span>
+      </div>
+    </div>
+    <div class="help-step">
+      <div class="help-step-num">4</div>
+      <div class="help-step-text">
+        <strong>Review & Submit</strong>
+        <span>Look over your entries on the final step, then click <strong>Submit Survey</strong>. You're done!</span>
+      </div>
+    </div>
+
+    <div class="help-tip-box">
+      💡 <strong>Tip:</strong> You only need to list work-related tools — websites, desktop apps, and mobile apps you use to do your job. If you're not sure whether to include something, go ahead and add it.
+    </div>
+
+    <button class="help-modal-close" onclick="closeHelpModal()">Got it, let's go →</button>
+  </div>
+</div>
+
+<!-- ── Floating Help FAB ── -->
+<button class="help-fab" onclick="openHelpModal()" title="Help">?</button>
+
+<!-- ── Firebase Auth + Firestore ── -->
 <script type="module">
   import { initializeApp, getApps, getApp }                    from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
   import { getAuth, onAuthStateChanged, signOut }              from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
@@ -468,7 +579,6 @@
       return;
     }
     window._currentUser = user;
-    // Pre-fill Your Info fields
     var nameEl  = document.getElementById('info_name');
     var emailEl = document.getElementById('info_email');
     if (emailEl && !emailEl.value) emailEl.value = user.email;
@@ -524,6 +634,7 @@ var KNOWN_OWNERS = [
 var softwareList = [];
 var editingIdx   = null;
 
+/* ── Navigation ── */
 function goTo(n) {
   if (n === 3) buildReview();
   var steps = document.querySelectorAll('.step');
@@ -535,14 +646,22 @@ function goTo(n) {
   window.scrollTo(0, 0);
 }
 
+/* ── Step 2 validation — inline error, no alert() ── */
 function goToStep2() {
   var name  = document.getElementById('info_name').value.trim();
   var email = document.getElementById('info_email').value.trim();
   var dept  = document.getElementById('info_dept').value;
-  if (!name || !email || !dept) { alert('Please fill in your name, email, and department before continuing.'); return; }
+  var errEl = document.getElementById('step1Err');
+  if (!name || !email || !dept) {
+    errEl.classList.add('show');
+    errEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    return;
+  }
+  errEl.classList.remove('show');
   goTo(2);
 }
 
+/* ── Software list ── */
 function addSoftware() {
   softwareList.push({ name:'', severity:'', admin:'', owner:'', who:'', notes:'', detailsFilled:false });
   renderTable();
@@ -563,7 +682,7 @@ function renderTable() {
 
   if (!softwareList.length) {
     thead.style.display = 'none';
-    tbody.innerHTML = '<tr><td style="text-align:center;color:var(--sb-muted);padding:2rem;font-size:0.85rem">No apps added yet — click the button below to get started.</td></tr>';
+    tbody.innerHTML = '<tr><td style="text-align:center;color:var(--sb-muted);padding:2rem;font-size:0.87rem">No apps added yet — click the button below to get started.</td></tr>';
     return;
   }
 
@@ -578,10 +697,10 @@ function renderTable() {
     var adm = sw.admin === 'Yes' ? '<span class="pill-sm pill-yes">Yes</span>'
             : sw.admin === 'No'  ? '<span class="pill-sm pill-no">No</span>'
             : sw.admin           ? '<span class="pill-sm pill-na">' + esc(sw.admin) + '</span>'
-            : '<span style="color:var(--sb-muted);font-size:0.75rem">—</span>';
+            : '<span style="color:var(--sb-muted);font-size:0.77rem">—</span>';
     var whoDisplay = sw.who
-      ? '<span style="font-size:0.75rem;color:var(--sb-text)">' + esc(sw.who) + '</span>'
-      : '<span style="color:var(--sb-muted);font-size:0.75rem">—</span>';
+      ? '<span style="font-size:0.77rem;color:var(--sb-text)">' + esc(sw.who) + '</span>'
+      : '<span style="color:var(--sb-muted);font-size:0.77rem">—</span>';
     var btnClass = sw.detailsFilled ? 'edit-btn done' : 'edit-btn';
     var btnLabel = sw.detailsFilled ? '✓ Edited' : 'Edit Details';
 
@@ -590,7 +709,7 @@ function renderTable() {
       + '<td>' + whoDisplay + '</td>'
       + '<td><div class="sev-dots">' + dots + '</div></td>'
       + '<td>' + adm + '</td>'
-      + '<td style="color:var(--sb-muted);font-size:0.78rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(sw.owner || '—') + '</td>'
+      + '<td style="color:var(--sb-muted);font-size:0.8rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(sw.owner || '—') + '</td>'
       + '<td style="text-align:center;white-space:nowrap">'
       +   '<button class="' + btnClass + '" data-edit="' + i + '">' + btnLabel + '</button>'
       +   '<button class="remove-btn" data-remove="' + i + '">✕</button>'
@@ -599,28 +718,18 @@ function renderTable() {
   }
   tbody.innerHTML = html;
 
-  var nameInputs = tbody.querySelectorAll('.sw-name-input');
-  for (var j = 0; j < nameInputs.length; j++) {
-    (function(el) {
-      el.addEventListener('input', function() {
-        softwareList[parseInt(el.dataset.idx)].name = el.value;
-      });
-    })(nameInputs[j]);
-  }
-  var editBtns = tbody.querySelectorAll('[data-edit]');
-  for (var j = 0; j < editBtns.length; j++) {
-    (function(el) {
-      el.addEventListener('click', function() { openDetails(parseInt(el.dataset.edit)); });
-    })(editBtns[j]);
-  }
-  var removeBtns = tbody.querySelectorAll('[data-remove]');
-  for (var j = 0; j < removeBtns.length; j++) {
-    (function(el) {
-      el.addEventListener('click', function() { removeSoftware(parseInt(el.dataset.remove)); });
-    })(removeBtns[j]);
-  }
+  tbody.querySelectorAll('.sw-name-input').forEach(function(el) {
+    el.addEventListener('input', function() { softwareList[parseInt(el.dataset.idx)].name = el.value; });
+  });
+  tbody.querySelectorAll('[data-edit]').forEach(function(el) {
+    el.addEventListener('click', function() { openDetails(parseInt(el.dataset.edit)); });
+  });
+  tbody.querySelectorAll('[data-remove]').forEach(function(el) {
+    el.addEventListener('click', function() { removeSoftware(parseInt(el.dataset.remove)); });
+  });
 }
 
+/* ── Details panel ── */
 function openDetails(idx) {
   editingIdx = idx;
   var sw = softwareList[idx];
@@ -654,31 +763,30 @@ function saveDetails() {
   closeDetails();
 }
 
+/* ── Pill / sev helpers ── */
 function setPill(fid, btn, val) {
-  var group = btn.closest('.pill-group').querySelectorAll('.pill-btn');
-  for (var i = 0; i < group.length; i++) group[i].classList.remove('selected');
+  btn.closest('.pill-group').querySelectorAll('.pill-btn').forEach(function(b) { b.classList.remove('selected'); });
   btn.classList.add('selected');
   document.getElementById(fid).value = val;
 }
-
 function setSev(val) {
-  var btns = document.querySelectorAll('.sev-btn');
-  for (var i = 0; i < btns.length; i++) btns[i].classList.toggle('selected', i < val);
+  document.querySelectorAll('.sev-btn').forEach(function(b, i) { b.classList.toggle('selected', i < val); });
   document.getElementById('d_severity').value = val;
 }
-
 function restorePills(gid, fid, val) {
   document.getElementById(fid).value = val || '';
-  var btns = document.getElementById(gid).querySelectorAll('.pill-btn');
-  for (var i = 0; i < btns.length; i++) btns[i].classList.toggle('selected', btns[i].textContent.trim() === val);
+  document.getElementById(gid).querySelectorAll('.pill-btn').forEach(function(b) {
+    b.classList.toggle('selected', b.textContent.trim() === val);
+  });
 }
-
 function restoreSev(val) {
   document.getElementById('d_severity').value = val || '';
-  var btns = document.querySelectorAll('.sev-btn');
-  for (var i = 0; i < btns.length; i++) btns[i].classList.toggle('selected', !!val && i < parseInt(val));
+  document.querySelectorAll('.sev-btn').forEach(function(b, i) {
+    b.classList.toggle('selected', !!val && i < parseInt(val));
+  });
 }
 
+/* ── Review page ── */
 function buildReview() {
   var name  = document.getElementById('info_name').value;
   var email = document.getElementById('info_email').value;
@@ -692,96 +800,69 @@ function buildReview() {
   var valid = softwareList.filter(function(s) { return s.name.trim(); });
   document.getElementById('reviewCount').textContent = '(' + valid.length + ' entr' + (valid.length === 1 ? 'y' : 'ies') + ')';
   if (!valid.length) {
-    document.getElementById('reviewSwList').innerHTML = '<p style="color:var(--sb-muted);font-size:0.85rem">No software entries added.</p>';
+    document.getElementById('reviewSwList').innerHTML = '<p style="color:var(--sb-muted);font-size:0.87rem">No software entries added.</p>';
     return;
   }
-  var html = '';
-  for (var i = 0; i < valid.length; i++) {
-    var s = valid[i];
+  document.getElementById('reviewSwList').innerHTML = valid.map(function(s) {
     var meta = [
       s.severity ? 'Criticality: ' + s.severity + '/5' : '',
       s.admin    ? 'Admin: '       + s.admin            : '',
       s.owner    ? 'Owner: '       + s.owner            : '',
       s.who      ? 'Used by: '     + s.who              : ''
     ].filter(Boolean).join(' · ') || 'No details added';
-    html += '<div class="review-sw-item"><strong>' + esc(s.name) + '</strong><span>' + esc(meta) + '</span></div>';
-  }
-  document.getElementById('reviewSwList').innerHTML = html;
+    return '<div class="review-sw-item"><strong>' + esc(s.name) + '</strong><span>' + esc(meta) + '</span></div>';
+  }).join('');
 }
 
+/* ── App Examples modal ── */
 function buildModal() {
-  var appsHtml = '';
-  var cats = Object.keys(APP_EXAMPLES);
-  for (var i = 0; i < cats.length; i++) {
-    var apps = APP_EXAMPLES[cats[i]];
-    var tags = '';
-    for (var j = 0; j < apps.length; j++) {
-      tags += '<span class="modal-app-tag" data-appname="' + esc(apps[j]) + '">' + apps[j] + '</span>';
-    }
-    appsHtml += '<div class="modal-category"><h4>' + cats[i] + '</h4><div class="modal-apps">' + tags + '</div></div>';
-  }
+  var appsHtml = Object.keys(APP_EXAMPLES).map(function(cat) {
+    var tags = APP_EXAMPLES[cat].map(function(app) {
+      return '<span class="modal-app-tag" data-appname="' + esc(app) + '">' + app + '</span>';
+    }).join('');
+    return '<div class="modal-category"><h4>' + cat + '</h4><div class="modal-apps">' + tags + '</div></div>';
+  }).join('');
+
   document.getElementById('tab-apps').innerHTML =
-    '<p style="font-size:0.8rem;color:var(--sb-muted);margin-bottom:1.25rem;line-height:1.5;background:var(--brand-soft);border:1.5px solid var(--brand-hover-border);border-radius:9px;padding:0.6rem 0.9rem;color:var(--brand-brown);font-weight:600">💡 Click any app below to instantly add it to your list.</p>'
+    '<p style="font-size:0.82rem;color:var(--brand-brown);font-weight:600;line-height:1.5;margin-bottom:1.25rem;background:var(--brand-soft);border:1.5px solid var(--brand-hover-border);border-radius:9px;padding:0.6rem 0.9rem">💡 Click any app below to instantly add it to your list.</p>'
     + appsHtml;
 
-  // Wire up click-to-add on each tag
-  var tags = document.querySelectorAll('.modal-app-tag[data-appname]');
-  for (var k = 0; k < tags.length; k++) {
-    (function(el) {
-      el.addEventListener('click', function() {
-        var appName = el.dataset.appname;
-        // Check if already in list
-        var exists = false;
-        for (var x = 0; x < softwareList.length; x++) {
-          if (softwareList[x].name.trim().toLowerCase() === appName.toLowerCase()) { exists = true; break; }
-        }
-        if (!exists) {
-          softwareList.push({ name: appName, severity:'', admin:'', owner:'', who:'', notes:'', detailsFilled:false });
-          renderTable();
-        }
-        // Toggle visual state
-        el.classList.add('added');
-        el.textContent = '✓ ' + appName;
-      });
-    })(tags[k]);
-  }
+  document.querySelectorAll('.modal-app-tag[data-appname]').forEach(function(el) {
+    el.addEventListener('click', function() {
+      var appName = el.dataset.appname;
+      var exists  = softwareList.some(function(s) { return s.name.trim().toLowerCase() === appName.toLowerCase(); });
+      if (!exists) {
+        softwareList.push({ name:appName, severity:'', admin:'', owner:'', who:'', notes:'', detailsFilled:false });
+        renderTable();
+      }
+      el.classList.add('added');
+      el.textContent = '✓ ' + appName;
+    });
+  });
 
-  // Refresh added state based on current softwareList
   refreshModalTags();
 
-  var ownerRows = '';
-  for (var i = 0; i < KNOWN_OWNERS.length; i++) {
-    ownerRows += '<tr><td style="font-weight:700">' + esc(KNOWN_OWNERS[i].name) + '</td>'
-               + '<td style="color:var(--sb-muted);font-size:0.78rem">' + esc(KNOWN_OWNERS[i].apps) + '</td></tr>';
-  }
+  var ownerRows = KNOWN_OWNERS.map(function(o) {
+    return '<tr><td style="font-weight:700">' + esc(o.name) + '</td><td style="color:var(--sb-muted);font-size:0.8rem">' + esc(o.apps) + '</td></tr>';
+  }).join('');
   document.getElementById('tab-owners').innerHTML =
-    '<p style="font-size:0.8rem;color:var(--sb-muted);margin-bottom:1rem;line-height:1.5">Known owners/admins for common RCO apps.</p>' +
+    '<p style="font-size:0.82rem;color:var(--sb-muted);margin-bottom:1rem;line-height:1.5">Known owners/admins for common RCO apps.</p>' +
     '<table class="owners-table"><thead><tr><th>Person</th><th>Apps They Own / Manage</th></tr></thead><tbody>' + ownerRows + '</tbody></table>';
 }
 
 function refreshModalTags() {
-  var tags = document.querySelectorAll('.modal-app-tag[data-appname]');
-  for (var i = 0; i < tags.length; i++) {
-    var appName = tags[i].dataset.appname;
-    var exists = false;
-    for (var x = 0; x < softwareList.length; x++) {
-      if (softwareList[x].name.trim().toLowerCase() === appName.toLowerCase()) { exists = true; break; }
-    }
-    if (exists) {
-      tags[i].classList.add('added');
-      tags[i].textContent = '✓ ' + appName;
-    } else {
-      tags[i].classList.remove('added');
-      tags[i].textContent = appName;
-    }
-  }
+  document.querySelectorAll('.modal-app-tag[data-appname]').forEach(function(el) {
+    var exists = softwareList.some(function(s) { return s.name.trim().toLowerCase() === el.dataset.appname.toLowerCase(); });
+    if (exists) { el.classList.add('added'); el.textContent = '✓ ' + el.dataset.appname; }
+    else         { el.classList.remove('added'); el.textContent = el.dataset.appname; }
+  });
 }
 
-function openModal(tab) { buildModal(); switchTab(tab || 'apps'); document.getElementById('examplesModal').classList.remove('hidden'); }
-function closeModal() { document.getElementById('examplesModal').classList.add('hidden'); }
-function switchTab(tab) {
-  document.getElementById('tab-apps').classList.toggle('active',   tab === 'apps');
-  document.getElementById('tab-owners').classList.toggle('active', tab === 'owners');
+function openModal(tab)  { buildModal(); switchTab(tab || 'apps'); document.getElementById('examplesModal').classList.remove('hidden'); }
+function closeModal()    { document.getElementById('examplesModal').classList.add('hidden'); }
+function switchTab(tab)  {
+  document.getElementById('tab-apps').classList.toggle('active',    tab === 'apps');
+  document.getElementById('tab-owners').classList.toggle('active',  tab === 'owners');
   var tabs = document.querySelectorAll('.modal-tab');
   tabs[0].classList.toggle('active', tab === 'apps');
   tabs[1].classList.toggle('active', tab === 'owners');
@@ -790,6 +871,14 @@ document.getElementById('examplesModal').addEventListener('click', function(e) {
   if (e.target === document.getElementById('examplesModal')) closeModal();
 });
 
+/* ── Help modal ── */
+function openHelpModal()  { document.getElementById('helpModal').classList.remove('hidden'); }
+function closeHelpModal() { document.getElementById('helpModal').classList.add('hidden'); }
+document.getElementById('helpModal').addEventListener('click', function(e) {
+  if (e.target === document.getElementById('helpModal')) closeHelpModal();
+});
+
+/* ── Submit ── */
 async function submitSurvey() {
   var btn   = document.getElementById('submitBtn');
   var stat  = document.getElementById('submitStatus');
@@ -797,17 +886,17 @@ async function submitSurvey() {
   var email = document.getElementById('info_email').value.trim();
   var dept  = document.getElementById('info_dept').value;
   if (!name || !email || !dept) {
-    stat.textContent = 'Please go back and fill in your name, email, and department.';
+    stat.textContent = '⚠️ Please go back and fill in your name, email, and department.';
     stat.className = 'contact-status error'; return;
   }
   btn.textContent = 'Submitting…'; btn.disabled = true;
   var payload = { info_name:name, info_email:email, info_dept:dept, info_date:new Date().toLocaleDateString('en-US'), submitted_at:new Date().toISOString() };
   var valid = softwareList.filter(function(s) { return s.name.trim(); });
-  for (var i = 0; i < valid.length; i++) {
-    var sw = valid[i]; var b = 'app_r' + i;
+  valid.forEach(function(sw, i) {
+    var b = 'app_r' + i;
     payload[b+'_name']=sw.name; payload[b+'_severity']=sw.severity; payload[b+'_who']=sw.who;
     payload[b+'_admin']=sw.admin; payload[b+'_owner']=sw.owner; payload[b+'_notes']=sw.notes;
-  }
+  });
   fetch(SHEET_ENDPOINT, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) }).catch(function(){});
   var saved = window.saveSubmission ? await window.saveSubmission({ title:'RCO IT Software Inventory', dept:dept, url:'surveys/tech-discovery.html' }) : true;
   if (saved) {
