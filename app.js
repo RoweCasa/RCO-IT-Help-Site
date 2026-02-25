@@ -3,7 +3,7 @@
 //  Handles: Firebase auth, Firestore submissions, nav, contact
 // ============================================================
 
-import { initializeApp }                                    from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { initializeApp, getApps, getApp }                  from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth, onAuthStateChanged, signOut }             from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, collection, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
@@ -20,8 +20,8 @@ const FIREBASE_CONFIG = {
 
 const ALLOWED_DOMAIN = '@rowecasaorganics.com';
 
-// ── Init ────────────────────────────────────────────────────────────────────
-const app  = initializeApp(FIREBASE_CONFIG);
+// ── Init — reuse existing app if already initialized by roles module ────────
+const app  = getApps().length ? getApp() : initializeApp(FIREBASE_CONFIG);
 const auth = getAuth(app);
 const db   = getFirestore(app);
 
@@ -29,25 +29,14 @@ let currentUser = null;
 
 // ── Auth guard ──────────────────────────────────────────────────────────────
 onAuthStateChanged(auth, user => {
-  const overlay = document.getElementById('authOverlay');
-
   if (!user || !user.email.endsWith(ALLOWED_DOMAIN)) {
-    // Not signed in — redirect immediately, keep overlay visible so nothing shows
     signOut(auth).finally(() => window.location.replace('login.html'));
     return;
   }
-
-  // Valid user — update UI then fade out the overlay
   currentUser = user;
+
   const userEl = document.getElementById('topbarUser');
   if (userEl) userEl.textContent = user.email;
-
-  // Small delay lets the roles module finish showing/hiding cards first
-  setTimeout(() => {
-    if (overlay) overlay.classList.add('hidden');
-    // Remove from DOM after fade so it can't block clicks
-    setTimeout(() => overlay?.remove(), 300);
-  }, 150);
 });
 
 // ── Sign out ────────────────────────────────────────────────────────────────
