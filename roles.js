@@ -41,9 +41,9 @@ const MEMBERS = {
   it_admin: [
     'philip@rowecasaorganics.com',          // Philip Williams   — Chief Information Officer
     'andrew.neidley@rowecasaorganics.com',  // Andrew Neidley    — IT Specialist
-    // 'kasey.tomasek@rowecasaorganics.com', // Kasey Tomasek    — Director of IT  ← ADD EMAIL
-    // 'hayden.howell@rowecasaorganics.com', // Hayden Howell    — IT Specialist   ← ADD EMAIL
-    // 'chase.parrish@rowecasaorganics.com', // Chase Parrish    — IT Specialist   ← ADD EMAIL
+    'kasey.tomasek@rowecasaorganics.com',   // Kasey Tomasek     — Director of IT
+    'hayden.howell@rowecasaorganics.com',   // Hayden Howell     — IT Specialist
+    'chase.parrish@rowecasaorganics.com',   // Chase Parrish     — IT Specialist
   ],
 
   // ── OWNERS + C-SUITE ────────────────────────────────────────────────────────
