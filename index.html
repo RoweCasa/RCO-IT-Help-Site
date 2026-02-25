@@ -385,17 +385,16 @@
             <p>A record of surveys and forms you have submitted.</p>
           </div>
 
-          <!-- Controls row: type tabs + scope toggle + refresh -->
+          <!-- Controls row -->
           <div class="completed-controls">
+            <!-- Left: type tabs + scope toggle -->
             <div style="display:flex;align-items:center;gap:0.65rem;flex-wrap:wrap">
-              <!-- Surveys / Forms tabs -->
               <div class="type-tabs">
                 <button class="type-tab active" id="tabSurveys"
                         onclick="setTypeTab('surveys')">📋 Surveys</button>
                 <button class="type-tab" id="tabForms"
                         onclick="setTypeTab('forms')">📝 Forms</button>
               </div>
-              <!-- IT admin only: My Submissions / Everyone's -->
               <div class="submissions-toggle" id="submissionsToggle">
                 <button class="toggle-btn active" id="toggleMine"
                         onclick="setSubmissionsView('mine')">My Submissions</button>
@@ -403,28 +402,34 @@
                         onclick="setSubmissionsView('all')">Everyone's</button>
               </div>
             </div>
-            <!-- Refresh -->
-            <button class="clear-btn" style="margin:0" id="refreshBtn">↻ Refresh</button>
-          </div>
 
-          <!-- IT admin sheet links — shown below controls, hidden for others -->
-          <div class="sheet-links-row" id="sheetLinksRow">
-            <a id="sheetLink-tech-discovery"
-               class="completed-sheet-link"
-               href="https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID_HERE/edit"
-               target="_blank">📊 Software Inventory</a>
-            <a id="sheetLink-onboarding"
-               class="completed-sheet-link"
-               href="https://docs.google.com/spreadsheets/d/YOUR_ONBOARDING_SHEET_ID/edit"
-               target="_blank">📊 Onboarding</a>
-            <a id="sheetLink-offboarding"
-               class="completed-sheet-link"
-               href="https://docs.google.com/spreadsheets/d/YOUR_OFFBOARDING_SHEET_ID/edit"
-               target="_blank">📊 Offboarding</a>
-            <a id="sheetLink-equipment"
-               class="completed-sheet-link"
-               href="https://docs.google.com/spreadsheets/d/YOUR_EQUIPMENT_SHEET_ID/edit"
-               target="_blank">📊 Equipment Requests</a>
+            <!-- Right: tab-specific sheet links (IT admin only) + refresh -->
+            <div style="display:flex;align-items:center;gap:0.65rem;flex-wrap:wrap">
+
+              <!-- Surveys sheets — visible when Surveys tab is active -->
+              <div class="sheet-links-group" id="sheetLinksRow-surveys">
+                <span class="sheet-links-label">Google Sheets:</span>
+                <a class="completed-sheet-link"
+                   href="https://docs.google.com/spreadsheets/d/1qGufmR0KvRCU8OhQiZgf1R9CnvEvBBHogAcUh6XbOeM/edit?gid=72884401#gid=72884401"
+                   target="_blank">Software Inventory</a>
+              </div>
+
+              <!-- Forms sheets — visible when Forms tab is active -->
+              <div class="sheet-links-group" id="sheetLinksRow-forms" style="display:none!important">
+                <span class="sheet-links-label">Google Sheets:</span>
+                <a class="completed-sheet-link"
+                   href="https://docs.google.com/spreadsheets/d/YOUR_ONBOARDING_SHEET_ID/edit"
+                   target="_blank">Onboarding</a>
+                <a class="completed-sheet-link"
+                   href="https://docs.google.com/spreadsheets/d/YOUR_OFFBOARDING_SHEET_ID/edit"
+                   target="_blank">Offboarding</a>
+                <a class="completed-sheet-link"
+                   href="https://docs.google.com/spreadsheets/d/YOUR_EQUIPMENT_SHEET_ID/edit"
+                   target="_blank">Equipment Requests</a>
+              </div>
+
+              <button class="clear-btn" style="margin:0" id="refreshBtn">↻ Refresh</button>
+            </div>
           </div>
 
           <!-- Content panels — only one visible at a time -->
@@ -620,6 +625,15 @@
       document.getElementById('tabForms').classList.toggle('active',   tab === 'forms');
       document.getElementById('completedSurveysList').style.display = tab === 'surveys' ? '' : 'none';
       document.getElementById('completedFormsList').style.display   = tab === 'forms'   ? '' : 'none';
+      // Swap sheet link groups — only toggle if the group is already visible (IT admin)
+      const sg = document.getElementById('sheetLinksRow-surveys');
+      const fg = document.getElementById('sheetLinksRow-forms');
+      if (sg && sg.classList.contains('visible')) {
+        sg.style.display = tab === 'surveys' ? '' : 'none';
+      }
+      if (fg && fg.classList.contains('visible')) {
+        fg.style.display = tab === 'forms' ? '' : 'none';
+      }
     }
 
     function setSubmissionsView(mode) {
@@ -668,7 +682,7 @@
     import { getAuth, onAuthStateChanged }     from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
     import {
       getRole, getRoleLabel,
-      canAccess, canViewSheets,
+      canAccess, canViewSheets, canViewAllSubmissions,
       CONTENT_CONFIG
     } from './roles.js';
 
@@ -714,14 +728,16 @@
       if (sn) sn.classList.toggle('show', surveysVisible === 0);
       if (fn) fn.classList.toggle('show', formsVisible === 0);
 
-      // 4. Google Sheets links row — IT admin only
+      // 4. Google Sheets links — IT admin only; surveys shown by default, forms hidden until tab switch
       if (canViewSheets(email)) {
-        document.getElementById('sheetLinksRow')?.classList.add('visible');
-        document.querySelectorAll('.completed-sheet-link').forEach(el => el.classList.add('visible'));
+        const sg = document.getElementById('sheetLinksRow-surveys');
+        const fg = document.getElementById('sheetLinksRow-forms');
+        if (sg) { sg.classList.add('visible'); sg.style.display = ''; }
+        if (fg) { fg.classList.add('visible'); fg.style.display = 'none'; }
       }
 
       // 5. Submissions toggle — IT admin only
-      if (window._canViewAllSubmissions) {
+      if (canViewAllSubmissions(email)) {
         document.getElementById('submissionsToggle')?.classList.add('visible');
       }
 
@@ -729,10 +745,11 @@
       document.getElementById('authLoading')?.classList.add('hidden');
 
       // Expose role for app.js renderCompleted to use
-      window._userEmail = email;
-      window._userRole  = role;
-      window._canViewSheets = canViewSheets(email);
-      window._contentConfig = CONTENT_CONFIG;
+      window._userEmail             = email;
+      window._userRole              = role;
+      window._canViewSheets         = canViewSheets(email);
+      window._canViewAllSubmissions = canViewAllSubmissions(email);
+      window._contentConfig         = CONTENT_CONFIG;
     });
   </script>
 
