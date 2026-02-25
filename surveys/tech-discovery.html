@@ -6,7 +6,6 @@
   <title>RCO IT Software Inventory</title>
   <link rel="stylesheet" href="../styles.css"/>
   <style>
-    /* ── Global overrides: darker muted + font size +1 ── */
     :root { --sb-muted: #6a5e57; }
     html  { font-size: 17px; }
 
@@ -71,9 +70,8 @@
       background: var(--brand-soft); border: 1.5px solid var(--brand-hover-border);
       color: var(--brand-brown); transition: all 0.15s; line-height: 1.4;
     }
-    .edit-btn:hover       { background: var(--brand-grad); color: #fff; border-color: var(--brand-brown); }
-    .edit-btn.done        { background: var(--brand-soft); border-color: var(--brand-hover-border); color: var(--brand-brown); }
-    .edit-btn.done:hover  { background: var(--brand-grad); color: #fff; border-color: var(--brand-brown); }
+    .edit-btn:hover, .edit-btn.done:hover { background: var(--brand-grad); color: #fff; border-color: var(--brand-brown); }
+    .edit-btn.done { background: var(--brand-soft); border-color: var(--brand-hover-border); color: var(--brand-brown); }
 
     .remove-btn {
       font-size: 0.72rem; font-weight: 700; font-family: inherit; cursor: pointer;
@@ -106,8 +104,8 @@
     .details-context-sub  { font-size: 0.8rem; color: var(--sb-muted); margin-top: 0.15rem; }
 
     .detail-q { margin-bottom: 1.5rem; }
-    .detail-q label      { display: block; font-size: 0.98rem; font-weight: 700; color: var(--sb-text); margin-bottom: 0.2rem; }
-    .detail-q .q-sub     { font-size: 0.82rem; color: var(--sb-muted); margin-bottom: 0.65rem; display: block; }
+    .detail-q label  { display: block; font-size: 0.98rem; font-weight: 700; color: var(--sb-text); margin-bottom: 0.2rem; }
+    .detail-q .q-sub { font-size: 0.82rem; color: var(--sb-muted); margin-bottom: 0.65rem; display: block; }
 
     .pill-group { display: flex; gap: 0.4rem; flex-wrap: wrap; }
     .pill-btn {
@@ -172,33 +170,28 @@
     .modal-category h4 { font-size: 0.73rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--sb-muted); margin-bottom: 0.5rem; }
     .modal-apps { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 
-    /* ── FIX: App example tags — selector was previously missing ── */
+    /* App example tags — cursor pointer, hover animates, added state is green, added+hover turns red to indicate removal */
     .modal-app-tag {
-      background: var(--sidebar-bg);
-      border: 1px solid var(--sb-border);
-      border-radius: 8px;
-      padding: 0.3rem 0.7rem;
-      font-size: 0.8rem;
-      color: var(--sb-text);
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.15s;
-      display: inline-block;
-      user-select: none;
+      background: var(--sidebar-bg); border: 1px solid var(--sb-border);
+      border-radius: 8px; padding: 0.3rem 0.7rem;
+      font-size: 0.8rem; color: var(--sb-text); font-weight: 600;
+      cursor: pointer; transition: all 0.15s;
+      display: inline-block; user-select: none;
     }
     .modal-app-tag:hover {
-      background: var(--brand-soft);
-      border-color: var(--brand-hover-border);
-      color: var(--brand-brown);
-      transform: translateY(-1px);
+      background: var(--brand-soft); border-color: var(--brand-hover-border);
+      color: var(--brand-brown); transform: translateY(-1px);
       box-shadow: 0 2px 8px rgba(95,75,60,0.15);
     }
     .modal-app-tag.added {
-      background: var(--success-soft);
-      border-color: var(--success);
-      color: var(--success);
-      cursor: default;
-      transform: none;
+      background: var(--success-soft); border-color: var(--success);
+      color: var(--success); cursor: pointer;
+    }
+    /* hover on added tag shows red = "click to remove" */
+    .modal-app-tag.added:hover {
+      background: rgba(220,80,60,0.08); border-color: rgba(220,80,60,0.4);
+      color: #c0392b; transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(220,80,60,0.15);
     }
 
     .app-examples-wrap { display: inline-flex; align-items: center; gap: 0.4rem; }
@@ -223,7 +216,7 @@
     .owners-table tr:last-child td { border-bottom: none; }
     .modal-close { width: 100%; margin-top: 1.25rem; padding: 0.65rem; background: var(--brand-grad); color: #fff; border: none; border-radius: 10px; font-size: 0.9rem; font-weight: 700; font-family: inherit; cursor: pointer; }
 
-    /* ── Floating Help button ── */
+    /* ── Floating Help FAB ── */
     .help-fab {
       position: fixed; bottom: 1.75rem; right: 1.75rem;
       width: 50px; height: 50px; border-radius: 50%;
@@ -231,27 +224,42 @@
       font-size: 1.35rem; font-weight: 900; cursor: pointer;
       box-shadow: 0 4px 18px rgba(95,75,60,0.35); z-index: 200;
       display: flex; align-items: center; justify-content: center;
-      transition: transform 0.2s, box-shadow 0.2s;
-      font-family: inherit;
+      transition: transform 0.2s, box-shadow 0.2s; font-family: inherit;
     }
     .help-fab:hover { transform: scale(1.12); box-shadow: 0 6px 24px rgba(95,75,60,0.45); }
 
-    /* ── Help modal ── */
+    /* ── Help Modal — wider so fewer line breaks ── */
     .help-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); backdrop-filter: blur(6px); z-index: 500; display: flex; align-items: center; justify-content: center; padding: 1rem; }
     .help-modal-overlay.hidden { display: none; }
-    .help-modal-box { background: var(--panel-bg); border: 1.5px solid var(--sb-border); border-radius: 20px; padding: 2rem; max-width: 500px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.22); max-height: 88vh; overflow-y: auto; }
+    .help-modal-box {
+      background: var(--panel-bg); border: 1.5px solid var(--sb-border);
+      border-radius: 20px; padding: 2rem;
+      max-width: 660px; width: 100%; /* ← widened from 500px */
+      box-shadow: 0 20px 60px rgba(0,0,0,0.22); max-height: 88vh; overflow-y: auto;
+    }
     .help-modal-box h3 { font-size: 1.15rem; font-weight: 800; color: var(--sb-text); margin-bottom: 0.35rem; }
     .help-modal-sub { font-size: 0.85rem; color: var(--sb-muted); margin-bottom: 1.25rem; line-height: 1.6; }
     .help-step { display: flex; gap: 0.9rem; align-items: flex-start; background: var(--sidebar-bg); border: 1.5px solid var(--sb-border); border-radius: 12px; padding: 0.85rem 1rem; margin-bottom: 0.65rem; }
     .help-step-num { width: 26px; height: 26px; border-radius: 50%; background: var(--brand-grad); color: #fff; font-size: 0.76rem; font-weight: 800; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
     .help-step-text strong { display: block; font-size: 0.88rem; color: var(--sb-text); margin-bottom: 0.15rem; }
-    .help-step-text span { font-size: 0.8rem; color: var(--sb-muted); line-height: 1.5; }
+    .help-step-text span   { font-size: 0.8rem; color: var(--sb-muted); line-height: 1.5; }
     .help-tip-box { background: var(--brand-soft); border: 1.5px solid var(--brand-hover-border); border-radius: 10px; padding: 0.75rem 1rem; margin-top: 1rem; font-size: 0.82rem; color: var(--brand-brown); line-height: 1.6; font-weight: 600; }
     .help-modal-close { width: 100%; margin-top: 1.25rem; padding: 0.65rem; background: var(--brand-grad); color: #fff; border: none; border-radius: 10px; font-size: 0.9rem; font-weight: 700; font-family: inherit; cursor: pointer; }
 
-    /* ── Inline validation error (replaces alert()) ── */
+    /* ── Inline validation error ── */
     .step-err { display: none; margin-top: 0.85rem; background: rgba(220,80,60,0.09); color: #c0392b; border: 1px solid rgba(220,80,60,0.25); border-radius: 9px; padding: 0.65rem 1rem; font-size: 0.85rem; font-weight: 600; }
     .step-err.show { display: block; }
+
+    /* ── Sidebar email button ── */
+    .portal-email-btn {
+      display: block; width: 100%; background: none;
+      border: 1px solid var(--sb-border); border-radius: 8px;
+      padding: 0.4rem 0.6rem; font-size: 0.67rem; color: var(--sb-muted);
+      font-family: inherit; font-weight: 600; cursor: pointer;
+      text-align: center; transition: all 0.18s; margin-top: 4px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .portal-email-btn:hover { background: var(--brand-soft); border-color: var(--brand-hover-border); color: var(--brand-brown); }
   </style>
 </head>
 <body>
@@ -266,12 +274,17 @@
       <button class="nav-btn step-nav-btn active" onclick="goTo(0)"><span class="step-num">1</span> Overview</button>
       <button class="nav-btn step-nav-btn"         onclick="goTo(1)"><span class="step-num">2</span> Your Info</button>
       <button class="nav-btn step-nav-btn"         onclick="goTo(2)"><span class="step-num">3</span> Software Details</button>
-      <button class="nav-btn step-nav-btn"         onclick="goTo(3)"><span class="step-num">4</span> Review & Submit</button>
+      <button class="nav-btn step-nav-btn"         onclick="goTo(3)"><span class="step-num">4</span> Review &amp; Submit</button>
     </nav>
     <div class="sidebar-footer">
       <div class="sidebar-divider" style="margin-bottom:0.75rem"></div>
       <button class="contact-btn" onclick="window.location.href='../index.html'">← Back to Portal</button>
-      <div class="portal-sub">@rowecasaorganics.com</div>
+      <!-- @rowecasaorganics.com → clickable email button -->
+      <button class="portal-email-btn"
+              title="Email itsupport@rowecasaorganics.com"
+              onclick="window.open('https://mail.google.com/mail/?view=cm&fs=1&to=itsupport%40rowecasaorganics.com','_blank')">
+        ✉️ itsupport@rowecasaorganics.com
+      </button>
     </div>
   </aside>
 
@@ -321,8 +334,8 @@
           <div class="howto-step">
             <div class="howto-step-num">3</div>
             <div class="howto-step-text">
-              <strong>Review & Submit</strong>
-              <span>Check your entries and submit. That's it.</span>
+              <strong>Review &amp; Submit</strong>
+              <span>Check your entries and submit. That's it. Feel free to resubmit anytime if you forgot to add something — each submission is saved separately.</span>
             </div>
           </div>
         </div>
@@ -368,7 +381,6 @@
             </select>
           </div>
         </div>
-        <!-- Inline validation — no more alert() -->
         <div id="step1Err" class="step-err">⚠️ Please fill in your name, email, and department before continuing.</div>
         <div style="margin-top:1.5rem">
           <button class="card-action" onclick="goToStep2()">Next: Software Details →</button>
@@ -384,7 +396,7 @@
           </div>
           <div class="app-examples-wrap" style="margin-bottom:1.25rem">
             <button class="clear-btn" style="font-size:0.8rem" onclick="openModal('apps')">App Examples</button>
-            <div class="info-tip">?<span class="tip-text">Click any app to instantly add it to your list</span></div>
+            <div class="info-tip">?<span class="tip-text">Click any app to add it — click again to remove it</span></div>
           </div>
           <div class="sw-table-wrap">
             <table class="sw-table">
@@ -403,7 +415,7 @@
           </div>
           <button class="add-sw-btn" onclick="addSoftware()">+ Add an app or software</button>
           <div style="margin-top:1.75rem;padding-top:1.25rem;border-top:1px solid var(--sb-sep)">
-            <button class="card-action" onclick="goTo(3)">Review & Submit →</button>
+            <button class="card-action" onclick="goTo(3)">Review &amp; Submit →</button>
           </div>
         </div>
 
@@ -421,7 +433,8 @@
             <div class="pill-group" id="d-who-pills">
               <button type="button" class="pill-btn" onclick="setPill('d_who',this,'Just me')">Just me</button>
               <button type="button" class="pill-btn" onclick="setPill('d_who',this,'My team')">My team</button>
-              <button type="button" class="pill-btn" onclick="setPill('d_who',this,'Company-wide')">Company-wide</button>
+              <!-- Changed from "Company-wide" to "Department-wide" -->
+              <button type="button" class="pill-btn" onclick="setPill('d_who',this,'Department-wide')">Department-wide</button>
             </div>
             <input type="hidden" id="d_who"/>
           </div>
@@ -462,19 +475,19 @@
           </div>
 
           <div class="detail-q">
-            <label>Any notes? <span style="font-weight:400;color:var(--sb-muted)">(optional)</span></label>
+            <label>Any notes?</label>
             <span class="q-sub">e.g. trial version, shared login, only used occasionally, pending cancellation</span>
             <textarea class="detail-textarea" id="d_notes" rows="3" placeholder="Optional notes..."></textarea>
           </div>
 
-          <button class="card-action" onclick="saveDetails()">Save & Return to List ✓</button>
+          <button class="card-action" onclick="saveDetails()">Save &amp; Return to List ✓</button>
         </div>
       </div>
 
       <!-- ── STEP 4: Review & Submit ── -->
       <div class="step" id="step-3">
         <div class="step-header">
-          <h2>Review & Submit</h2>
+          <h2>Review &amp; Submit</h2>
           <p>Check your details below, then hit submit.</p>
         </div>
         <div class="review-card">
@@ -526,21 +539,22 @@
       <div class="help-step-num">2</div>
       <div class="help-step-text">
         <strong>Add Your Apps</strong>
-        <span>On the Software Details step, click <strong>+ Add an app or software</strong> and type the name. Use <strong>App Examples</strong> to browse and click common tools to add them instantly.</span>
+        <span>On the Software Details step, click <strong>+ Add an app or software</strong> and type the name. Use <strong>App Examples</strong> to browse and click common tools to add them instantly — click again to remove.</span>
       </div>
     </div>
     <div class="help-step">
       <div class="help-step-num">3</div>
       <div class="help-step-text">
-        <strong>Edit Details (Optional but Helpful)</strong>
+        <!-- Removed "(Optional but Helpful)" -->
+        <strong>Edit Details</strong>
         <span>Click <strong>Edit Details</strong> on any row to answer a few quick questions: who uses it, how critical it is, whether you have admin access, and who manages it. Skip anything you're unsure about.</span>
       </div>
     </div>
     <div class="help-step">
       <div class="help-step-num">4</div>
       <div class="help-step-text">
-        <strong>Review & Submit</strong>
-        <span>Look over your entries on the final step, then click <strong>Submit Survey</strong>. You're done!</span>
+        <strong>Review &amp; Submit</strong>
+        <span>Look over your entries on the final step, then click <strong>Submit Survey</strong>. Feel free to resubmit anytime if you need to add or change something.</span>
       </div>
     </div>
 
@@ -552,7 +566,7 @@
   </div>
 </div>
 
-<!-- ── Floating Help FAB ── -->
+<!-- Floating Help FAB -->
 <button class="help-fab" onclick="openHelpModal()" title="Help">?</button>
 
 <!-- ── Firebase Auth + Firestore ── -->
@@ -637,16 +651,14 @@ var editingIdx   = null;
 /* ── Navigation ── */
 function goTo(n) {
   if (n === 3) buildReview();
-  var steps = document.querySelectorAll('.step');
-  var btns  = document.querySelectorAll('.step-nav-btn');
-  for (var i = 0; i < steps.length; i++) steps[i].classList.toggle('active', i === n);
-  for (var i = 0; i < btns.length;  i++) btns[i].classList.toggle('active',  i === n);
+  document.querySelectorAll('.step').forEach(function(s,i)         { s.classList.toggle('active', i===n); });
+  document.querySelectorAll('.step-nav-btn').forEach(function(b,i) { b.classList.toggle('active', i===n); });
   document.getElementById('progressCurrent').textContent = n + 1;
-  document.getElementById('progressFill').style.width = ((n + 1) / 4 * 100) + '%';
-  window.scrollTo(0, 0);
+  document.getElementById('progressFill').style.width = ((n+1)/4*100) + '%';
+  window.scrollTo(0,0);
 }
 
-/* ── Step 2 validation — inline error, no alert() ── */
+/* ── Step 2 validation — inline, no alert() ── */
 function goToStep2() {
   var name  = document.getElementById('info_name').value.trim();
   var email = document.getElementById('info_email').value.trim();
@@ -654,7 +666,7 @@ function goToStep2() {
   var errEl = document.getElementById('step1Err');
   if (!name || !email || !dept) {
     errEl.classList.add('show');
-    errEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    errEl.scrollIntoView({ behavior:'smooth', block:'nearest' });
     return;
   }
   errEl.classList.remove('show');
@@ -667,56 +679,44 @@ function addSoftware() {
   renderTable();
   setTimeout(function() {
     var inputs = document.querySelectorAll('.sw-name-input');
-    if (inputs.length) inputs[inputs.length - 1].focus();
+    if (inputs.length) inputs[inputs.length-1].focus();
   }, 50);
 }
 
 function removeSoftware(idx) {
-  softwareList.splice(idx, 1);
+  softwareList.splice(idx,1);
   renderTable();
 }
 
 function renderTable() {
   var thead = document.getElementById('swThead');
   var tbody = document.getElementById('swTableBody');
-
   if (!softwareList.length) {
     thead.style.display = 'none';
     tbody.innerHTML = '<tr><td style="text-align:center;color:var(--sb-muted);padding:2rem;font-size:0.87rem">No apps added yet — click the button below to get started.</td></tr>';
     return;
   }
-
   thead.style.display = '';
-  var html = '';
-  for (var i = 0; i < softwareList.length; i++) {
-    var sw   = softwareList[i];
-    var dots = '';
-    for (var d = 1; d <= 5; d++) {
-      dots += '<div class="sev-dot' + (sw.severity && d <= parseInt(sw.severity) ? ' on' : '') + '"></div>';
-    }
-    var adm = sw.admin === 'Yes' ? '<span class="pill-sm pill-yes">Yes</span>'
-            : sw.admin === 'No'  ? '<span class="pill-sm pill-no">No</span>'
-            : sw.admin           ? '<span class="pill-sm pill-na">' + esc(sw.admin) + '</span>'
+  tbody.innerHTML = softwareList.map(function(sw,i) {
+    var dots=''; for(var d=1;d<=5;d++) dots+='<div class="sev-dot'+(sw.severity&&d<=parseInt(sw.severity)?' on':'')+'"></div>';
+    var adm = sw.admin==='Yes' ? '<span class="pill-sm pill-yes">Yes</span>'
+            : sw.admin==='No'  ? '<span class="pill-sm pill-no">No</span>'
+            : sw.admin         ? '<span class="pill-sm pill-na">'+esc(sw.admin)+'</span>'
             : '<span style="color:var(--sb-muted);font-size:0.77rem">—</span>';
     var whoDisplay = sw.who
-      ? '<span style="font-size:0.77rem;color:var(--sb-text)">' + esc(sw.who) + '</span>'
+      ? '<span style="font-size:0.77rem;color:var(--sb-text)">'+esc(sw.who)+'</span>'
       : '<span style="color:var(--sb-muted);font-size:0.77rem">—</span>';
-    var btnClass = sw.detailsFilled ? 'edit-btn done' : 'edit-btn';
-    var btnLabel = sw.detailsFilled ? '✓ Edited' : 'Edit Details';
-
-    html += '<tr>'
-      + '<td><input class="sw-name-input" type="text" placeholder="App or software name" data-idx="' + i + '" value="' + esc(sw.name) + '"/></td>'
-      + '<td>' + whoDisplay + '</td>'
-      + '<td><div class="sev-dots">' + dots + '</div></td>'
-      + '<td>' + adm + '</td>'
-      + '<td style="color:var(--sb-muted);font-size:0.8rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(sw.owner || '—') + '</td>'
-      + '<td style="text-align:center;white-space:nowrap">'
-      +   '<button class="' + btnClass + '" data-edit="' + i + '">' + btnLabel + '</button>'
-      +   '<button class="remove-btn" data-remove="' + i + '">✕</button>'
-      + '</td>'
-      + '</tr>';
-  }
-  tbody.innerHTML = html;
+    return '<tr>'
+      +'<td><input class="sw-name-input" type="text" placeholder="App or software name" data-idx="'+i+'" value="'+esc(sw.name)+'"/></td>'
+      +'<td>'+whoDisplay+'</td>'
+      +'<td><div class="sev-dots">'+dots+'</div></td>'
+      +'<td>'+adm+'</td>'
+      +'<td style="color:var(--sb-muted);font-size:0.8rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(sw.owner||'—')+'</td>'
+      +'<td style="text-align:center;white-space:nowrap">'
+      +'<button class="'+(sw.detailsFilled?'edit-btn done':'edit-btn')+'" data-edit="'+i+'">'+(sw.detailsFilled?'✓ Edited':'Edit Details')+'</button>'
+      +'<button class="remove-btn" data-remove="'+i+'">✕</button>'
+      +'</td></tr>';
+  }).join('');
 
   tbody.querySelectorAll('.sw-name-input').forEach(function(el) {
     el.addEventListener('input', function() { softwareList[parseInt(el.dataset.idx)].name = el.value; });
@@ -737,52 +737,49 @@ function openDetails(idx) {
   restorePills('d-who-pills',   'd_who',   sw.who);
   restorePills('d-admin-pills', 'd_admin', sw.admin);
   restoreSev(sw.severity);
-  document.getElementById('d_owner').value = sw.owner || '';
-  document.getElementById('d_notes').value = sw.notes || '';
+  document.getElementById('d_owner').value = sw.owner||'';
+  document.getElementById('d_notes').value = sw.notes||'';
   document.getElementById('sw-summary-view').style.display = 'none';
   document.getElementById('sw-details-view').classList.add('active');
-  window.scrollTo(0, 0);
+  window.scrollTo(0,0);
 }
-
 function closeDetails() {
   document.getElementById('sw-summary-view').style.display = '';
   document.getElementById('sw-details-view').classList.remove('active');
   editingIdx = null;
 }
-
 function saveDetails() {
-  if (editingIdx === null) return;
+  if (editingIdx===null) return;
   var sw      = softwareList[editingIdx];
   sw.who      = document.getElementById('d_who').value;
   sw.severity = document.getElementById('d_severity').value;
   sw.admin    = document.getElementById('d_admin').value;
   sw.owner    = document.getElementById('d_owner').value;
   sw.notes    = document.getElementById('d_notes').value;
-  sw.detailsFilled = !!(sw.who || sw.severity || sw.admin || sw.owner);
-  renderTable();
-  closeDetails();
+  sw.detailsFilled = !!(sw.who||sw.severity||sw.admin||sw.owner);
+  renderTable(); closeDetails();
 }
 
 /* ── Pill / sev helpers ── */
-function setPill(fid, btn, val) {
-  btn.closest('.pill-group').querySelectorAll('.pill-btn').forEach(function(b) { b.classList.remove('selected'); });
+function setPill(fid,btn,val) {
+  btn.closest('.pill-group').querySelectorAll('.pill-btn').forEach(function(b){b.classList.remove('selected');});
   btn.classList.add('selected');
   document.getElementById(fid).value = val;
 }
 function setSev(val) {
-  document.querySelectorAll('.sev-btn').forEach(function(b, i) { b.classList.toggle('selected', i < val); });
+  document.querySelectorAll('.sev-btn').forEach(function(b,i){b.classList.toggle('selected',i<val);});
   document.getElementById('d_severity').value = val;
 }
-function restorePills(gid, fid, val) {
-  document.getElementById(fid).value = val || '';
-  document.getElementById(gid).querySelectorAll('.pill-btn').forEach(function(b) {
-    b.classList.toggle('selected', b.textContent.trim() === val);
+function restorePills(gid,fid,val) {
+  document.getElementById(fid).value = val||'';
+  document.getElementById(gid).querySelectorAll('.pill-btn').forEach(function(b){
+    b.classList.toggle('selected', b.textContent.trim()===val);
   });
 }
 function restoreSev(val) {
-  document.getElementById('d_severity').value = val || '';
-  document.querySelectorAll('.sev-btn').forEach(function(b, i) {
-    b.classList.toggle('selected', !!val && i < parseInt(val));
+  document.getElementById('d_severity').value = val||'';
+  document.querySelectorAll('.sev-btn').forEach(function(b,i){
+    b.classList.toggle('selected', !!val&&i<parseInt(val));
   });
 }
 
@@ -791,92 +788,94 @@ function buildReview() {
   var name  = document.getElementById('info_name').value;
   var email = document.getElementById('info_email').value;
   var dept  = document.getElementById('info_dept').value;
-  var date  = new Date().toLocaleDateString('en-US', { month:'long', day:'numeric', year:'numeric' });
+  var date  = new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
   document.getElementById('reviewSummary').innerHTML =
-    '<div class="review-row"><span>Name</span><strong>'       + esc(name  || '—') + '</strong></div>' +
-    '<div class="review-row"><span>Email</span><strong>'      + esc(email || '—') + '</strong></div>' +
-    '<div class="review-row"><span>Department</span><strong>' + esc(dept  || '—') + '</strong></div>' +
-    '<div class="review-row"><span>Date</span><strong>'       + date              + '</strong></div>';
-  var valid = softwareList.filter(function(s) { return s.name.trim(); });
-  document.getElementById('reviewCount').textContent = '(' + valid.length + ' entr' + (valid.length === 1 ? 'y' : 'ies') + ')';
-  if (!valid.length) {
-    document.getElementById('reviewSwList').innerHTML = '<p style="color:var(--sb-muted);font-size:0.87rem">No software entries added.</p>';
-    return;
-  }
-  document.getElementById('reviewSwList').innerHTML = valid.map(function(s) {
-    var meta = [
-      s.severity ? 'Criticality: ' + s.severity + '/5' : '',
-      s.admin    ? 'Admin: '       + s.admin            : '',
-      s.owner    ? 'Owner: '       + s.owner            : '',
-      s.who      ? 'Used by: '     + s.who              : ''
-    ].filter(Boolean).join(' · ') || 'No details added';
-    return '<div class="review-sw-item"><strong>' + esc(s.name) + '</strong><span>' + esc(meta) + '</span></div>';
-  }).join('');
+    '<div class="review-row"><span>Name</span><strong>'+esc(name||'—')+'</strong></div>'+
+    '<div class="review-row"><span>Email</span><strong>'+esc(email||'—')+'</strong></div>'+
+    '<div class="review-row"><span>Department</span><strong>'+esc(dept||'—')+'</strong></div>'+
+    '<div class="review-row"><span>Date</span><strong>'+date+'</strong></div>';
+  var valid = softwareList.filter(function(s){return s.name.trim();});
+  document.getElementById('reviewCount').textContent='('+valid.length+' entr'+(valid.length===1?'y':'ies')+')';
+  document.getElementById('reviewSwList').innerHTML = !valid.length
+    ? '<p style="color:var(--sb-muted);font-size:0.87rem">No software entries added.</p>'
+    : valid.map(function(s){
+        var meta=[
+          s.severity?'Criticality: '+s.severity+'/5':'',
+          s.admin   ?'Admin: '+s.admin:'',
+          s.owner   ?'Owner: '+s.owner:'',
+          s.who     ?'Used by: '+s.who:''
+        ].filter(Boolean).join(' · ')||'No details added';
+        return '<div class="review-sw-item"><strong>'+esc(s.name)+'</strong><span>'+esc(meta)+'</span></div>';
+      }).join('');
 }
 
-/* ── App Examples modal ── */
+/* ── App Examples modal — with add/remove toggle ── */
 function buildModal() {
-  var appsHtml = Object.keys(APP_EXAMPLES).map(function(cat) {
-    var tags = APP_EXAMPLES[cat].map(function(app) {
-      return '<span class="modal-app-tag" data-appname="' + esc(app) + '">' + app + '</span>';
-    }).join('');
-    return '<div class="modal-category"><h4>' + cat + '</h4><div class="modal-apps">' + tags + '</div></div>';
-  }).join('');
-
   document.getElementById('tab-apps').innerHTML =
-    '<p style="font-size:0.82rem;color:var(--brand-brown);font-weight:600;line-height:1.5;margin-bottom:1.25rem;background:var(--brand-soft);border:1.5px solid var(--brand-hover-border);border-radius:9px;padding:0.6rem 0.9rem">💡 Click any app below to instantly add it to your list.</p>'
-    + appsHtml;
+    '<p style="font-size:0.82rem;color:var(--brand-brown);font-weight:600;line-height:1.5;margin-bottom:1.25rem;background:var(--brand-soft);border:1.5px solid var(--brand-hover-border);border-radius:9px;padding:0.6rem 0.9rem">💡 Click an app to add it to your list. Click it again to remove it.</p>'
+    + Object.keys(APP_EXAMPLES).map(function(cat){
+        return '<div class="modal-category"><h4>'+cat+'</h4><div class="modal-apps">'
+          + APP_EXAMPLES[cat].map(function(app){
+              return '<span class="modal-app-tag" data-appname="'+esc(app)+'">'+app+'</span>';
+            }).join('')
+          +'</div></div>';
+      }).join('');
 
+  /* Wire toggle: click adds if not present, removes if already in list */
   document.querySelectorAll('.modal-app-tag[data-appname]').forEach(function(el) {
     el.addEventListener('click', function() {
       var appName = el.dataset.appname;
-      var exists  = softwareList.some(function(s) { return s.name.trim().toLowerCase() === appName.toLowerCase(); });
-      if (!exists) {
+      var existsIdx = softwareList.findIndex(function(s) {
+        return s.name.trim().toLowerCase() === appName.toLowerCase();
+      });
+      if (existsIdx > -1) {
+        /* Deselect — remove from list */
+        softwareList.splice(existsIdx, 1);
+        renderTable();
+        el.classList.remove('added');
+        el.textContent = appName;
+      } else {
+        /* Select — add to list */
         softwareList.push({ name:appName, severity:'', admin:'', owner:'', who:'', notes:'', detailsFilled:false });
         renderTable();
+        el.classList.add('added');
+        el.textContent = '✓ ' + appName;
       }
-      el.classList.add('added');
-      el.textContent = '✓ ' + appName;
     });
   });
 
   refreshModalTags();
 
-  var ownerRows = KNOWN_OWNERS.map(function(o) {
-    return '<tr><td style="font-weight:700">' + esc(o.name) + '</td><td style="color:var(--sb-muted);font-size:0.8rem">' + esc(o.apps) + '</td></tr>';
-  }).join('');
   document.getElementById('tab-owners').innerHTML =
-    '<p style="font-size:0.82rem;color:var(--sb-muted);margin-bottom:1rem;line-height:1.5">Known owners/admins for common RCO apps.</p>' +
-    '<table class="owners-table"><thead><tr><th>Person</th><th>Apps They Own / Manage</th></tr></thead><tbody>' + ownerRows + '</tbody></table>';
+    '<p style="font-size:0.82rem;color:var(--sb-muted);margin-bottom:1rem;line-height:1.5">Known owners/admins for common RCO apps.</p>'
+    +'<table class="owners-table"><thead><tr><th>Person</th><th>Apps They Own / Manage</th></tr></thead><tbody>'
+    + KNOWN_OWNERS.map(function(o){
+        return '<tr><td style="font-weight:700">'+esc(o.name)+'</td><td style="color:var(--sb-muted);font-size:0.8rem">'+esc(o.apps)+'</td></tr>';
+      }).join('')
+    +'</tbody></table>';
 }
 
 function refreshModalTags() {
   document.querySelectorAll('.modal-app-tag[data-appname]').forEach(function(el) {
-    var exists = softwareList.some(function(s) { return s.name.trim().toLowerCase() === el.dataset.appname.toLowerCase(); });
-    if (exists) { el.classList.add('added'); el.textContent = '✓ ' + el.dataset.appname; }
-    else         { el.classList.remove('added'); el.textContent = el.dataset.appname; }
+    var exists = softwareList.some(function(s){return s.name.trim().toLowerCase()===el.dataset.appname.toLowerCase();});
+    if (exists) { el.classList.add('added');    el.textContent = '✓ '+el.dataset.appname; }
+    else        { el.classList.remove('added'); el.textContent = el.dataset.appname; }
   });
 }
 
-function openModal(tab)  { buildModal(); switchTab(tab || 'apps'); document.getElementById('examplesModal').classList.remove('hidden'); }
+function openModal(tab)  { buildModal(); switchTab(tab||'apps'); document.getElementById('examplesModal').classList.remove('hidden'); }
 function closeModal()    { document.getElementById('examplesModal').classList.add('hidden'); }
 function switchTab(tab)  {
-  document.getElementById('tab-apps').classList.toggle('active',    tab === 'apps');
-  document.getElementById('tab-owners').classList.toggle('active',  tab === 'owners');
-  var tabs = document.querySelectorAll('.modal-tab');
-  tabs[0].classList.toggle('active', tab === 'apps');
-  tabs[1].classList.toggle('active', tab === 'owners');
+  document.getElementById('tab-apps').classList.toggle('active',   tab==='apps');
+  document.getElementById('tab-owners').classList.toggle('active', tab==='owners');
+  document.querySelectorAll('.modal-tab').forEach(function(t,i){ t.classList.toggle('active', i===(tab==='apps'?0:1)); });
 }
-document.getElementById('examplesModal').addEventListener('click', function(e) {
-  if (e.target === document.getElementById('examplesModal')) closeModal();
-});
+document.getElementById('examplesModal').addEventListener('click', function(e){ if(e.target===this) closeModal(); });
 
 /* ── Help modal ── */
 function openHelpModal()  { document.getElementById('helpModal').classList.remove('hidden'); }
 function closeHelpModal() { document.getElementById('helpModal').classList.add('hidden'); }
-document.getElementById('helpModal').addEventListener('click', function(e) {
-  if (e.target === document.getElementById('helpModal')) closeHelpModal();
-});
+document.getElementById('helpModal').addEventListener('click', function(e){ if(e.target===this) closeHelpModal(); });
 
 /* ── Submit ── */
 async function submitSurvey() {
@@ -885,31 +884,31 @@ async function submitSurvey() {
   var name  = document.getElementById('info_name').value.trim();
   var email = document.getElementById('info_email').value.trim();
   var dept  = document.getElementById('info_dept').value;
-  if (!name || !email || !dept) {
-    stat.textContent = '⚠️ Please go back and fill in your name, email, and department.';
-    stat.className = 'contact-status error'; return;
+  if (!name||!email||!dept) {
+    stat.textContent='⚠️ Please go back and fill in your name, email, and department.';
+    stat.className='contact-status error'; return;
   }
-  btn.textContent = 'Submitting…'; btn.disabled = true;
-  var payload = { info_name:name, info_email:email, info_dept:dept, info_date:new Date().toLocaleDateString('en-US'), submitted_at:new Date().toISOString() };
-  var valid = softwareList.filter(function(s) { return s.name.trim(); });
-  valid.forEach(function(sw, i) {
-    var b = 'app_r' + i;
+  btn.textContent='Submitting…'; btn.disabled=true;
+  var payload={info_name:name,info_email:email,info_dept:dept,info_date:new Date().toLocaleDateString('en-US'),submitted_at:new Date().toISOString()};
+  var valid=softwareList.filter(function(s){return s.name.trim();});
+  valid.forEach(function(sw,i){
+    var b='app_r'+i;
     payload[b+'_name']=sw.name; payload[b+'_severity']=sw.severity; payload[b+'_who']=sw.who;
     payload[b+'_admin']=sw.admin; payload[b+'_owner']=sw.owner; payload[b+'_notes']=sw.notes;
   });
-  fetch(SHEET_ENDPOINT, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) }).catch(function(){});
-  var saved = window.saveSubmission ? await window.saveSubmission({ title:'RCO IT Software Inventory', dept:dept, url:'surveys/tech-discovery.html' }) : true;
+  fetch(SHEET_ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(function(){});
+  var saved=window.saveSubmission?await window.saveSubmission({title:'RCO IT Software Inventory',dept:dept,url:'surveys/tech-discovery.html'}):true;
   if (saved) {
-    stat.textContent = '✅ Survey submitted! Redirecting you back to the portal…';
-    stat.className = 'contact-status success'; btn.textContent = 'Submitted ✓';
-    setTimeout(function() { window.location.href = '../index.html'; }, 2500);
+    stat.textContent='✅ Survey submitted! Redirecting you back to the portal…';
+    stat.className='contact-status success'; btn.textContent='Submitted ✓';
+    setTimeout(function(){window.location.href='../index.html';},2500);
   } else {
-    stat.textContent = '❌ Submission failed. Please try again or contact itsupport@rowecasaorganics.com.';
-    stat.className = 'contact-status error'; btn.textContent = 'Submit Survey →'; btn.disabled = false;
+    stat.textContent='❌ Submission failed. Please try again or contact itsupport@rowecasaorganics.com.';
+    stat.className='contact-status error'; btn.textContent='Submit Survey →'; btn.disabled=false;
   }
 }
 
-function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
 renderTable();
 </script>
