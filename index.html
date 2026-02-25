@@ -169,6 +169,26 @@
     }
     .cg-close:hover { opacity: 0.88; }
 
+    /* ── IT Admin submissions toggle ── */
+    .submissions-toggle {
+      display: none; /* shown by JS for IT admins only */
+      align-items: center; gap: 0.5rem;
+      background: var(--sidebar-bg);
+      border: 1.5px solid var(--sb-border);
+      border-radius: 999px; padding: 0.25rem;
+    }
+    .submissions-toggle.visible { display: inline-flex; }
+    .toggle-btn {
+      padding: 0.32rem 0.9rem; border-radius: 999px; border: none;
+      font-size: 0.75rem; font-weight: 700; font-family: inherit;
+      cursor: pointer; transition: all 0.18s; background: none;
+      color: var(--sb-muted);
+    }
+    .toggle-btn.active {
+      background: var(--brand-grad); color: #fff;
+      box-shadow: 0 2px 8px rgba(95,75,60,0.25);
+    }
+
     /* ── No-access notice for restricted surveys ── */
     .access-notice {
       background: var(--sidebar-bg); border: 1.5px solid var(--sb-border);
@@ -317,6 +337,13 @@
             <p>A record of surveys and forms you have submitted.</p>
             <div style="display:flex;align-items:center;gap:0.75rem;margin-top:0.75rem;flex-wrap:wrap">
               <button class="clear-btn" style="margin:0" id="refreshBtn">↻ Refresh</button>
+              <!-- IT admin only — toggled visible by roles module -->
+              <div class="submissions-toggle" id="submissionsToggle">
+                <button class="toggle-btn active" id="toggleMine"
+                        onclick="setSubmissionsView('mine')">My Submissions</button>
+                <button class="toggle-btn" id="toggleAll"
+                        onclick="setSubmissionsView('all')">All Submissions</button>
+              </div>
             </div>
           </div>
 
@@ -543,6 +570,18 @@
        UTILITY SCRIPTS (non-module, runs immediately)
        ═══════════════════════════════════════════════ -->
   <script>
+    // Track which view IT admins are on so refresh respects it
+    window._submissionsView = 'mine';
+
+    function setSubmissionsView(mode) {
+      window._submissionsView = mode;
+      // Update toggle button states
+      document.getElementById('toggleMine').classList.toggle('active', mode === 'mine');
+      document.getElementById('toggleAll').classList.toggle('active',  mode === 'all');
+      // Re-render with the new mode
+      if (typeof window._renderCompleted === 'function') window._renderCompleted();
+    }
+
     function getSurveyUrl(path) {
       var href = window.location.href.split('?')[0].split('#')[0];
       var base = href.endsWith('/') ? href : href.substring(0, href.lastIndexOf('/') + 1);
@@ -629,6 +668,11 @@
       // 4. Google Sheets links — IT admin only
       if (canViewSheets(email)) {
         document.querySelectorAll('.completed-sheet-link').forEach(el => el.classList.add('visible'));
+      }
+
+      // 5. Submissions toggle — IT admin only
+      if (window._canViewAllSubmissions) {
+        document.getElementById('submissionsToggle')?.classList.add('visible');
       }
 
       // Expose role for app.js renderCompleted to use
