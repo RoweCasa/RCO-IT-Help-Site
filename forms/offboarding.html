@@ -149,7 +149,7 @@
         <!-- ── Section 1: Departing Employee ── -->
         <div class="form-section">
           <div class="form-section-title">Departing Employee</div>
-          <div class="form-grid-3">
+          <div class="form-grid">
             <div class="field">
               <label>Full Name <span class="req">*</span></label>
               <input type="text" id="off_name" placeholder="First Last"/>
@@ -158,12 +158,12 @@
               <label>Last Day <span class="req">*</span></label>
               <input type="date" id="off_last_day"/>
             </div>
+          </div>
+          <div class="form-grid" style="margin-top:0.9rem">
             <div class="field">
               <label>Supervisor / Manager <span class="req">*</span></label>
               <input type="text" id="off_supervisor" placeholder="Who do they report to?"/>
             </div>
-          </div>
-          <div class="form-grid" style="margin-top:0.9rem">
             <div class="field">
               <label>Department</label>
               <select id="off_dept">
@@ -181,16 +181,6 @@
                 <option>Social Media</option><option>Strategy</option>
                 <option>Wholesale</option>
               </select>
-            </div>
-            <div class="field">
-              <label>Departure Type</label>
-              <div class="pill-group">
-                <button type="button" class="pill-btn" onclick="setPill('off_departure',this,'Resignation')">Resignation</button>
-                <button type="button" class="pill-btn" onclick="setPill('off_departure',this,'Termination')">Termination</button>
-                <button type="button" class="pill-btn" onclick="setPill('off_departure',this,'Contract End')">Contract End</button>
-                <button type="button" class="pill-btn" onclick="setPill('off_departure',this,'Retirement')">Retirement</button>
-              </div>
-              <input type="hidden" id="off_departure"/>
             </div>
           </div>
         </div>
@@ -214,7 +204,7 @@
             </div>
 
             <div class="field span2">
-              <label>Did the employee have a PDK access card / badge?</label>
+              <label>Did the employee return their PDK access card?</label>
               <div class="pill-group">
                 <button type="button" class="pill-btn" onclick="setPill('off_pdk',this,'Yes')">Yes</button>
                 <button type="button" class="pill-btn" onclick="setPill('off_pdk',this,'No')">No</button>
@@ -279,17 +269,8 @@
             </div>
 
             <div class="field span2">
-              <label>Any other equipment to return? <span class="field-note">— select all that apply</span></label>
-              <div class="check-group">
-                <label class="check-item"><input type="checkbox" name="off_other_equip" value="Phone"/> Phone</label>
-                <label class="check-item"><input type="checkbox" name="off_other_equip" value="Monitor"/> Monitor</label>
-                <label class="check-item"><input type="checkbox" name="off_other_equip" value="Charger / Cables"/> Charger / Cables</label>
-                <label class="check-item"><input type="checkbox" name="off_other_equip" value="Other"/> Other</label>
-                <label class="check-item"><input type="checkbox" name="off_other_equip" value="None"/> None</label>
-              </div>
-              <div style="margin-top:0.55rem">
-                <input type="text" id="off_other_equip_details" placeholder="Any other equipment details?"/>
-              </div>
+              <label>Any other equipment to return? <span class="field-note">(optional)</span></label>
+              <input type="text" id="off_other_equip_details" placeholder="e.g. Phone, monitor, charger, cables"/>
             </div>
 
           </div>
@@ -356,9 +337,6 @@
       statusEl.className = 'form-status error'; return;
     }
 
-    var otherEquip = [];
-    document.querySelectorAll('input[name="off_other_equip"]:checked').forEach(function(cb) { otherEquip.push(cb.value); });
-
     var hadEmail  = document.getElementById('cb_had_email').checked;
     var hadLaptop = document.getElementById('cb_had_laptop').checked;
 
@@ -376,7 +354,6 @@
       last_day:            lastDay,
       supervisor:          supervisor,
       department:          document.getElementById('off_dept').value,
-      departure_type:      document.getElementById('off_departure').value,
       revoke_access:       revokeVal,
       pdk_card:            document.getElementById('off_pdk').value,
       had_email:           hadEmail ? 'Yes' : 'No',
@@ -386,8 +363,7 @@
       had_laptop:          hadLaptop ? 'Yes' : 'No',
       laptop_type:         hadLaptop ? document.getElementById('off_laptop_type').value : '',
       laptop_return_notes: hadLaptop ? document.getElementById('off_laptop_return').value.trim() : '',
-      other_equipment:     otherEquip.join(', ') || 'None',
-      other_equip_details: document.getElementById('off_other_equip_details').value.trim(),
+      other_equipment:     document.getElementById('off_other_equip_details').value.trim(),
       notes:               document.getElementById('off_notes').value.trim(),
       submitted_by:        window._currentUser?.email || '',
       submitted_at:        new Date().toISOString()
