@@ -88,14 +88,14 @@ export const CONTENT_CONFIG = {
       id:       'onboarding',
       title:    'User Onboarding Request',
       minRole:  'manager',
-      sheetUrl: 'YOUR_ONBOARDING_SHEET_URL',
+      sheetUrl: 'https://docs.google.com/spreadsheets/d/1HA_jQYKXn5X-WhcIUd79NPzR_WIzCi5y5CJ9aW7fVGk/edit?gid=1473197887#gid=1473197887',
       url:      'forms/onboarding.html',
     },
     {
       id:       'offboarding',
       title:    'User Offboarding Request',
       minRole:  'manager',
-      sheetUrl: 'YOUR_OFFBOARDING_SHEET_URL',
+      sheetUrl: 'https://docs.google.com/spreadsheets/d/1HIlC6OlWtyIN8DH1kRnf0P2GBHGlHUWBJxFyllfdwjk/edit?gid=2068521876#gid=2068521876',
       url:      'forms/offboarding.html',
     },
     {
