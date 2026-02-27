@@ -22,7 +22,8 @@
       color: var(--sb-muted); margin-bottom: 0.9rem; padding-bottom: 0.45rem; border-bottom: 1px solid var(--sb-sep);
     }
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
-    @media(max-width:560px){ .form-grid { grid-template-columns: 1fr; } }
+    .form-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.9rem; }
+    @media(max-width:560px){ .form-grid, .form-grid-3 { grid-template-columns: 1fr; } }
     .span2 { grid-column: 1 / -1; }
     .field { display: flex; flex-direction: column; gap: 0.32rem; }
     .field label { font-size: 0.84rem; font-weight: 700; color: var(--sb-text); }
@@ -46,16 +47,37 @@
     }
     .pill-btn:hover    { border-color: var(--brand-hover-border); color: var(--brand-brown); }
     .pill-btn.selected { background: var(--brand-grad); border-color: var(--brand-brown); color: #fff; }
-    .check-group { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+    .check-group { display: flex; flex-wrap: nowrap; gap: 0.45rem; align-items: center; }
     .check-item {
       display: flex; align-items: center; gap: 0.4rem;
       font-size: 0.84rem; color: var(--sb-text); font-weight: 500;
       background: var(--sidebar-bg); border: 1.5px solid var(--sb-border);
       border-radius: 8px; padding: 0.35rem 0.75rem; cursor: pointer;
-      transition: border-color 0.15s; user-select: none;
+      transition: border-color 0.15s; user-select: none; white-space: nowrap;
     }
     .check-item:hover { border-color: var(--brand-hover-border); }
     .check-item input[type="checkbox"] { accent-color: var(--brand-brown); cursor: pointer; }
+    /* Secondary inline option that pops up */
+    .inline-sub {
+      display: none; align-items: center; gap: 0.35rem;
+      margin-left: 0.15rem;
+    }
+    .inline-sub.show { display: flex; }
+    .inline-sub .pill-btn {
+      padding: 0.32rem 0.85rem; font-size: 0.8rem;
+      background: rgba(189,153,121,0.1); border-color: var(--brand-hover-border);
+    }
+    .inline-sub .pill-btn:hover { background: rgba(189,153,121,0.2); }
+    .inline-sub .pill-btn.selected { background: var(--brand-grad); border-color: var(--brand-brown); color: #fff; }
+    /* Gmail inbox sub-option */
+    .sub-check-inline {
+      display: none; align-items: center; gap: 0.35rem;
+      margin-left: 0.15rem;
+    }
+    .sub-check-inline.show { display: flex; }
+    .sub-check-inline .check-item {
+      background: rgba(189,153,121,0.1); border-color: var(--brand-hover-border);
+    }
     .conditional { display: none; margin-top: 0.55rem; }
     .conditional.show { display: block; }
     .form-footer { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; padding-top: 1.25rem; border-top: 1px solid var(--sb-sep); }
@@ -73,11 +95,6 @@
       font-size: 0.84rem; color: var(--sb-muted); line-height: 1.55;
     }
     .skip-note strong { color: var(--sb-text); }
-    .sub-check {
-      margin-left: 1.5rem; margin-top: 0.45rem;
-      display: none;
-    }
-    .sub-check.show { display: flex; }
   </style>
 </head>
 <body>
@@ -135,7 +152,8 @@
 
         <div class="form-section">
           <div class="form-section-title">New Employee Info</div>
-          <div class="form-grid">
+          <!-- Row 1: 3 columns -->
+          <div class="form-grid-3">
             <div class="field">
               <label>Full Name <span class="req">*</span></label>
               <input type="text" id="ob_name" placeholder="First Last"/>
@@ -144,6 +162,13 @@
               <label>Start Date <span class="req">*</span></label>
               <input type="date" id="ob_start_date"/>
             </div>
+            <div class="field">
+              <label>Direct Manager <span class="req">*</span></label>
+              <input type="text" id="ob_manager" placeholder="Who will they report to?"/>
+            </div>
+          </div>
+          <!-- Row 2: 2 columns -->
+          <div class="form-grid" style="margin-top:0.9rem">
             <div class="field">
               <label>Job Title <span class="req">*</span></label>
               <input type="text" id="ob_title" placeholder="e.g. Marketing Coordinator"/>
@@ -166,10 +191,6 @@
                 <option>Wholesale</option>
               </select>
             </div>
-            <div class="field">
-              <label>Direct Manager <span class="req">*</span></label>
-              <input type="text" id="ob_manager" placeholder="Who will they report to?"/>
-            </div>
           </div>
         </div>
 
@@ -181,19 +202,25 @@
               <div class="pill-group">
                 <button type="button" class="pill-btn" onclick="setPill('ob_arrangement',this,'Onsite')">Onsite</button>
                 <button type="button" class="pill-btn" onclick="setPill('ob_arrangement',this,'Remote')">Remote</button>
+                <button type="button" class="pill-btn" onclick="setPill('ob_arrangement',this,'Hybrid')">Hybrid</button>
               </div>
               <input type="hidden" id="ob_arrangement"/>
             </div>
+
             <div class="field span2">
               <label>Equipment Needed <span class="field-note">— select all that apply</span></label>
               <div class="check-group">
-                <label class="check-item"><input type="checkbox" name="ob_equip" value="Laptop"/> Laptop</label>
-                <label class="check-item"><input type="checkbox" name="ob_equip" value="Monitor"/> Monitor</label>
+                <label class="check-item"><input type="checkbox" name="ob_equip" value="Laptop" id="cb_laptop" onchange="toggleLaptopType()"/> Laptop</label>
+                <div class="inline-sub" id="laptopTypeWrap">
+                  <button type="button" class="pill-btn" onclick="setPill('ob_laptop_type',this,'Windows')">Windows</button>
+                  <button type="button" class="pill-btn" onclick="setPill('ob_laptop_type',this,'Mac')">Mac</button>
+                  <input type="hidden" id="ob_laptop_type"/>
+                </div>
                 <label class="check-item"><input type="checkbox" name="ob_equip" value="Phone"/> Phone</label>
                 <label class="check-item"><input type="checkbox" name="ob_equip" value="None"/> None</label>
               </div>
               <div style="margin-top:0.55rem">
-                <input type="text" id="ob_equip_specifics" placeholder="Any specifics? e.g. Windows laptop, Mac laptop"/>
+                <input type="text" id="ob_equip_specifics" placeholder="Any other equipment needed?"/>
               </div>
             </div>
 
@@ -203,17 +230,17 @@
                 <label class="check-item">
                   <input type="checkbox" name="ob_systems" value="Google Account" id="cb_google" onchange="toggleGoogleInbox()"/> Google Account
                 </label>
+                <div class="sub-check-inline" id="gmailInboxWrap">
+                  <label class="check-item">
+                    <input type="checkbox" name="ob_systems" value="Gmail Inbox" id="cb_inbox"/> Gmail Inbox
+                  </label>
+                </div>
                 <label class="check-item"><input type="checkbox" name="ob_systems" value="Office Apps"/> Office Apps</label>
                 <label class="check-item"><input type="checkbox" name="ob_systems" value="Shopify"/> Shopify</label>
                 <label class="check-item"><input type="checkbox" name="ob_systems" value="ShipStation"/> ShipStation</label>
               </div>
-              <div class="sub-check" id="googleInboxWrap">
-                <label class="check-item" style="background:var(--panel-bg);">
-                  <input type="checkbox" name="ob_systems" value="Email Inbox" id="cb_inbox"/> Do they need an email inbox?
-                </label>
-              </div>
               <div style="margin-top:0.55rem">
-                <textarea id="ob_software" rows="2" placeholder="Any other software or access needed? e.g. BambooHR, Slack, Canva"></textarea>
+                <textarea id="ob_software" rows="2" placeholder="Any other software or access needed? e.g. Adobe, Slack, Canva"></textarea>
               </div>
             </div>
 
@@ -281,6 +308,10 @@
 
     var equip = [];
     document.querySelectorAll('input[name="ob_equip"]:checked').forEach(function(cb) { equip.push(cb.value); });
+    var laptopType = document.getElementById('ob_laptop_type').value;
+    if (laptopType && equip.includes('Laptop')) {
+      equip = equip.map(function(e) { return e === 'Laptop' ? 'Laptop (' + laptopType + ')' : e; });
+    }
 
     var systems = [];
     document.querySelectorAll('input[name="ob_systems"]:checked').forEach(function(cb) { systems.push(cb.value); });
@@ -306,11 +337,9 @@
 
     // Post to Google Sheet
     var endpoint = 'https://script.google.com/macros/s/AKfycby_w3_2eq5BLkvo49DQgu6zBGxFqATjMxptCDY4QrGOe-aRHjb50Z7Pnxqu2Uy-WE6_1Q/exec';
-    if (!endpoint.startsWith('YOUR_')) {
-      try {
-        await fetch(endpoint, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
-      } catch(e) { console.warn('Sheet post failed:', e); }
-    }
+    try {
+      await fetch(endpoint, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+    } catch(e) { console.warn('Sheet post failed:', e); }
 
     try {
       await addDoc(collection(db, 'submissions'), {
@@ -334,13 +363,24 @@
 
 <script>
   function setPill(hiddenId, btn, val) {
-    btn.closest('.pill-group').querySelectorAll('.pill-btn').forEach(function(b) { b.classList.remove('selected'); });
+    btn.closest('.pill-group, .inline-sub').querySelectorAll('.pill-btn').forEach(function(b) { b.classList.remove('selected'); });
     btn.classList.add('selected');
     document.getElementById(hiddenId).value = val;
   }
+  function toggleLaptopType() {
+    var cb = document.getElementById('cb_laptop');
+    var wrap = document.getElementById('laptopTypeWrap');
+    if (cb.checked) {
+      wrap.classList.add('show');
+    } else {
+      wrap.classList.remove('show');
+      document.getElementById('ob_laptop_type').value = '';
+      wrap.querySelectorAll('.pill-btn').forEach(function(b) { b.classList.remove('selected'); });
+    }
+  }
   function toggleGoogleInbox() {
     var cb = document.getElementById('cb_google');
-    var wrap = document.getElementById('googleInboxWrap');
+    var wrap = document.getElementById('gmailInboxWrap');
     if (cb.checked) {
       wrap.classList.add('show');
     } else {
