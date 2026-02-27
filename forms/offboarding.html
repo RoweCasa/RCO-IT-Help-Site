@@ -155,16 +155,6 @@
               <input type="text" id="off_name" placeholder="First Last"/>
             </div>
             <div class="field">
-              <label>Last Day <span class="req">*</span></label>
-              <input type="date" id="off_last_day"/>
-            </div>
-          </div>
-          <div class="form-grid" style="margin-top:0.9rem">
-            <div class="field">
-              <label>Supervisor / Manager <span class="req">*</span></label>
-              <input type="text" id="off_supervisor" placeholder="Who do they report to?"/>
-            </div>
-            <div class="field">
               <label>Department</label>
               <select id="off_dept">
                 <option value="">— Select —</option>
@@ -325,13 +315,9 @@
     var btn      = document.getElementById('submitBtn');
     var statusEl = document.getElementById('formStatus');
 
-    var name       = document.getElementById('off_name').value.trim();
-    var lastDay    = document.getElementById('off_last_day').value;
-    var supervisor = document.getElementById('off_supervisor').value.trim();
+    var name    = document.getElementById('off_name').value.trim();
     var missing = [];
-    if (!name)       missing.push('Full name');
-    if (!lastDay)    missing.push('Last day');
-    if (!supervisor) missing.push('Supervisor / Manager');
+    if (!name) missing.push('Full name');
     if (missing.length) {
       statusEl.textContent = '⚠️ Please fill in: ' + missing.join(', ') + '.';
       statusEl.className = 'form-status error'; return;
@@ -351,8 +337,6 @@
 
     var payload = {
       employee_name:       name,
-      last_day:            lastDay,
-      supervisor:          supervisor,
       department:          document.getElementById('off_dept').value,
       revoke_access:       revokeVal,
       pdk_card:            document.getElementById('off_pdk').value,
