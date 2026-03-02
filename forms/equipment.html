@@ -37,7 +37,7 @@
       border-color: var(--brand-hover-border); box-shadow: 0 0 0 3px rgba(189,153,121,0.15);
     }
     .field textarea { resize: vertical; }
-    .pill-group { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .pill-group { display: flex; gap: 0.4rem; flex-wrap: wrap; align-items: center; }
     .pill-btn {
       padding: 0.38rem 1rem; border-radius: 999px;
       border: 1.5px solid var(--sb-border); background: var(--panel-bg);
@@ -46,8 +46,30 @@
     }
     .pill-btn:hover    { border-color: var(--brand-hover-border); color: var(--brand-brown); }
     .pill-btn.selected { background: var(--brand-grad); border-color: var(--brand-brown); color: #fff; }
-    .conditional { display: none; margin-top: 0.55rem; }
-    .conditional.show { display: block; }
+    .inline-sub {
+      display: none; align-items: center; gap: 0.35rem;
+      margin-left: 0.15rem;
+    }
+    .inline-sub.show { display: flex; }
+    .inline-sub input {
+      background: rgba(189,153,121,0.1); border: 1.5px solid var(--brand-hover-border);
+      border-radius: 9px; padding: 0.38rem 0.75rem; font-size: 0.85rem;
+      font-family: inherit; color: var(--sb-text); outline: none;
+      width: 200px; transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .inline-sub input:focus {
+      border-color: var(--brand-brown); box-shadow: 0 0 0 3px rgba(189,153,121,0.15);
+    }
+    .check-group { display: flex; flex-wrap: nowrap; gap: 0.45rem; align-items: center; }
+    .check-item {
+      display: flex; align-items: center; gap: 0.4rem;
+      font-size: 0.84rem; color: var(--sb-text); font-weight: 500;
+      background: var(--sidebar-bg); border: 1.5px solid var(--sb-border);
+      border-radius: 8px; padding: 0.35rem 0.75rem; cursor: pointer;
+      transition: border-color 0.15s; user-select: none; white-space: nowrap;
+    }
+    .check-item:hover { border-color: var(--brand-hover-border); }
+    .check-item input[type="checkbox"] { accent-color: var(--brand-brown); cursor: pointer; }
     .form-footer { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; padding-top: 1.25rem; border-top: 1px solid var(--sb-sep); }
     .form-status { font-size: 0.84rem; font-weight: 600; padding: 0.55rem 0.9rem; border-radius: 9px; display: none; }
     .form-status.error   { display: block; background: rgba(220,80,60,0.1); color: #c0392b; border: 1px solid rgba(220,80,60,0.2); }
@@ -57,6 +79,12 @@
     .success-screen .s-icon { font-size: 3.5rem; margin-bottom: 1rem; }
     .success-screen h2 { font-size: 1.3rem; font-weight: 800; color: var(--sb-text); margin-bottom: 0.5rem; }
     .success-screen p  { font-size: 0.9rem; color: var(--sb-muted); line-height: 1.7; margin-bottom: 1.5rem; }
+    .skip-note {
+      background: var(--sidebar-bg); border: 1.5px solid var(--sb-border);
+      border-radius: 11px; padding: 0.75rem 1.1rem; margin-bottom: 1.75rem;
+      font-size: 0.84rem; color: var(--sb-muted); line-height: 1.55;
+    }
+    .skip-note strong { color: var(--sb-text); }
   </style>
 </head>
 <body>
@@ -69,7 +97,7 @@
     <div class="sidebar-divider"></div>
     <nav class="sidebar-nav">
       <button class="nav-btn" onclick="window.location.href='../index.html'">
-        <span class="nav-icon">🏠</span> Portal Home
+        <span class="nav-icon"></span> Portal Home
       </button>
     </nav>
     <div class="sidebar-footer">
@@ -86,7 +114,7 @@
     <header class="topbar">
       <div class="topbar-left">
         <div class="topbar-title">IT Equipment &amp; Software Request</div>
-        <div class="topbar-desc">Request hardware, software, or licenses for yourself or your team.</div>
+        <div class="topbar-desc">Universal request form for any technology need — with business justification and approval workflow.</div>
       </div>
       <div class="topbar-right">
         <span class="topbar-user" id="topbarUser">Not signed in</span>
@@ -106,6 +134,11 @@
 
       <div class="form-wrap" id="formWrap">
 
+        <div class="skip-note">
+          💡 <strong>Not sure about something? No problem!</strong> — IT will work with you to figure out the best solution.
+        </div>
+
+        <!-- ── Section 1: What Do You Need? ── -->
         <div class="form-section">
           <div class="form-section-title">What Do You Need?</div>
           <div class="form-grid">
@@ -115,14 +148,48 @@
               <div class="pill-group">
                 <button type="button" class="pill-btn" onclick="setPill('eq_type',this,'Hardware')">Hardware</button>
                 <button type="button" class="pill-btn" onclick="setPill('eq_type',this,'Software / License')">Software / License</button>
-                <button type="button" class="pill-btn" onclick="setPill('eq_type',this,'Both')">Both</button>
+                <button type="button" class="pill-btn" onclick="setPill('eq_type',this,'Access / Permissions')">Access / Permissions</button>
+                <button type="button" class="pill-btn" onclick="setPill('eq_type',this,'Repair / Replacement')">Repair / Replacement</button>
+                <button type="button" class="pill-btn" onclick="setPill('eq_type',this,'Other')">Other</button>
               </div>
               <input type="hidden" id="eq_type"/>
             </div>
 
             <div class="field span2">
-              <label>Item(s) Requested <span class="req">*</span></label>
-              <textarea id="eq_items" rows="3" placeholder="Describe what you need — model, version, or software name if known"></textarea>
+              <label>Describe What You Need <span class="req">*</span></label>
+              <textarea id="eq_items" rows="3" placeholder="Be as specific as you can — model, software name, version, what access you need, etc."></textarea>
+            </div>
+
+            <div class="field span2">
+              <label>This Request Is For</label>
+              <div class="pill-group">
+                <button type="button" class="pill-btn" onclick="setPill('eq_for',this,'Just me');hideInline('eq-for-name')">Just me</button>
+                <button type="button" class="pill-btn" onclick="setPill('eq_for',this,'My team');hideInline('eq-for-name')">My team</button>
+                <button type="button" class="pill-btn" onclick="setPill('eq_for',this,'Specific employee');showInline('eq-for-name')">Specific employee</button>
+                <div class="inline-sub" id="eq-for-name">
+                  <input type="text" id="eq_for_name" placeholder="Employee name"/>
+                </div>
+              </div>
+              <input type="hidden" id="eq_for"/>
+            </div>
+
+            <div class="field">
+              <label>Department</label>
+              <select id="eq_dept">
+                <option value="">— Select —</option>
+                <option>Administration</option><option>Brand Experience</option>
+                <option>Curing</option><option>Customer Care</option>
+                <option>Customer Service</option><option>Facilities and Maintenance</option>
+                <option>Finance</option><option>Human Resources</option>
+                <option>Information Technology</option><option>Inventory</option>
+                <option>Kitchen</option><option>Labeling</option>
+                <option>Marketing</option><option>Operations</option>
+                <option>Procurement</option><option>Production</option>
+                <option>Project Management</option><option>Quality Control</option>
+                <option>Research &amp; Development</option><option>Shipping</option>
+                <option>Social Media</option><option>Strategy</option>
+                <option>Wholesale</option>
+              </select>
             </div>
 
             <div class="field">
@@ -130,22 +197,10 @@
               <input type="number" id="eq_quantity" min="1" value="1"/>
             </div>
 
-            <div class="field">
-              <label>This Request Is For</label>
-              <div class="pill-group">
-                <button type="button" class="pill-btn" onclick="setPill('eq_for',this,'Just me');toggle('eq-for-name',false)">Just me</button>
-                <button type="button" class="pill-btn" onclick="setPill('eq_for',this,'My team');toggle('eq-for-name',false)">My team</button>
-                <button type="button" class="pill-btn" onclick="setPill('eq_for',this,'Specific employee');toggle('eq-for-name',true)">Specific employee</button>
-              </div>
-              <input type="hidden" id="eq_for"/>
-              <div class="conditional" id="eq-for-name">
-                <input type="text" id="eq_for_name" placeholder="Employee name"/>
-              </div>
-            </div>
-
           </div>
         </div>
 
+        <!-- ── Section 2: Business Case ── -->
         <div class="form-section">
           <div class="form-section-title">Business Case</div>
           <div class="form-grid">
@@ -166,14 +221,9 @@
               <input type="hidden" id="eq_urgency"/>
             </div>
 
-            <div class="field">
-              <label>Budget Estimate <span class="field-note">(optional)</span></label>
-              <input type="text" id="eq_budget" placeholder="Approximate cost if known"/>
-            </div>
-
             <div class="field span2">
               <label>Notes <span class="field-note">(optional)</span></label>
-              <textarea id="eq_notes" rows="2" placeholder="Any additional context"></textarea>
+              <textarea id="eq_notes" rows="2" placeholder="Any additional context for IT"></textarea>
             </div>
 
           </div>
@@ -223,7 +273,7 @@
     var justif  = document.getElementById('eq_justification').value.trim();
     var missing = [];
     if (!reqType) missing.push('Request type');
-    if (!items)   missing.push('Items requested');
+    if (!items)   missing.push('Description of what you need');
     if (!justif)  missing.push('Business justification');
     if (missing.length) {
       statusEl.textContent = '⚠️ Please fill in: ' + missing.join(', ') + '.';
@@ -233,29 +283,35 @@
     btn.textContent = 'Submitting…'; btn.disabled = true;
     statusEl.className = 'form-status';
 
+    var forWhom     = document.getElementById('eq_for').value;
+    var forWhomName = document.getElementById('eq_for_name').value.trim();
+
     var payload = {
       request_type:    reqType,
       items_requested: items,
       quantity:        document.getElementById('eq_quantity').value || '1',
-      for_whom:        document.getElementById('eq_for').value,
-      for_whom_name:   document.getElementById('eq_for_name').value.trim(),
+      for_whom:        forWhom,
+      for_whom_name:   forWhom === 'Specific employee' ? forWhomName : '',
+      department:      document.getElementById('eq_dept').value,
       justification:   justif,
       urgency:         document.getElementById('eq_urgency').value,
-      budget_estimate: document.getElementById('eq_budget').value.trim(),
       notes:           document.getElementById('eq_notes').value.trim(),
       submitted_by:    window._currentUser?.email || '',
       submitted_at:    new Date().toISOString()
     };
 
+    // Post to Google Sheet
     var endpoint = 'YOUR_EQUIPMENT_SHEET_ENDPOINT';
     if (!endpoint.startsWith('YOUR_')) {
-      fetch(endpoint, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) }).catch(function(){});
+      try {
+        await fetch(endpoint, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+      } catch(e) { console.warn('Sheet post failed:', e); }
     }
 
     try {
       await addDoc(collection(db, 'submissions'), {
         title:       'IT Equipment & Software Request',
-        dept:        '',
+        dept:        document.getElementById('eq_dept').value,
         url:         'forms/equipment.html',
         uid:         window._currentUser.uid,
         userEmail:   window._currentUser.email,
@@ -278,9 +334,17 @@
     btn.classList.add('selected');
     document.getElementById(hiddenId).value = val;
   }
-  function toggle(id, show) {
+  function showInline(id) {
     var el = document.getElementById(id);
-    if (el) el.classList.toggle('show', show);
+    if (el) el.classList.add('show');
+  }
+  function hideInline(id) {
+    var el = document.getElementById(id);
+    if (el) {
+      el.classList.remove('show');
+      var inp = el.querySelector('input');
+      if (inp) inp.value = '';
+    }
   }
 </script>
 </body>
