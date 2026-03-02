@@ -301,7 +301,7 @@
     };
 
     // Post to Google Sheet
-    var endpoint = 'YOUR_EQUIPMENT_SHEET_ENDPOINT';
+    var endpoint = 'https://script.google.com/macros/s/AKfycbx9Dcp4Kvon1f6YHVoZV3KJGGRNi8jcv_VUzF03eNmVUujwXJBs-A9Y-hPu2g90GHAatw/exec';
     if (!endpoint.startsWith('YOUR_')) {
       try {
         await fetch(endpoint, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
