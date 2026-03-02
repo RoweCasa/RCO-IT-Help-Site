@@ -102,7 +102,7 @@ export const CONTENT_CONFIG = {
       id:       'equipment',
       title:    'IT Equipment & Software Request',
       minRole:  'manager',
-      sheetUrl: 'YOUR_EQUIPMENT_SHEET_URL',
+      sheetUrl: 'https://docs.google.com/spreadsheets/d/1fbvR-hUOgW_nmhzuNn7mnS2bk75dbzUa-x_leXWt2Wo/edit?gid=461376341#gid=461376341',
       url:      'forms/equipment.html',
     },
   ],
