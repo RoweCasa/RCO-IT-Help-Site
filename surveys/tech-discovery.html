@@ -258,6 +258,20 @@
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
     .portal-email-btn:hover { background: var(--brand-soft); border-color: var(--brand-hover-border); color: var(--brand-brown); }
+
+    /* ── Sidebar sheet link ── */
+    .sidebar-sheet-link {
+      display: none; width: 100%; text-align: center;
+      font-size: 0.72rem; font-weight: 700; color: var(--brand-brown);
+      text-decoration: none; background: var(--brand-soft);
+      border: 1.5px solid var(--brand-hover-border);
+      padding: 0.45rem 0.6rem; border-radius: 9px;
+      transition: all 0.15s; margin-bottom: 0.6rem;
+    }
+    .sidebar-sheet-link:hover {
+      background: var(--brand-grad); color: #fff; border-color: var(--brand-brown);
+    }
+    .sidebar-sheet-link.visible { display: block; }
   </style>
 </head>
 <body>
@@ -275,6 +289,12 @@
       <button class="nav-btn step-nav-btn"         onclick="goTo(3)"><span class="step-num">4</span> Review &amp; Submit</button>
     </nav>
     <div class="sidebar-footer">
+      <a id="sidebarSheetLink"
+         class="sidebar-sheet-link"
+         href="https://docs.google.com/spreadsheets/d/1qGufmR0KvRCU8OhQiZgf1R9CnvEvBBHogAcUh6XbOeM/edit?gid=72884401#gid=72884401"
+         target="_blank">
+        View Responses in Google Sheets →
+      </a>
       <div class="sidebar-divider" style="margin-bottom:0.75rem"></div>
       <button class="contact-btn" onclick="window.location.href='../index.html'">← Back to Portal</button>
       <button class="portal-email-btn"
@@ -336,20 +356,6 @@
               <span>Check your entries and submit. That's it. Feel free to resubmit anytime if you forgot to add something — each submission is saved separately.</span>
             </div>
           </div>
-        </div>
-
-        <!-- Sheet link — only revealed by JS for it_admin role -->
-        <div id="surveySheetLink" style="display:none;margin-bottom:1.5rem">
-          <a href="https://docs.google.com/spreadsheets/d/1qGufmR0KvRCU8OhQiZgf1R9CnvEvBBHogAcUh6XbOeM/edit?gid=72884401#gid=72884401"
-             target="_blank"
-             style="display:inline-flex;align-items:center;gap:0.45rem;
-                    background:var(--brand-soft);border:1.5px solid var(--brand-hover-border);
-                    color:var(--brand-brown);padding:0.45rem 1rem;border-radius:9px;
-                    font-size:0.82rem;font-weight:700;text-decoration:none;transition:all 0.15s"
-             onmouseover="this.style.background='var(--brand-grad)';this.style.color='#fff';this.style.borderColor='var(--brand-brown)'"
-             onmouseout="this.style.background='var(--brand-soft)';this.style.color='var(--brand-brown)';this.style.borderColor='var(--brand-hover-border)'">
-            📊 View Responses in Google Sheets →
-          </a>
         </div>
 
         <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
@@ -609,11 +615,11 @@
     if (emailEl && !emailEl.value) emailEl.value = user.email;
     if (nameEl  && !nameEl.value  && user.displayName) nameEl.value = user.displayName;
 
-    // Show the Google Sheets link for IT admins only
+    // Show the Google Sheets link in sidebar for IT admins only
     var role = getRole(user.email);
     if (role === 'it_admin') {
-      var linkEl = document.getElementById('surveySheetLink');
-      if (linkEl) linkEl.style.display = '';
+      var linkEl = document.getElementById('sidebarSheetLink');
+      if (linkEl) linkEl.classList.add('visible');
     }
   });
 
