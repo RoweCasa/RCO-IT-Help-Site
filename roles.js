@@ -14,6 +14,7 @@ const MEMBERS = {
   ],
   leadership: [
     'mike@rowecasaorganics.com',
+    'hayden.howell@rowecasaorganics.com',
     'jill@rowecasaorganics.com',
     'alicia@rowecasaorganics.com',
     'jacob@rowecasaorganics.com',
@@ -22,6 +23,7 @@ const MEMBERS = {
     'grant@rowecasaorganics.com',
     'ivan.gonzalez@rowecasaorganics.com',
     'heidi.partlow@rowecasaorganics.com',
+    
   ],
   director: [
     'carly@rowecasaorganics.com',
