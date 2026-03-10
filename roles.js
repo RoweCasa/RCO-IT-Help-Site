@@ -9,7 +9,7 @@ const MEMBERS = {
     'philip@rowecasaorganics.com',
     'andrew.neidley@rowecasaorganics.com',
     'kasey.tomasek@rowecasaorganics.com',
-    
+    'hayden.howell@rowecasaorganics.com',
     'chase.parrish@rowecasaorganics.com',
   ],
   leadership: [
@@ -48,7 +48,6 @@ const MEMBERS = {
     'brandi@rowecasaorganics.com',
     'tonia@rowecasaorganics.com',
     'mark@rowecasaorganics.com',
-    'hayden.howell@rowecasaorganics.com',
     'alisha.wilson@rowecasaorganics.com',
     'ashley.roberson@rowecasaorganics.com',
     'kathy.sanford@rowecasaorganics.com',
